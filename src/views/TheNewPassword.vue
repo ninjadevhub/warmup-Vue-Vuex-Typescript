@@ -2,37 +2,29 @@
   <v-container class="py-0 mx-5 pt-5" fluid>
     <v-row>
       <v-col cols="12">
-        <v-card class="login mx-auto pa-4 px-11 mt-10" width="560px" elevation="0">
+        <v-card class="new-password mx-auto pa-4 px-11 mt-10" width="560px" elevation="0">
           <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
-          <v-card-title class="px-2 pb-0 pt-3">
-            <div class="login__title text-capitalize">Log in</div>
+          <v-card-title class="px-2 pb-0 pt-6">
+            <div class="new-password__title text-capitalize">Reset your password</div>
           </v-card-title>
           <v-divider class="mx-2 my-2" />
           <v-container class="px-2" fluid>
             <v-row>
               <v-col col="12">
-                <base-input label="Email address" class="mb-4" />
+                <base-input label="New password" class="mb-4" />
               </v-col>
             </v-row>
             <v-row>
               <v-col col="12">
-                <base-input label="Password" />
+                <base-input label="Confirm password" />
               </v-col>
             </v-row>
           </v-container>
-          <v-card-actions class="py-0">
+          <v-card-actions class="py-0 pb-6">
             <base-button class="text-capitalize" variant="secondary" large block tile>
-              Sign in
+              Reset password
             </base-button>
           </v-card-actions>
-          <v-card-text class="px-2 login__footer">
-            <div>
-              Don’t have an account? <router-link to="/sign-up">Sign up</router-link>.
-            </div>
-            <div>
-              Forgot your password? <router-link to="/password-reset">Reset your password</router-link>.
-            </div>
-          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -43,22 +35,16 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class TheLogin extends Vue {}
+export default class TheNewPassword extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-  .login {
+  .new-password {
     &__title {
       font-family: $base-font;
       font-size: $font-md-x;
       color: $color-mako;
       font-weight: $font-weight-bold;
-    }
-    &__footer {
-      font-size: $font-sm;
-      a {
-        text-decoration: none;
-      }
     }
   }
 </style>

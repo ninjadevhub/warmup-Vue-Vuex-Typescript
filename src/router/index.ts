@@ -4,6 +4,8 @@ import TheDashboard from '@/views/TheDashboard.vue'
 import TheSignUp from '@/views/TheSignUp.vue'
 import TheEmailVerification from '@/views/TheEmailVerification.vue'
 import TheLogin from '@/views/TheLogin.vue'
+import ThePasswordReset from '@/views/ThePasswordReset.vue'
+import TheNewPassword from '@/views/TheNewPassword.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +29,16 @@ const routes: Array<RouteConfig> = [
     path: '/login',
     name: 'Log in',
     component: TheLogin
+  },
+  {
+    path: '/password-reset',
+    name: 'Password reset',
+    component: ThePasswordReset
+  },
+  {
+    path: '/new-password',
+    name: 'New password',
+    component: TheNewPassword
   }
 ]
 
