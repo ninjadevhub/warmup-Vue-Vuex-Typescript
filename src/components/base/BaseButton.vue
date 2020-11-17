@@ -24,10 +24,10 @@ export default class BaseButton extends Vue {
   .btn {
     color: #FFFFFF !important;
     &--primary {
-      background-color: #347EED !important;
+      background-color: $primary-color !important;
     }
     &--secondary {
-      background-color: #333333 !important;
+      background-color: $secondary-color !important;
     }
   }
 </style>

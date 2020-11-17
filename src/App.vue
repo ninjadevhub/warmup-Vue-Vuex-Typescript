@@ -4,7 +4,11 @@
   </div>
 </template>
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+<style lang="scss">
+  @import url(./scss/_fonts.scss);
+
+  #app {
+    background-color: $bg-color;
+    min-height: 100vh;
+  }
 </style>

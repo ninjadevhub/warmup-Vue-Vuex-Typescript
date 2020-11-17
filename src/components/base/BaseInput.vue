@@ -43,11 +43,11 @@ export default class BaseInput extends Vue {
       left: -10px !important;
       top: -26px !important;
       text-transform: uppercase;
-      font-size: 10px;
+      font-size: $font-sm;
       opacity: 0.8;
-      font-family: 'Roboto', sans-serif;
-      color: #41494F;
-      font-weight: 600;
+      font-family: $label-font;
+      color: $color-mako;
+      font-weight: $font-weight-bold;
     }
   }
 </style>

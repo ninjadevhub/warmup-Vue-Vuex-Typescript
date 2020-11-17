@@ -2,7 +2,7 @@
   <v-container class="py-0">
     <v-row>
       <v-col cols="12">
-        <v-card class="sign-up mx-auto pa-8 mx-11" width="560px">
+        <v-card class="sign-up mx-auto pa-8 mx-11 mt-10" width="560px">
           <v-card-title>
             <div class="sign-up__title">The easiest way to warm up your inboxes.</div>
             <div class="sign-up__sub-title">Create an account, no credit card required.</div>
@@ -36,14 +36,14 @@ export default class TheSignUpForm extends Vue {}
 <style lang="scss" scoped>
   .sign-up {
     &__title {
-      font-family: 'Open Sans', sans-serif;
-      font-size: 20px;
-      color: #41494F;
+      font-family: $base-font;
+      font-size: $font-lg-x;
+      color: $color-mako;
     }
     &__sub-title {
-      font-family: 'Open Sans', sans-serif;
-      color: #80888F;
-      font-size: 14px;
+      font-family: $base-font;
+      color: $color-oslo-gray;
+      font-size: $font-md;
     }
   }
 </style>
