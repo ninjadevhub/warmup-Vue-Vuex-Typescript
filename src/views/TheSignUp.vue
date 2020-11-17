@@ -1,5 +1,12 @@
 <template>
-  <v-container class="py-0">
+  <v-container class="py-0 mx-5 pt-5" fluid>
+    <v-row>
+      <v-col cols="12">
+        <div class="text-right">
+          Already have an account? <router-link to="/login">Log in</router-link>.
+        </div>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col cols="12">
         <v-card class="sign-up mx-auto pa-8 mx-11 mt-10" width="560px">
