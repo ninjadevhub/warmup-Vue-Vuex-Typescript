@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import TheDashboard from '@/views/TheDashboard.vue'
 import TheSignUp from '@/views/TheSignUp.vue'
+import TheEmailVerification from '@/views/TheEmailVerification.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes: Array<RouteConfig> = [
     path: '/sign-up',
     name: 'Sign up',
     component: TheSignUp
+  },
+  {
+    path: '/email-verification',
+    name: 'Email verification',
+    component: TheEmailVerification
   }
 ]
 

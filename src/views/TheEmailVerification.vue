@@ -2,29 +2,24 @@
   <v-container class="py-0 mx-5 pt-5" fluid>
     <v-row>
       <v-col cols="12">
-        <div class="text-right">
-          Already have an account? <router-link to="/login">Log in</router-link>.
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-card class="sign-up mx-auto pa-8 mx-11 mt-10" width="560px" elevation="0">
-          <v-card-title>
-            <div class="sign-up__title">The easiest way to warm up your inboxes.</div>
-            <div class="sign-up__sub-title">Create an account, no credit card required.</div>
+        <v-card class="verify mx-auto pa-6 px-11 mt-10" width="560px" elevation="0">
+          <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
+          <v-card-title class="px-2 mb-6">
+            <div class="verify__title mb-2">Please verify your email address.</div>
+            <div class="verify__sub-title">
+              We just sent a verification code to {email_address}. Please enter the code below to verify your account.
+            </div>
           </v-card-title>
-          <sign-up-form />
-          <v-card-actions class="py-0 px-3">
+          <base-input label="Code" class="mb-4 px-2" />
+          <v-card-actions class="py-0">
             <base-button class="text-capitalize" variant="secondary" large block tile>
-              Sign up free
+              Verify
             </base-button>
           </v-card-actions>
-          <v-card-text>
+          <v-card-text class="px-2">
             <div>
-              By signing up you agree to the <a href="#">terms of service</a> and <a href="#">privacy policy</a>.
+              <a href="#">Resend code</a>
             </div>
-            <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
           </v-card-text>
         </v-card>
       </v-col>
@@ -41,7 +36,7 @@ export default class TheSignUpForm extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-  .sign-up {
+  .verify {
     &__title {
       font-family: $base-font;
       font-size: $font-lg-x;
@@ -51,6 +46,7 @@ export default class TheSignUpForm extends Vue {}
       font-family: $base-font;
       color: $color-oslo-gray;
       font-size: $font-md;
+      line-height: 24px;
     }
   }
 </style>
