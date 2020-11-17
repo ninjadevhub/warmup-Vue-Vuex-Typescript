@@ -41,10 +41,9 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator'
-import SignUpForm from '@/components/forms/SignUpForm.vue'
 
-@Component({ components: { SignUpForm } })
-export default class TheSignUpForm extends Vue {}
+@Component
+export default class TheLogin extends Vue {}
 </script>
 
 <style lang="scss" scoped>

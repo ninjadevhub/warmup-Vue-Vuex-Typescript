@@ -2,23 +2,23 @@
   <v-container class="py-0 mx-5 pt-5" fluid>
     <v-row>
       <v-col cols="12">
-        <v-card class="verify mx-auto pa-6 px-11 mt-10" width="560px" elevation="0">
+        <v-card class="reset mx-auto pa-5 px-11 mt-10" width="560px" elevation="0">
           <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
           <v-card-title class="px-2 mb-6">
-            <div class="verify__title mb-2">Please verify your email address.</div>
-            <div class="verify__sub-title">
-              We just sent a verification code to {email_address}. Please enter the code below to verify your account.
+            <div class="reset__title mb-2">Password Reset</div>
+            <div class="reset__sub-title">
+              Enter your email address below and we will send you a link for a password reset.
             </div>
           </v-card-title>
-          <base-input label="Code" class="mb-4 px-2" />
+          <base-input label="Email address" class="mb-4 px-2" />
           <v-card-actions class="py-0">
             <base-button class="text-capitalize" variant="secondary" large block tile>
-              Verify
+              Send password reset
             </base-button>
           </v-card-actions>
-          <v-card-text class="verify__footer px-2">
+          <v-card-text class="px-2 reset__footer">
             <div>
-              <a href="#">Resend code</a>
+              <router-link to="/login">Back to login</router-link>
             </div>
           </v-card-text>
         </v-card>
@@ -31,11 +31,11 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class TheEmailVerification extends Vue {}
+export default class ThePasswordReset extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-  .verify {
+  .reset {
     &__title {
       font-family: $base-font;
       font-size: $font-lg-x;
