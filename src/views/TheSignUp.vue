@@ -9,7 +9,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-card class="sign-up mx-auto pa-8 mx-11 mt-10" width="560px">
+        <v-card class="sign-up mx-auto pa-8 mx-11 mt-10" width="560px" elevation="0">
           <v-card-title>
             <div class="sign-up__title">The easiest way to warm up your inboxes.</div>
             <div class="sign-up__sub-title">Create an account, no credit card required.</div>
