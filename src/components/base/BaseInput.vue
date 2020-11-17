@@ -43,7 +43,7 @@ export default class BaseInput extends Vue {
       left: -10px !important;
       top: -26px !important;
       text-transform: uppercase;
-      font-size: $font-sm;
+      font-size: $font-xs;
       opacity: 0.8;
       font-family: $label-font;
       color: $color-mako;
