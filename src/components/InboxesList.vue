@@ -1,0 +1,85 @@
+<template>
+  <div class="inboxes">
+    <div>
+      <div class="inboxes__title pb-3">
+        Inboxes
+        <base-button class="inboxes__new text-capitalize float-right" small elevation="0">
+          <base-icon class="pr-0 pl-0" variant="secondary" size="14">mdi-plus</base-icon> Add Inbox
+        </base-button>
+      </div>
+      <v-list class="inboxes__list" dense>
+        <v-list-item-group>
+          <template v-for="inbox in inboxes">
+            <v-list-item v-if="inbox <= inboxesToShow" :key="inbox" class="pl-0" :ripple="false">
+              <v-list-item-content class="py-0">
+                <v-list-item-title>
+                  <v-switch
+                    class="pl-3"
+                    color="#00d474"
+                    label="mike.benson@aol.com"
+                    :ripple="false"
+                    flat
+                    inset
+                  />
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
+      </v-list>
+      <v-divider class="pb-3"></v-divider>
+      <v-btn
+        class="d-block mx-auto text-capitalize font-weight-bold inboxes__more"
+        elevation="0"
+        :ripple="false"
+        text
+        @click="inboxesToShow += 3"
+      >
+        Load more
+      </v-btn>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component
+export default class InboxesList extends Vue {
+  inboxes = 10 // TODO: fetch inboxes
+  inboxesToShow = 3 // TODO: move to config file
+}
+</script>
+
+<style lang="scss" scoped>
+  .inboxes {
+    background-color: #FFFFFF;
+    width: 100%;
+    height: 100%;
+    &__title {
+      font-size: $font-lg;
+      font-weight: $font-weight-bold;
+    }
+    &__new {
+      font-size: 11px;
+    }
+    &__list {
+      ::v-deep {
+        .v-input {
+          &--switch__track {
+            opacity: 1;
+          }
+          &--switch__thumb {
+            color: #FFFFFF !important;
+          }
+        }
+        .v-label {
+          font-size: 14px;
+        }
+      }
+    }
+    &__more {
+      color: $color-dodger-blue !important;
+    }
+  }
+</style>

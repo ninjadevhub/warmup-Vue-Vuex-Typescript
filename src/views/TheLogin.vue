@@ -21,7 +21,7 @@
             </v-row>
           </v-container>
           <v-card-actions class="py-0">
-            <base-button class="text-capitalize" variant="secondary" large block tile>
+            <base-button to="/inboxes" class="text-capitalize" variant="secondary" large block tile>
               Sign in
             </base-button>
           </v-card-actions>
