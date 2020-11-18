@@ -6,18 +6,27 @@ import TheEmailVerification from '@/views/TheEmailVerification.vue'
 import TheLogin from '@/views/TheLogin.vue'
 import ThePasswordReset from '@/views/ThePasswordReset.vue'
 import TheNewPassword from '@/views/TheNewPassword.vue'
+import TheInboxes from '@/views/TheInboxes.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Dashboard',
-    component: TheDashboard
+    name: '',
+    redirect: 'inboxes',
+    component: TheDashboard,
+    children: [
+      {
+        path: '/inboxes',
+        name: 'inboxes',
+        component: TheInboxes
+      }
+    ]
   },
   {
     path: '/sign-up',
-    name: 'Sign up',
+    name: 'sign-up',
     component: TheSignUp
   },
   {
@@ -27,17 +36,17 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/login',
-    name: 'Log in',
+    name: 'login',
     component: TheLogin
   },
   {
     path: '/password-reset',
-    name: 'Password reset',
+    name: 'password-reset',
     component: ThePasswordReset
   },
   {
     path: '/new-password',
-    name: 'New password',
+    name: 'new-password',
     component: TheNewPassword
   }
 ]
