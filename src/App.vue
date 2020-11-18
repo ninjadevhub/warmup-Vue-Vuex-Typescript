@@ -1,7 +1,9 @@
 <template>
-  <div id="app" class="v-application">
-    <router-view/>
-  </div>
+  <v-app>
+    <v-main>
+      <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
 <style lang="scss">
@@ -9,6 +11,6 @@
 
   #app {
     background-color: $bg-color;
-    min-height: 100vh;
+    font-size: $font-md;
   }
 </style>
