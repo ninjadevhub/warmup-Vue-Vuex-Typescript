@@ -7,7 +7,7 @@
       <v-tab-item>
         <v-container fluid>
           <v-row>
-            <v-col cols="7">
+            <v-col cols="12" md="7">
               <div class="account-details__title mb-1">
                 Account Information
               </div>
@@ -17,19 +17,19 @@
             </v-col>
           </v-row>
           <v-row class="mt-16">
-            <v-col cols="7">
+            <v-col cols="12" md="7">
               <div class="account-details__title mb-1">
                 Change password
               </div>
               <v-divider />
               <v-row class="mt-7">
-                <v-col cols="4">
-                  <base-input label="Old password" variant="normal" />
+                <v-col cols="12" sm="4">
+                  <base-input custom-label="Old password" variant="normal" />
                 </v-col>
-                <v-col cols="4">
-                  <base-input label="New password" variant="normal" />
+                <v-col cols="12" sm="4">
+                  <base-input custom-label="New password" variant="normal" />
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="12" sm="4">
                   <base-button class="text-capitalize px-6">
                     Save
                   </base-button>

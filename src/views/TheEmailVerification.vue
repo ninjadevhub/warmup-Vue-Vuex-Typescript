@@ -10,7 +10,7 @@
               We just sent a verification code to {email_address}. Please enter the code below to verify your account.
             </div>
           </v-card-title>
-          <base-input label="Code" class="mb-4 px-2" />
+          <base-input custom-label="Code" class="mb-4 px-2" />
           <v-card-actions class="py-0">
             <base-button class="text-capitalize" variant="secondary" large block tile>
               Verify
