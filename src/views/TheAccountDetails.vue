@@ -23,13 +23,13 @@
               </div>
               <v-divider />
               <v-row class="mt-7">
-                <v-col cols="12" sm="4">
-                  <base-input custom-label="Old password" variant="normal" />
+                <v-col cols="12" sm="4" class="d-flex align-end">
+                  <base-input custom-label="Old password" variant="normal" class="account-details__input" />
                 </v-col>
-                <v-col cols="12" sm="4">
-                  <base-input custom-label="New password" variant="normal" />
+                <v-col cols="12" sm="4" class="d-flex align-end">
+                  <base-input custom-label="New password" variant="normal" class="account-details__input" />
                 </v-col>
-                <v-col cols="12" sm="4">
+                <v-col cols="12" sm="4" class="d-flex align-end">
                   <base-button class="text-capitalize px-6">
                     Save
                   </base-button>
@@ -60,6 +60,9 @@ export default class TheAccountDetails extends Vue {
     &__title {
       font-size: $font-md-x;
       font-weight: $font-weight-bold;
+    }
+    &__input {
+      margin-bottom: 0 !important;
     }
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div :class="`input--${variant}`">
-    <label class="d-block mb-2">
+  <div :class="`input--${variant} input__wrapper`">
+    <label class="d-block">
       {{ customLabel }}
       <span v-if="helpText" class="input__help-text text-capitalize">
         <i>{{ helpText }}</i>
@@ -9,7 +9,6 @@
     <v-text-field
       :placeholder="placeholder"
       v-bind="{ ...$attrs, ...$props }"
-      class="mb-3"
       outlined
       dense
       single-line
@@ -63,6 +62,12 @@ export default class BaseInput extends Vue {
     }
   }
   .input {
+    &__wrapper {
+      margin-bottom: 12px;
+      label {
+        margin-bottom: 8px;
+      }
+    }
     &--main {
       ::v-deep {
         label {

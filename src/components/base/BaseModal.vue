@@ -11,7 +11,7 @@
     <v-card>
       <v-card-title class="modal__title d-flex justify-space-between px-0 py-0">
         {{ title }}
-        <v-btn class="black--text" icon dark text @click="dialog = false">
+        <v-btn v-if="closeButton" class="black--text" icon dark text @click="dialog = false">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
@@ -31,11 +31,24 @@ export default class BaseModal extends Vue {
   })
   readonly title!: string
 
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  readonly closeButton!: boolean
+
   dialog = false;
 }
 </script>
 
 <style lang="scss" scoped>
+  .v-dialog {
+    &__content {
+      margin-top: 40px;
+      align-items: flex-start;
+    }
+  }
+
   .v-card {
     padding: 20px 25px;
   }

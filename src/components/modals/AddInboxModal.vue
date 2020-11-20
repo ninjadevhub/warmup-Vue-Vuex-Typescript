@@ -4,9 +4,9 @@
     title="Add inbox"
   >
     <template #button>
-      <v-btn class="inboxes__new text-capitalize white--text" color="#347EED" small elevation="0">
+      <base-button class="text-capitalize" elevation="0" small>
         <base-icon class="pr-0 pl-0" variant="secondary" size="14">mdi-plus</base-icon> Add Inbox
-      </v-btn>
+      </base-button>
     </template>
 
     <template #content>
@@ -24,7 +24,3 @@ export default class AddInboxModal extends Vue {
   dialog = false;
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
