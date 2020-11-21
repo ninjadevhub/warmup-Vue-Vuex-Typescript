@@ -6,23 +6,33 @@
         <i>{{ helpText }}</i>
       </span>
     </label>
-    <v-text-field
-      :placeholder="placeholder"
-      v-bind="{ ...$attrs, ...$props }"
-      class="mb-3"
-      outlined
+    <v-select
+      v-model="localValue"
+      :items="items"
       dense
-      single-line
+      outlined
       hide-details="auto"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop, Model } from 'vue-property-decorator'
 
 @Component
-export default class BaseInput extends Vue {
+export default class BaseSelect extends Vue {
+  @Model('select', {
+    type: String,
+    required: true
+  })
+  readonly value!: string;
+
+  @Prop({
+    type: Array,
+    required: true
+  })
+  readonly items!: string[]
+
   @Prop({
     type: String,
     default: ''
@@ -37,15 +47,17 @@ export default class BaseInput extends Vue {
 
   @Prop({
     type: String,
-    default: ''
-  })
-  readonly placeholder?: string
-
-  @Prop({
-    type: String,
     default: 'main'
   })
   readonly variant?: string
+
+  get localValue (): string {
+    return this.value
+  }
+
+  set localValue (value: string) {
+    this.$emit('select', value)
+  }
 }
 </script>
 

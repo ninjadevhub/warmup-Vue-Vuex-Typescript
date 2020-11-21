@@ -4,13 +4,13 @@
       <v-col cols="12">
         <v-card class="reset mx-auto pa-5 px-11 mt-10" width="560px" elevation="0">
           <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
-          <v-card-title class="px-2 mb-6">
+          <v-card-title class="px-2">
             <div class="reset__title mb-2">Password Reset</div>
             <div class="reset__sub-title">
               Enter your email address below and we will send you a link for a password reset.
             </div>
           </v-card-title>
-          <base-input label="Email address" class="mb-4 px-2" />
+          <base-input custom-label="Email address" class="px-2" />
           <v-card-actions class="py-0">
             <base-button class="text-capitalize" variant="secondary" large block tile>
               Send password reset

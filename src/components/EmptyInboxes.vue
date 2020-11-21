@@ -8,9 +8,7 @@
         <a href="#">let us know</a>.
       </div>
       <div class="px-2 pt-5">
-        <base-button class="inboxes__new text-capitalize" small elevation="0">
-          <base-icon class="pr-0 pl-0" variant="secondary" size="14">mdi-plus</base-icon> Add Inbox
-        </base-button>
+        <add-inbox-modal />
       </div>
     </div>
     <v-container fluid>
@@ -58,8 +56,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import AddInboxModal from '@/components/modals/AddInboxModal.vue'
 
-@Component
+@Component({ components: { AddInboxModal } })
 export default class EmptyInboxes extends Vue {}
 </script>
 

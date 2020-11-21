@@ -2,17 +2,17 @@
   <div>
     <v-container>
       <v-row>
-        <v-col cols="6">
-          <base-input label="First name" class="mb-4" />
+        <v-col cols="6" class="py-0">
+          <base-input custom-label="First name" height="40" />
         </v-col>
-        <v-col cols="6">
-          <base-input label="Last name" class="mb-4" />
+        <v-col cols="6" class="py-0">
+          <base-input custom-label="Last name" height="40" />
         </v-col>
-        <v-col cols="12">
-          <base-input label="Email address" class="mb-4" />
+        <v-col cols="12" class="py-0">
+          <base-input custom-label="Email address" height="40" />
         </v-col>
-        <v-col cols="12">
-          <base-input label="Create password" />
+        <v-col cols="12" class="py-0">
+          <base-input custom-label="Create password" height="40" />
         </v-col>
       </v-row>
     </v-container>

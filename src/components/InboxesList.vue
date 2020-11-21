@@ -3,9 +3,9 @@
     <div>
       <div class="inboxes__title pb-3">
         Inboxes
-        <base-button class="inboxes__new text-capitalize float-right" small elevation="0">
-          <base-icon class="pr-0 pl-0" variant="secondary" size="14">mdi-plus</base-icon> Add Inbox
-        </base-button>
+        <div class="float-right">
+          <add-inbox-modal />
+        </div>
       </div>
       <v-list class="inboxes__list" dense>
         <v-list-item-group>
@@ -43,8 +43,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import AddInboxModal from '@/components/modals/AddInboxModal.vue'
 
-@Component
+@Component({ components: { AddInboxModal } })
 export default class InboxesList extends Vue {
   inboxes = 10 // TODO: fetch inboxes
   inboxesToShow = 3 // TODO: move to config file

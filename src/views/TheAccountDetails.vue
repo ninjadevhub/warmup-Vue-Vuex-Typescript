@@ -24,10 +24,10 @@
               <v-divider />
               <v-row class="mt-7">
                 <v-col cols="12" sm="4">
-                  <base-input label="Old password" variant="normal" />
+                  <base-input custom-label="Old password" variant="normal" />
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <base-input label="New password" variant="normal" />
+                  <base-input custom-label="New password" variant="normal" />
                 </v-col>
                 <v-col cols="12" sm="4">
                   <base-button class="text-capitalize px-6">

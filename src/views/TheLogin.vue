@@ -10,13 +10,13 @@
           <v-divider class="mx-2 my-2" />
           <v-container class="px-2" fluid>
             <v-row>
-              <v-col col="12">
-                <base-input label="Email address" class="mb-4" />
+              <v-col col="12" class="py-0">
+                <base-input custom-label="Email address" />
               </v-col>
             </v-row>
             <v-row>
-              <v-col col="12">
-                <base-input label="Password" />
+              <v-col col="12" class="py-0">
+                <base-input custom-label="Password" />
               </v-col>
             </v-row>
           </v-container>
