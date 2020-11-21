@@ -1,11 +1,13 @@
 <template>
   <v-text-field
+    :class="`input--${variant}`"
     :label="label"
     :placeholder="placeholder"
-    hide-details="auto"
+    v-bind="{ ...$attrs, ...$props }"
     outlined
     dense
     single-line
+    height="30"
   />
 </template>
 
@@ -25,6 +27,12 @@ export default class BaseInput extends Vue {
     default: ''
   })
   readonly placeholder?: string
+
+  @Prop({
+    type: String,
+    default: 'main'
+  })
+  readonly variant?: string
 }
 </script>
 
@@ -42,12 +50,28 @@ export default class BaseInput extends Vue {
     label {
       left: -10px !important;
       top: -26px !important;
-      text-transform: uppercase;
-      font-size: $font-xs;
-      opacity: 0.8;
       font-family: $label-font;
-      color: $color-mako;
       font-weight: $font-weight-bold;
+    }
+  }
+  .input {
+    &--main {
+      ::v-deep {
+        label {
+          font-size: $font-xs;
+          opacity: 0.8;
+          text-transform: uppercase;
+          color: $color-mako;
+        }
+      }
+    }
+    &--normal {
+      ::v-deep {
+        label {
+          font-size: 12px;
+          color: $secondary-color;
+        }
+      }
     }
   }
 </style>

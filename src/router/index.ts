@@ -7,6 +7,7 @@ import TheLogin from '@/views/TheLogin.vue'
 import ThePasswordReset from '@/views/ThePasswordReset.vue'
 import TheNewPassword from '@/views/TheNewPassword.vue'
 import TheInboxes from '@/views/TheInboxes.vue'
+import TheAccountDetails from '@/views/TheAccountDetails.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes: Array<RouteConfig> = [
         path: '/inboxes',
         name: 'inboxes',
         component: TheInboxes
+      },
+      {
+        path: '/account-settings',
+        name: 'account-settings',
+        component: TheAccountDetails
       }
     ]
   },
