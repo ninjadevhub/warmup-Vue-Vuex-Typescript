@@ -27,6 +27,7 @@ export default class BaseButton extends Vue {
       &__content {
         display: flex;
         align-items: center;
+        font-family: $base-font;
       }
     }
   }

@@ -8,6 +8,7 @@ import ThePasswordReset from '@/views/ThePasswordReset.vue'
 import TheNewPassword from '@/views/TheNewPassword.vue'
 import TheInboxes from '@/views/TheInboxes.vue'
 import TheAccountDetails from '@/views/TheAccountDetails.vue'
+import TheBilling from '@/views/TheBilling.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes: Array<RouteConfig> = [
         path: '/account-settings',
         name: 'account-settings',
         component: TheAccountDetails
+      },
+      {
+        path: '/billing',
+        name: 'billing',
+        component: TheBilling
       }
     ]
   },

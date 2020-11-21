@@ -1,47 +1,60 @@
 <template>
   <div class="dashboard ml-md-15 ml-0">
     <v-app-bar class="header" app flat>
-      <img src="@/assets/img/logo_white.png" width="25px" @click.stop="sidebar = !sidebar">
-      <div v-if="title" class="white--text text-center text-capitalize">
-        <base-icon class="pr-1" variant="secondary">
-          {{ title.icon }}
-        </base-icon>
-        {{ title.title }}
-        <template v-if="title.subTitle">
-          - <span class="grey--text">{{ title.subTitle }}</span>
-        </template>
-      </div>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            class="align-items-center white--text"
-            variant="secondary"
-            v-bind="attrs"
-            v-on="on"
-            elevation="0"
-            text
-          >
-            MB
-            <base-icon class="pl-0 pr-0 pt-0 pb-0" variant="secondary" size="14">mdi-chevron-down</base-icon>
-          </v-btn>
-        </template>
-        <v-list class="menu">
-          <v-list-item link>
-            <v-list-item-title>
-              <router-link class="menu__link" to="/account">
-                Account
-              </router-link>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item link>
-            <v-list-item-title>
-              <router-link class="menu__link" to="/logout">
-                Log out
-              </router-link>
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="6" sm="4" class="d-flex align-center">
+            <img src="@/assets/img/logo_white.png" width="25px" @click.stop="sidebar = !sidebar">
+          </v-col>
+          <v-col cols="6" sm="4" class="d-none d-sm-block">
+            <div v-if="title" class="white--text text-center text-capitalize">
+              <base-icon class="pr-1" variant="secondary">
+                {{ title.icon }}
+              </base-icon>
+              {{ title.title }}
+              <template v-if="title.subTitle">
+                - <span class="grey--text">{{ title.subTitle }}</span>
+              </template>
+            </div>
+          </v-col>
+          <v-col cols="6" sm="4" class="d-flex align-center justify-end">
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <div>
+                  <a v-if="!hasSubscription" href="#" class="dashboard__link font-weight-bold">Upgrade Now</a>
+                  <v-btn
+                    class="align-items-center white--text"
+                    variant="secondary"
+                    v-bind="attrs"
+                    v-on="on"
+                    elevation="0"
+                    text
+                  >
+                    MB
+                    <base-icon class="pl-0 pr-0 pt-0 pb-0" variant="secondary" size="14">mdi-chevron-down</base-icon>
+                  </v-btn>
+                </div>
+              </template>
+              <v-list class="menu">
+                <v-list-item link>
+                  <v-list-item-title>
+                    <router-link class="menu__link" to="/account">
+                      Account
+                    </router-link>
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item link>
+                  <v-list-item-title>
+                    <router-link class="menu__link" to="/logout">
+                      Log out
+                    </router-link>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-app-bar>
     <div class="dashboard__content d-flex">
       <v-navigation-drawer
@@ -105,7 +118,8 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class TheDashboard extends Vue {
-  sidebar = null;
+  sidebar = null
+  hasSubscription = true // TODO: Make computed getter
 
   isActiveRoute (route: string): boolean {
     return this.$route.name === route
@@ -125,6 +139,12 @@ export default class TheDashboard extends Vue {
           title: 'Account details',
           subTitle: 'Settings'
         }
+      case 'billing':
+        return {
+          icon: 'mdi-label-outline mdi-rotate-270',
+          title: 'Billing',
+          subTitle: 'Settings'
+        }
     }
   }
 }
@@ -136,16 +156,14 @@ export default class TheDashboard extends Vue {
     &__content {
       height: inherit;
     }
+    &__link {
+      font-family: $label-font;
+      color: $color-apricot;
+    }
   }
 
   .header {
     background-color: $secondary-color !important;
-    ::v-deep {
-      .v-toolbar__content {
-        display: flex;
-        justify-content: space-between;
-      }
-    }
   }
 
   .menu {
