@@ -14,25 +14,25 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12" md="4">
-          <div class="help-text">
+          <div class="help-text border-right" :class="{'no-border': $vuetify.breakpoint.sm || $vuetify.breakpoint.xs}">
             <div class="mb-2 font-weight-bold">How Does This All Work?</div>
             <div>
               Building up and maintain a positive sending reputation is a complicated process.
               Thankfully we built an effortless way to keep your deliverability high. Learn how we do it.
             </div>
-            <base-button to="#" class="help-text__action text-capitalize mt-5" small elevation="0">
+            <base-button to="#" class="help-text__action text-capitalize mt-5" small>
               Lear more
             </base-button>
           </div>
         </v-col>
         <v-col cols="12" md="4">
-          <div class="help-text">
+          <div class="help-text border-right" :class="{'no-border': $vuetify.breakpoint.sm || $vuetify.breakpoint.xs}">
             <div class="mb-2 font-weight-bold">ABW: Always Be Warming</div>
             <div>
               Maintaining consistent positive engagement within your inboxes is critical for upholding the highest
               possible delivery rates for your emails.
             </div>
-            <base-button to="#" class="help-text__action text-capitalize mt-5" small elevation="0">
+            <base-button to="#" class="help-text__action text-capitalize mt-5" small>
               Lear why
             </base-button>
           </div>
@@ -44,7 +44,7 @@
               You can earn a 20% commission every month for every customer you refer. Use your unqiue link below so
               you can share on your blog, podcast, etc…
             </div>
-            <base-button to="#" class="help-text__action text-capitalize mt-5" small elevation="0">
+            <base-button to="#" class="help-text__action text-capitalize mt-5" small>
               Copy Referral Link
             </base-button>
           </div>
@@ -81,6 +81,12 @@ export default class EmptyInboxes extends Vue {}
       height: 100%;
       flex-direction: column;
       justify-content: space-between;
+      &.border-right {
+        border-right: 1px solid #F0F0F0;
+      }
+      &.no-border {
+        border: none !important;
+      }
       &__action {
         font-size: 11px;
         align-self: baseline;

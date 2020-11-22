@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-0 mx-5 pt-5" fluid>
+  <v-container class="py-0 pt-15" fluid>
     <v-row>
       <v-col cols="12">
         <v-card class="reset mx-auto pa-5 px-11 mt-10" width="560px" elevation="0">
@@ -12,7 +12,7 @@
           </v-card-title>
           <base-input custom-label="Email address" class="px-2" />
           <v-card-actions class="py-0">
-            <base-button class="text-capitalize" variant="secondary" large block tile>
+            <base-button class="text-capitalize font-weight-bold" variant="secondary" large block tile>
               Send password reset
             </base-button>
           </v-card-actions>

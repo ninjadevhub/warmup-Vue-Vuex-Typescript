@@ -3,6 +3,8 @@
     :class="`btn--${variant}`"
     class="d-flex align-center"
     v-bind="{ ...$attrs }"
+    elevation="0"
+    v-on="$listeners"
   >
     <slot />
   </v-btn>
@@ -42,40 +44,47 @@ export default class BaseButton extends Vue {
       background-color: #000000 !important;
       ::v-deep {
         .v-btn {
-          &__content i {
-            color: #FFFFFF !important;
+          &__content {
+            svg {
+              fill: #FFFFFF;
+            }
+            i {
+              color: #FFFFFF !important;
+            }
           }
         }
       }
       &:hover {
-        color: #000000 !important;
-        background-color: #D6D6D6 !important;
-        ::v-deep {
-        .v-btn {
-          &__content i {
-            color: #000000 !important;
-          }
-        }
-      }
+        background-color: #000000 !important;
       }
     }
     &--secondary {
       color: #FFFFFF !important;
+      font-family: 'SFUIText' !important;
       background-color: $secondary-color !important;
       ::v-deep {
         .v-btn {
-          &__content i {
-            color: #FFFFFF !important;
+          &__content {
+            svg {
+              fill: #FFFFFF;
+            }
+            i {
+              color: #FFFFFF !important;
+            }
           }
         }
       }
       &:hover {
-        color: #000000 !important;
-        background-color: #D6D6D6 !important;
+        background-color: #000000 !important;
         ::v-deep {
         .v-btn {
-          &__content i {
-            color: #000000 !important;
+          &__content {
+            svg {
+              fill: #000000;
+            }
+            i {
+              color: #000000 !important;
+            }
           }
         }
       }

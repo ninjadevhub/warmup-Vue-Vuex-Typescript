@@ -12,7 +12,7 @@ import InboxesList from '@/components/InboxesList.vue'
 
 @Component({ components: { EmptyInboxes, InboxesList } })
 export default class TheInboxes extends Vue {
-  hasInboxes = true; // TODO: add getter
+  hasInboxes = false; // TODO: add getter
 }
 </script>
 

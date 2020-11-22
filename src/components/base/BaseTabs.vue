@@ -43,6 +43,7 @@ export default class BaseTabs extends Vue {
           .v-tab {
             text-transform: capitalize;
             color: $color-edward !important;
+            font-weight: bold;
             &--active {
               color: #FFFFFF !important;
             }

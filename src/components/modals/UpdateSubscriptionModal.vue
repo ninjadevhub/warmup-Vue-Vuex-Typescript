@@ -85,13 +85,9 @@
       </v-container>
       <v-divider v-if="inboxesChanged" class="mt-1 mb-3" />
       <div class="d-flex justify-end edit-subscription__action">
-        <base-button
-          class="text-capitalize font-weight-bold"
-          elevation="0"
-          :disabled="!inboxesChanged"
-        >
-        Confirm changes
-      </base-button>
+        <base-button class="text-capitalize font-weight-bold" :disabled="!inboxesChanged">
+          Confirm changes
+        </base-button>
       </div>
     </template>
   </base-modal>

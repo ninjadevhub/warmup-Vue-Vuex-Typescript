@@ -1,10 +1,10 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12">
-        <div class="metrics__title mb-7">
+      <v-col cols="12" class="pt-0">
+        <div class="metrics__title mb-0">
           <div class="font-weight-bold">john.smith@acme.com</div>
-          <base-switch v-model="isRunning" class="d-inline-block" />
+          <base-switch v-model="isRunning" class="d-inline-block py-0" />
           <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
           <span v-else class="label label__paused font-weight-bold">Paused</span>
           <v-divider />
@@ -85,7 +85,7 @@
       </v-col>
     </v-row>
     <v-row class="metrics__data data">
-      <v-col cols="12">
+      <v-col cols="12" class="pt-0">
         <div class="data__title">
           Inbox Activity
           <div class="float-right">
@@ -350,7 +350,7 @@ export default class InboxMetrics extends Vue {
       font-family: $label-font;
       .data {
         &__wrapper {
-          margin-bottom: 18px;
+          margin-bottom: 10px;
         }
         &__title {
           font-weight: $font-weight-bold;
