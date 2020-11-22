@@ -17,7 +17,12 @@
               <v-divider />
               <div class="mt-3 mb-2">Using 0/1 Inboxes</div>
               <div v-if="hasSubscription">Your plan will renew on Dec 1, 2020 for $10.00.</div>
-              <div v-else>Your free trial ends Nov 17, 2020 (<a href="#" class="green--text">Upgrade now</a>)</div>
+              <div v-else>
+                Your free trial ends Nov 17, 2020
+                (<div class="d-inline-block">
+                  <subscribe-modal />
+                </div>)
+              </div>
             </v-col>
           </v-row>
           <v-row class="mt-16">
@@ -45,11 +50,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import UpdateSubscriptionModal from '@/components/modals/UpdateSubscriptionModal.vue'
+import SubscribeModal from '@/components/modals/SubscribeModal.vue'
 
-@Component({ components: { UpdateSubscriptionModal } })
+@Component({ components: { UpdateSubscriptionModal, SubscribeModal } })
 export default class TheBilling extends Vue {
   activeTab = 0
-  hasSubscription = true; // TODO: Make computed
+  hasSubscription = false; // TODO: Make computed
 }
 </script>
 

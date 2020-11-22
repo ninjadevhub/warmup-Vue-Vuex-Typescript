@@ -1,10 +1,10 @@
 <template>
-  <div class="dashboard ml-md-15 ml-0">
-    <v-app-bar class="header" app flat>
+  <div class="dashboard ml-md-12 ml-0">
+    <v-app-bar class="header" height="50px" app flat>
       <v-container fluid>
         <v-row>
           <v-col cols="6" sm="4" class="d-flex align-center">
-            <img src="@/assets/img/logo_white.png" width="25px" @click.stop="sidebar = !sidebar">
+            <img src="@/assets/img/logo_white.png" width="20px" @click.stop="sidebar = !sidebar">
           </v-col>
           <v-col cols="6" sm="4" class="d-none d-sm-block">
             <div v-if="title" class="white--text text-center text-capitalize">
@@ -59,7 +59,7 @@
     <div class="dashboard__content d-flex">
       <v-navigation-drawer
         v-model="sidebar"
-        with="60"
+        with="50"
         :permanent="$vuetify.breakpoint.mdAndUp"
         absolute
         left
@@ -70,7 +70,7 @@
               <base-button
                 to="/inboxes"
                 class="mx-auto"
-                :variant="isActiveRoute('inboxes') ? 'secondary' : 'text'"
+                :variant="isActiveRoute('inboxes') ? 'black' : 'text'"
                 icon
               >
                 <base-icon>mdi-inbox-outline</base-icon>
@@ -82,7 +82,7 @@
               <base-button
                 to="/billing"
                 class="mx-auto"
-                :variant="isActiveRoute('billing') ? 'secondary' : 'text'"
+                :variant="isActiveRoute('billing') ? 'black' : 'text'"
                 icon
               >
                 <base-icon >mdi-label-outline mdi-rotate-270</base-icon>
@@ -92,7 +92,7 @@
               <base-button
                 to="/account-settings"
                 class="mx-auto"
-                :variant="isActiveRoute('account-settings') ? 'secondary' : 'text'"
+                :variant="isActiveRoute('account-settings') ? 'black' : 'text'"
                 icon
               >
                 <base-icon >mdi-account-outline</base-icon>
@@ -164,6 +164,11 @@ export default class TheDashboard extends Vue {
 
   .header {
     background-color: $secondary-color !important;
+    ::v-deep {
+      .v-toolbar__content {
+        padding: 0px !important;
+      }
+    }
   }
 
   .menu {
@@ -175,8 +180,15 @@ export default class TheDashboard extends Vue {
 
   aside {
     position: fixed;
-    padding-top: 60px;
-    max-width: 60px;
+    padding-top: 50px;
+    max-width: 50px;
+    .v-btn--icon.v-size--default {
+      height: 30px;
+      width: 30px;
+      i {
+        font-size: 18px;
+      }
+    }
   }
 
   .sidebar {
