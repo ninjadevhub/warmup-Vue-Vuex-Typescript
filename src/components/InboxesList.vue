@@ -13,14 +13,7 @@
             <v-list-item v-if="inbox <= inboxesToShow" :key="inbox" class="pl-0" :ripple="false">
               <v-list-item-content class="py-0">
                 <v-list-item-title>
-                  <v-switch
-                    class="pl-3"
-                    color="#00d474"
-                    label="mike.benson@aol.com"
-                    :ripple="false"
-                    flat
-                    inset
-                  />
+                  <base-switch class="pl-3" label="mike.benson@aol.com" />
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -63,21 +56,6 @@ export default class InboxesList extends Vue {
     }
     &__new {
       font-size: 11px;
-    }
-    &__list {
-      ::v-deep {
-        .v-input {
-          &--switch__track {
-            opacity: 1;
-          }
-          &--switch__thumb {
-            color: #FFFFFF !important;
-          }
-        }
-        .v-label {
-          font-size: 14px;
-        }
-      }
     }
     &__more {
       color: $color-dodger-blue !important;
