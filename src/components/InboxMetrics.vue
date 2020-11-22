@@ -108,14 +108,20 @@
             <bar-chart
               :chart-data="computedChartData"
               :options="barChartOptions"
-              :height="150"
+              :height="100"
+              @blla="console.log('event')"
             />
           </v-col>
           <v-col cols="12" md="2">
             <div class="font-weight-bold mb-3">{{ currentDate }}, 2020</div>
             <div class="chart-legend d-flex align-center" @click="isScheduledVisible = !isScheduledVisible">
               <div class="chart-legend__icon">
-                <base-icon v-if="isScheduledVisible" class="d-inline-block d-fle pl-0 pt-0 pb-0">mdi-check</base-icon>
+                <base-icon
+                  v-if="isScheduledVisible"
+                  class="d-inline-block d-fle pl-0 pt-0 pb-0"
+                >
+                  mdi-check
+                </base-icon>
               </div>
               <div class="chart-legend__wrapper scheduled d-inline-block">
                 <div class="chart-legend__value">{{ currentScheduled }}</div>
@@ -124,7 +130,12 @@
             </div>
             <div class="chart-legend d-flex align-center" @click="isLandedInInboxVixible = !isLandedInInboxVixible">
               <div class="chart-legend__icon">
-                <base-icon v-if="isLandedInInboxVixible" class="d-inline-block d-fle pl-0 pt-0 pb-0">mdi-check</base-icon>
+                <base-icon
+                  v-if="isLandedInInboxVixible"
+                  class="d-inline-block d-fle pl-0 pt-0 pb-0"
+                >
+                  mdi-check
+                </base-icon>
               </div>
               <div class="chart-legend__wrapper landed-inbox d-inline-block">
                 <div class="chart-legend__value">{{ currentLandedInInbox }}</div>
@@ -133,7 +144,12 @@
             </div>
             <div class="chart-legend d-flex align-center" @click="isLandedInSpamVisible = !isLandedInSpamVisible">
               <div class="chart-legend__icon">
-                <base-icon v-if="isLandedInSpamVisible" class="d-inline-block d-fle pl-0 pt-0 pb-0">mdi-check</base-icon>
+                <base-icon
+                  v-if="isLandedInSpamVisible"
+                  class="d-inline-block d-fle pl-0 pt-0 pb-0"
+                >
+                  mdi-check
+                </base-icon>
               </div>
               <div class="chart-legend__wrapper landed-spam d-inline-block">
                 <div class="chart-legend__value">{{ currentLandedInSpam }}</div>
@@ -150,7 +166,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
-import { ChartData, ChartTooltipItem } from 'chart.js'
 import BarChart from '@/components/charts/BarChart.vue'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
 
@@ -185,10 +200,11 @@ export default class InboxMetrics extends Vue {
     tooltips: {
       mode: 'label',
       callbacks: {
-        label: function (tooltipItem: ChartTooltipItem, data: ChartData) {
-          const dataset = data.datasets![tooltipItem.datasetIndex!]
-          const value = dataset.data![tooltipItem.index!]
-          const label = data.labels![tooltipItem.index!]
+        // eslint-disable-next-line
+        label: function (tooltipItem: any, data: any) {
+          const dataset = data.datasets[tooltipItem.datasetIndex]
+          const value = dataset.data[tooltipItem.index]
+          const label = data.labels[tooltipItem.index]
           return `${label} (${value} %)`
         }
       }
@@ -240,11 +256,9 @@ export default class InboxMetrics extends Vue {
       ]
     },
     hover: {
-      onHover: (self: Chart, event: MouseEvent) => {
-        if (event && event[0]) {
-          console.log('changed')
-          this.currentIndex = (event[0] as any)._index
-        }
+      // eslint-disable-next-line
+      onHover: (self: Chart, event: any) => {
+        if (event && event[0]) this.changeCurrentIndex(event[0]._index)
       }
     }
   }
@@ -278,6 +292,10 @@ export default class InboxMetrics extends Vue {
     return this.barChartData.datasets[2].data[this.currentIndex]
       ? this.barChartData.datasets[2].data[this.currentIndex]
       : '-'
+  }
+
+  changeCurrentIndex (index: number): void {
+    this.currentIndex = index
   }
 }
 </script>
