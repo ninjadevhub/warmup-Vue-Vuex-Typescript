@@ -37,6 +37,28 @@ export default class BaseButton extends Vue {
       color: #FFFFFF !important;
       background-color: $primary-color !important;
     }
+    &--black {
+      color: #FFFFFF !important;
+      background-color: #000000 !important;
+      ::v-deep {
+        .v-btn {
+          &__content i {
+            color: #FFFFFF !important;
+          }
+        }
+      }
+      &:hover {
+        color: #000000 !important;
+        background-color: #D6D6D6 !important;
+        ::v-deep {
+        .v-btn {
+          &__content i {
+            color: #000000 !important;
+          }
+        }
+      }
+      }
+    }
     &--secondary {
       color: #FFFFFF !important;
       background-color: $secondary-color !important;

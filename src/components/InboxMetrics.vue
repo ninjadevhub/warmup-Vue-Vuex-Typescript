@@ -1,97 +1,87 @@
 <template>
   <v-container>
     <v-row>
-      <div class="metrics__title">
-        <div class="font-weight-bold">john.smith@acme.com</div>
-        <base-switch v-model="isRunning" class="d-inline-block" />
-        <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
-        <span v-else class="label label__paused font-weight-bold">Paused</span>
-        <v-divider />
-      </div>
+      <v-col cols="12">
+        <div class="metrics__title mb-7">
+          <div class="font-weight-bold">john.smith@acme.com</div>
+          <base-switch v-model="isRunning" class="d-inline-block" />
+          <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
+          <span v-else class="label label__paused font-weight-bold">Paused</span>
+          <v-divider />
+        </div>
+      </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12" md="4">
-        <v-row class="metrics__data data">
-          <v-col cols="6">
-            <div class="data__title">Sending</div>
-            <v-divider class="mb-2 mt-1" />
-            <div class="data__wrapper">
-              <div class="data__value">5</div>
-              <div class="data__info">Sent last 24 hours</div>
-            </div>
-            <div class="data__wrapper">
-              <div class="data__value">10</div>
-              <div class="data__info">Sent last 7 days</div>
-            </div>
-            <div class="data__wrapper">
-              <div class="data__value">300</div>
-              <div class="data__info">Sent last 30 days</div>
-            </div>
-          </v-col>
-          <v-col cols="6">
-            <div class="data__title">Receiving</div>
-            <v-divider class="mb-2 mt-1" />
-            <div class="data__wrapper">
-              <div class="data__value">12</div>
-              <div class="data__info">Received last 24 hours</div>
-            </div>
-            <div class="data__wrapper">
-              <div class="data__value">30</div>
-              <div class="data__info">Received last 7 days</div>
-            </div>
-            <div class="data__wrapper">
-              <div class="data__value">712</div>
-              <div class="data__info">Received last 30 days</div>
-            </div>
-          </v-col>
-        </v-row>
+    <v-row class="metrics__data data">
+      <v-col class="pr-lg-10" cols="12" md="6" lg="4" >
+        <div class="d-inline-block float-lg-left pr-4 pr-sm-10 pr-md-5 pr-lg-0">
+          <div class="data__title">Sending</div>
+          <v-divider class="mb-2 mt-1" />
+          <div class="data__wrapper">
+            <div class="data__value">5</div>
+            <div class="data__info">Sent last 24 hours</div>
+          </div>
+          <div class="data__wrapper">
+            <div class="data__value">10</div>
+            <div class="data__info">Sent last 7 days</div>
+          </div>
+          <div class="data__wrapper">
+            <div class="data__value">300</div>
+            <div class="data__info">Sent last 30 days</div>
+          </div>
+        </div>
+        <div class="d-inline-block float-lg-right pl-0 pl-sm-10 pl-md-5 pl-lg-0">
+          <div class="data__title">Receiving</div>
+          <v-divider class="mb-2 mt-1" />
+          <div class="data__wrapper">
+            <div class="data__value">12</div>
+            <div class="data__info">Received last 24 hours</div>
+          </div>
+          <div class="data__wrapper">
+            <div class="data__value">30</div>
+            <div class="data__info">Received last 7 days</div>
+          </div>
+          <div class="data__wrapper">
+            <div class="data__value">712</div>
+            <div class="data__info">Received last 30 days</div>
+          </div>
+        </div>
       </v-col>
-      <v-col cols="12" md="4" >
-        <v-row class="metrics__data data">
-          <v-col cols="10" offset="1">
-            <div class="data__title">Inbox vs Spam</div>
-            <v-divider class="mb-6 mt-1" />
-            <div class="data__doughnut-chart float-left">
-              <doughnut-chart :chart-data="doughnutChartData" :options="doughnutOptions" />
+      <v-col class="px-lg-10" cols="12" md="6" lg="4" >
+        <div class="data__title">Inbox vs Spam</div>
+        <v-divider class="mb-6 mt-1" />
+        <div class="d-flex flex-column flex-sm-row justify-lg-space-between">
+          <div class="data__doughnut-chart d-flex justify-center d-sm-block">
+            <doughnut-chart :chart-data="doughnutChartData" :options="doughnutOptions" />
+          </div>
+          <div class="d-flex justify-space-between align-center mt-5 mt-sm-0 d-sm-block ml-10 ml-lg-0">
+            <div class="data__doughnut-legend-inbox mb-sm-8 d-inline-block d-sm-block">
+              <div class="data__doughnut-legend-inbox-title font-weight-bold">98.1% (591)</div>
+              <div>Landed in <br /> Inbox</div>
             </div>
-            <div class="float-right">
-              <div class="data__doughnut-legend-inbox mb-8">
-                <div class="data__doughnut-legend-inbox-title font-weight-bold">98.1% (591)</div>
-                <div>Landed in <br /> Inbox</div>
-              </div>
-              <div class="data__doughnut-legend-spam">
-                <div class="data__doughnut-legend-spam-title font-weight-bold">2.9% (11)</div>
-                <div>Landed in <br /> Spam & Saved</div>
-              </div>
+            <div class="data__doughnut-legend-spam d-inline-block d-sm-block">
+              <div class="data__doughnut-legend-spam-title font-weight-bold">2.9% (11)</div>
+              <div>Landed in <br /> Spam & Saved</div>
             </div>
-          </v-col>
-        </v-row>
+          </div>
+        </div>
       </v-col>
-      <v-col cols="12" md="4" >
-        <v-row class="metrics__data data">
-          <v-col cols="12">
-            <div class="data__title">Health Score</div>
-            <v-divider class="mb-2 mt-1" />
-            <div class="data__wrapper">
-              <div class="data__value">0/0</div>
-              <div class="data__info">
-                Upgrade to see your score
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row class="metrics__data data">
-          <v-col cols="12">
-            <div class="data__title">Listed On Any Blacklists</div>
-            <v-divider class="mb-2 mt-1" />
-            <div class="data__wrapper">
-              <div class="data__value">?</div>
-              <div class="data__info">
-                Upgrade to see your score
-              </div>
-            </div>
-          </v-col>
-        </v-row>
+      <v-col class="pl-lg-10" cols="12" lg="4" >
+        <div class="data__title">Health Score</div>
+        <v-divider class="mb-2 mt-1" />
+        <div class="data__wrapper">
+          <div class="data__value">0/0</div>
+          <div class="data__info">
+            Upgrade to see your score
+          </div>
+        </div>
+        <div class="data__title">Listed On Any Blacklists</div>
+        <v-divider class="mb-2 mt-1" />
+        <div class="data__wrapper">
+          <div class="data__value">?</div>
+          <div class="data__info">
+            Upgrade to see your score
+          </div>
+        </div>
       </v-col>
     </v-row>
     <v-row class="metrics__data data">

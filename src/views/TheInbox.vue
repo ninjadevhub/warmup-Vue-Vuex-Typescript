@@ -9,8 +9,7 @@
         <inbox-metrics class="mx-0" />
       </v-tab-item>
       <v-tab-item>
-        Settings
-        <!-- Settings component -->
+        <inbox-settings class="mx-0" />
       </v-tab-item>
     </base-tabs-items>
   </div>
@@ -19,8 +18,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import InboxMetrics from '@/components/InboxMetrics.vue'
+import InboxSettings from '@/components/InboxSettings.vue'
 
-@Component({ components: { InboxMetrics } })
+@Component({ components: { InboxMetrics, InboxSettings } })
 export default class TheInbox extends Vue {
   activeTab = 0
 }

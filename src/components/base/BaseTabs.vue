@@ -1,6 +1,6 @@
 <template>
   <v-tabs
-    v-model="value"
+    v-model="localValue"
     v-bind="{ ...$attrs, ...$props }"
     class="tabs"
     @change="$emit('change', $event)"
@@ -19,6 +19,14 @@ export default class BaseTabs extends Vue {
     required: true
   })
   readonly value!: number;
+
+  get localValue (): number {
+    return this.value
+  }
+
+  set localValue (value: number) {
+    this.$emit('change', value)
+  }
 }
 </script>
 
