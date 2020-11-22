@@ -59,8 +59,6 @@
           <i>Want to increase these limits? <a href="#">Chat with us.</a></i>
         </div>
         <base-button class="float-right mt-5 px-9 text-capitalize">Save</base-button>
-        <div class="text-right">
-        </div>
       </v-col>
     </v-row>
   </v-container>

@@ -6,6 +6,7 @@ import BaseTabsItems from './BaseTabsItems.vue'
 import BaseModal from './BaseModal.vue'
 import BaseSelect from './BaseSelect.vue'
 import BaseCheckbox from './BaseCheckbox.vue'
+import BaseSwitch from './BaseSwitch.vue'
 
 export {
   BaseInput,
@@ -15,5 +16,6 @@ export {
   BaseTabsItems,
   BaseModal,
   BaseSelect,
-  BaseCheckbox
+  BaseCheckbox,
+  BaseSwitch
 }

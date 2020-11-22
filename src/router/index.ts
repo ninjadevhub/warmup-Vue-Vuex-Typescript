@@ -7,6 +7,7 @@ import TheLogin from '@/views/TheLogin.vue'
 import ThePasswordReset from '@/views/ThePasswordReset.vue'
 import TheNewPassword from '@/views/TheNewPassword.vue'
 import TheInboxes from '@/views/TheInboxes.vue'
+import TheInbox from '@/views/TheInbox.vue'
 import TheAccountDetails from '@/views/TheAccountDetails.vue'
 import TheBilling from '@/views/TheBilling.vue'
 
@@ -23,6 +24,11 @@ const routes: Array<RouteConfig> = [
         path: '/inboxes',
         name: 'inboxes',
         component: TheInboxes
+      },
+      {
+        path: '/inboxes/:inboxId',
+        name: 'inbox-details',
+        component: TheInbox
       },
       {
         path: '/account-settings',
