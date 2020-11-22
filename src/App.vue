@@ -12,5 +12,6 @@
   #app {
     background-color: $bg-color;
     font-size: $font-md;
+    font-family: $label-font;
   }
 </style>

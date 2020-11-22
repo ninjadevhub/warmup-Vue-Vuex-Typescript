@@ -7,7 +7,7 @@
             <img src="@/assets/img/logo_white.png" width="20px" @click.stop="sidebar = !sidebar">
           </v-col>
           <v-col cols="6" sm="4" class="d-none d-sm-block">
-            <div v-if="title" class="white--text text-center text-capitalize">
+            <div v-if="title" class="header__title white--text text-center text-capitalize">
               <base-icon class="pr-1" variant="secondary">
                 {{ title.icon }}
               </base-icon>
@@ -67,41 +67,81 @@
         <v-list-item class="sidebar px-0 justify-space-between flex-column">
           <v-list-item-content>
             <v-list-item-icon class="mx-0">
-              <base-button
-                to="/inboxes"
-                class="mx-auto"
-                :variant="isActiveRoute('inboxes') ? 'black' : 'text'"
-                icon
-              >
-                <base-icon>mdi-inbox-outline</base-icon>
-              </base-button>
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <base-button
+                    to="/inboxes"
+                    class="mx-auto"
+                    :variant="isActiveRoute('inboxes') ? 'black' : 'text'"
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <svg width="17px" height="17px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                      <g id="Page-1" stroke="none" stroke-width="1" fill-rule="evenodd">
+                        <g id="/inboxes-(No-Data)" transform="translate(-22.000000, -92.000000)">
+                          <path d="M33.9,103.9 L33.9,103.05 C33.9,102.5808 34.2808,102.2 34.75,102.2 L37.3,102.2 L37.3,106.45 C37.3,106.9192 36.9192,107.3 36.45,107.3 L24.55,107.3 C24.0808,107.3 23.7,106.9192 23.7,106.45 L23.7,102.2 L26.25,102.2 C26.7192,102.2 27.1,102.5808 27.1,103.05 L27.1,103.9 C27.1,104.83925 27.86075,105.6 28.8,105.6 L32.2,105.6 C33.13925,105.6 33.9,104.83925 33.9,103.9 L33.9,103.9 Z M32.2,102.2 L32.2,103.9 L28.8,103.9 L28.8,102.2 C28.8,101.26075 28.03925,100.5 27.1,100.5 L23.7,100.5 L25.06,93.7 L35.94,93.7 L37.3,100.5 L33.9,100.5 C32.96075,100.5 32.2,101.26075 32.2,102.2 L32.2,102.2 Z M39,100.5 L37.43685,92.6834 C37.35695,92.2856 37.00845,92 36.603,92 L24.397,92 C23.99155,92 23.64305,92.2856 23.56315,92.6834 L22,100.5 L22,107.3 C22,108.23925 22.76075,109 23.7,109 L37.3,109 C38.23925,109 39,108.23925 39,107.3 L39,100.5 Z" id="inbox_empty_round-[#1553]"></path>
+                        </g>
+                      </g>
+                    </svg>
+                  </base-button>
+                </template>
+                <span>Account Settings</span>
+              </v-tooltip>
             </v-list-item-icon>
             </v-list-item-content>
             <v-list-item-content class="py-0 align-content-end">
             <v-list-item-icon class="mx-0">
-              <base-button
-                to="/billing"
-                class="mx-auto"
-                :variant="isActiveRoute('billing') ? 'black' : 'text'"
-                icon
-              >
-                <base-icon >mdi-label-outline mdi-rotate-270</base-icon>
-              </base-button>
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <base-button
+                    id="someId"
+                    to="/billing"
+                    class="mx-auto"
+                    :variant="isActiveRoute('billing') ? 'black' : 'text'"
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <base-icon >mdi-label-outline mdi-rotate-270</base-icon>
+                  </base-button>
+                </template>
+                <span>Billing</span>
+              </v-tooltip>
             </v-list-item-icon>
             <v-list-item-icon class="mx-0">
-              <base-button
-                to="/account-settings"
-                class="mx-auto"
-                :variant="isActiveRoute('account-settings') ? 'black' : 'text'"
-                icon
-              >
-                <base-icon >mdi-account-outline</base-icon>
-              </base-button>
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <base-button
+                    to="/account-settings"
+                    class="mx-auto"
+                    :variant="isActiveRoute('account-settings') ? 'black' : 'text'"
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <base-icon >mdi-account-outline</base-icon>
+                  </base-button>
+                </template>
+                <span>Account Settings</span>
+              </v-tooltip>
             </v-list-item-icon>
             <v-list-item-icon class="mx-0 mb-0">
-              <base-button to="/logout" class="mx-auto" variant="text" icon>
-                <base-icon >mdi-exit-to-app</base-icon>
-              </base-button>
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <base-button
+                    to="/logout"
+                    class="mx-auto"
+                    variant="text"
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <base-icon >mdi-exit-to-app</base-icon>
+                  </base-button>
+                </template>
+                <span>Log out</span>
+              </v-tooltip>
             </v-list-item-icon>
           </v-list-item-content>
         </v-list-item>
@@ -168,6 +208,10 @@ export default class TheDashboard extends Vue {
       .v-toolbar__content {
         padding: 0px !important;
       }
+    }
+    &__title {
+      font-family: $base-font;
+      font-weight: bold;
     }
   }
 

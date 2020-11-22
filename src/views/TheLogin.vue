@@ -1,5 +1,12 @@
 <template>
-  <v-container class="py-0 mx-5 pt-5" fluid>
+  <v-container class="py-0 pt-5" fluid>
+    <v-row>
+      <v-col cols="12">
+        <div class="text-right">
+          Don't have an account? <router-link to="/sign-up">Sign up</router-link>.
+        </div>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col cols="12">
         <v-card class="login mx-auto pa-4 px-11 mt-10" width="560px" elevation="0">
@@ -21,7 +28,7 @@
             </v-row>
           </v-container>
           <v-card-actions class="py-0">
-            <base-button to="/inboxes" class="text-capitalize" variant="secondary" large block tile>
+            <base-button to="/inboxes" class="text-capitalize font-weight-bold" variant="secondary" large block tile>
               Sign in
             </base-button>
           </v-card-actions>

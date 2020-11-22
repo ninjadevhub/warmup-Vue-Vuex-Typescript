@@ -50,6 +50,9 @@ export default class BaseInput extends Vue {
 
 <style lang="scss" scoped>
   ::v-deep {
+    .v-text-field--outlined.v-input--is-focused fieldset {
+      border-color: #000000;
+    }
     .v-text-field--outlined .v-input--dense .v-label--active {
       transform: translateY(0) scale(0) !important;
     }

@@ -6,10 +6,10 @@
     </base-tabs>
     <base-tabs-items v-model="activeTab">
       <v-tab-item>
-        <inbox-metrics class="mx-0" />
+        <inbox-metrics class="mx-0 px-0 p-2" />
       </v-tab-item>
       <v-tab-item>
-        <inbox-settings class="mx-0" />
+        <inbox-settings class="mx-0 px-0 p-2" />
       </v-tab-item>
     </base-tabs-items>
   </div>

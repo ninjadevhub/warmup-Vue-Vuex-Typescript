@@ -16,7 +16,7 @@
           </v-card-title>
           <sign-up-form />
           <v-card-actions class="py-0 px-3">
-            <base-button class="text-capitalize" variant="secondary" large block tile>
+            <base-button class="text-capitalize font-weight-bold" variant="secondary" large block tile>
               Sign up free
             </base-button>
           </v-card-actions>

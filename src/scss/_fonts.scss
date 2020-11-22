@@ -27,3 +27,15 @@
   src: local("iAWriterQuattroS"), url('../assets/fonts/iAWriterQuattroS/iAWriterQuattroS-Bold.ttf') format("truetype");
   font-weight: 600;
 }
+
+@font-face {
+  font-family: "SFUIText";
+  src: local("SFUIText"), url('../assets/fonts/SFUIText/SFUIText-Regular.ttf') format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "SFUIText";
+  src: local("SFUIText"), url('../assets/fonts/SFUIText/SFUIText-Bold.ttf') format("truetype");
+  font-weight: 600;
+}

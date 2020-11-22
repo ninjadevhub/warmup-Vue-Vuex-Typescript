@@ -78,12 +78,9 @@
         </v-row>
       </v-container>
       <div class="d-flex justify-end subscribe__action">
-        <base-button
-          class="text-capitalize font-weight-bold"
-          elevation="0"
-        >
-        Subscribe & Pay $3.42
-      </base-button>
+        <base-button class="text-capitalize font-weight-bold">
+          Subscribe & Pay $3.42
+        </base-button>
       </div>
     </template>
   </base-modal>

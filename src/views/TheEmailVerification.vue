@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-0 mx-5 pt-5" fluid>
+  <v-container class="py-0 pt-15" fluid>
     <v-row>
       <v-col cols="12">
         <v-card class="verify mx-auto pa-6 px-11 mt-10" width="560px" elevation="0">
@@ -12,7 +12,7 @@
           </v-card-title>
           <base-input custom-label="Code" class="mb-4 px-2" />
           <v-card-actions class="py-0">
-            <base-button class="text-capitalize" variant="secondary" large block tile>
+            <base-button class="text-capitalize font-weight-bold" variant="secondary" large block tile>
               Verify
             </base-button>
           </v-card-actions>
