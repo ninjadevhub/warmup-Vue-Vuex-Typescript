@@ -12,6 +12,7 @@
       dense
       outlined
       hide-details="auto"
+      v-on="$listeners"
     />
   </div>
 </template>
@@ -63,15 +64,30 @@ export default class BaseSelect extends Vue {
 
 <style lang="scss" scoped>
   ::v-deep {
+    .v-text-field--outlined.v-input--is-focused fieldset {
+      border-color: #000000 !important;
+    }
     .v-text-field--outlined .v-input--dense .v-label--active {
       transform: translateY(0) scale(0) !important;
     }
     fieldset {
       border-radius: 0;
+      font-size: 11px;
     }
     label {
       font-family: $label-font;
       font-weight: $font-weight-bold;
+    }
+    .v-input {
+      &__control {
+        caret-color: #000000;
+        font-size: 11px;
+      }
+      &__icon {
+        i {
+          color: #000000!important;
+        }
+      }
     }
   }
   .input {

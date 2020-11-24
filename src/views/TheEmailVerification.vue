@@ -2,7 +2,7 @@
   <v-container class="py-0 pt-15" fluid>
     <v-row>
       <v-col cols="12">
-        <v-card class="verify mx-auto pa-6 px-11 mt-10" width="560px" elevation="0">
+        <v-card class="verify mx-auto pa-6 px-11 mt-3" width="560px" elevation="0">
           <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
           <v-card-title class="px-2 mb-6">
             <div class="verify__title mb-2">Please verify your email address.</div>

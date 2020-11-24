@@ -5,7 +5,7 @@
       <v-divider class="pb-3"></v-divider>
       <div class="px-2">
         Thanks for signing up for Warmup Inbox! Get started by adding an inbox. If you get stuck just
-        <a href="#">let us know</a>.
+        <a :href="`mailto:${process.env.VUE_APP_SUPPORT_EMAIL}`">let us know</a>.
       </div>
       <div class="px-2 pt-5">
         <add-inbox-modal />
@@ -21,7 +21,7 @@
               Thankfully we built an effortless way to keep your deliverability high. Learn how we do it.
             </div>
             <base-button to="#" class="help-text__action text-capitalize mt-5" small>
-              Lear more
+              Learn more
             </base-button>
           </div>
         </v-col>
@@ -33,7 +33,7 @@
               possible delivery rates for your emails.
             </div>
             <base-button to="#" class="help-text__action text-capitalize mt-5" small>
-              Lear why
+              Learn why
             </base-button>
           </div>
         </v-col>

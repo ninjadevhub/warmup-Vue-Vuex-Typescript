@@ -1,6 +1,6 @@
 <template>
   <base-modal
-    max-width="960"
+    :max-width="modalMaxWidth"
     title="Add inbox"
   >
     <template #button>
@@ -10,7 +10,7 @@
     </template>
 
     <template #content>
-      <add-inbox-form />
+      <add-inbox-form @resize="onResize" />
     </template>
   </base-modal>
 </template>
@@ -22,5 +22,10 @@ import AddInboxForm from '@/components/forms/AddInboxForm.vue'
 @Component({ components: { AddInboxForm } })
 export default class AddInboxModal extends Vue {
   dialog = false;
+  modalMaxWidth = '640'
+
+  onResize (provider: string) {
+    provider === 'other' ? this.modalMaxWidth = '960' : this.modalMaxWidth = '640'
+  }
 }
 </script>

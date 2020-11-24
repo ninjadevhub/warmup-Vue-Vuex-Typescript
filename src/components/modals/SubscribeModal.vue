@@ -1,5 +1,5 @@
 <template>
-  <base-modal max-width="550" title="Subscribe to Warmup Inbox" :close-button="false">
+  <base-modal max-width="550" title="Subscribe to Warmup Inbox" title-class="title--sm">
     <template #button>
       <a class="subscribe__link text-capitalize pl-0">
         Upgrade now
@@ -96,6 +96,7 @@ export default class SubscribeModal extends Vue {
   currentInboxes = 1
   updatedInboxes = 1
   rate = 500; // TODO: Add configuration (5$ in cents)
+  mask = '/^[a-z][0-9]+(-[a-z][0-9]+)*$/'
 
   dueDateVisible = true; // TODO: should be a computed getter
   accountCreditVisible = false; // TODO: should be a compted getter
@@ -122,12 +123,24 @@ export default class SubscribeModal extends Vue {
   ::v-deep {
     fieldset {
       border: 1px solid #E6E6E8 !important;
+      caret-color: #000000 !important;
     }
-    .v-input__slot {
-      min-height: 29px !important;
-      height: 29px;
+    .v-input {
+      &__slot {
+        min-height: 29px !important;
+        height: 29px;
+      }
     }
+
+    .v-card {
+      &__title {
+        font-size: 10px !important;
+        color: red;
+      }
+    }
+
   }
+
   .subscribe {
     &__link {
       font-size: $font-md;

@@ -23,49 +23,76 @@ const routes: Array<RouteConfig> = [
       {
         path: '/inboxes',
         name: 'inboxes',
-        component: TheInboxes
+        component: TheInboxes,
+        meta: {
+          title: 'Inboxes'
+        }
       },
       {
         path: '/inboxes/:inboxId',
         name: 'inbox-details',
-        component: TheInbox
+        component: TheInbox,
+        meta: {
+          title: '{email}' // TODO: make dynamic
+        }
       },
       {
         path: '/account-settings',
         name: 'account-settings',
-        component: TheAccountDetails
+        component: TheAccountDetails,
+        meta: {
+          title: 'Account Settings'
+        }
       },
       {
         path: '/billing',
         name: 'billing',
-        component: TheBilling
+        component: TheBilling,
+        meta: {
+          title: 'Billing'
+        }
       }
     ]
   },
   {
     path: '/sign-up',
     name: 'sign-up',
-    component: TheSignUp
+    component: TheSignUp,
+    meta: {
+      title: 'Sign Up'
+    }
   },
   {
     path: '/email-verification',
     name: 'Email verification',
-    component: TheEmailVerification
+    component: TheEmailVerification,
+    meta: {
+      title: 'Email Verification'
+    }
   },
   {
     path: '/login',
     name: 'login',
-    component: TheLogin
+    component: TheLogin,
+    meta: {
+      title: 'Log In'
+    }
   },
   {
     path: '/password-reset',
     name: 'password-reset',
-    component: ThePasswordReset
+    component: ThePasswordReset,
+    meta: {
+      title: 'Password Reset'
+    }
   },
   {
     path: '/new-password',
     name: 'new-password',
-    component: TheNewPassword
+    component: TheNewPassword,
+    meta: {
+      title: 'New Password'
+    }
   }
 ]
 
@@ -73,6 +100,11 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title} | Warmup Inbox`
+  next()
 })
 
 export default router

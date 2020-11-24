@@ -1,16 +1,21 @@
 <template>
   <v-container class="form px-1 py-0" fluid>
     <v-row>
-      <v-col cols="12" :md="isOther ? '4' : '6'">
-        <div class="form__title">Authetification</div>
+      <v-col class="pt-5" cols="12" :md="isOther ? '4' : '6'" max-width="300">
+        <div class="form__title">Authentication</div>
         <v-divider class="mb-10 mt-1" />
-        <base-select v-model="form.provider" :items="providers" custom-label="email provider" />
+        <base-select
+          v-model="form.provider"
+          :items="providers"
+          custom-label="email provider"
+          @change="$emit('resize', $event)"
+        />
         <a v-if="isGoogleWorkspace" href="#" class="form__setup-hint d-block pt-1 mb-2">
-          <i>Learn how to configure Gmail</i>
+          Learn how to configure Gmail
           <base-icon class="pl-2 pt-0 pb-0">mdi-open-in-new</base-icon>
         </a>
         <a v-if="isMicrosoft365" href="#" class="form__setup-hint d-block pt-1 mb-2">
-          <i>Learn how to configure Microsoft 365</i>
+          Learn how to configure Microsoft 365
           <base-icon class="pl-2 pt-0 pb-0">mdi-open-in-new</base-icon>
         </a>
         <base-input custom-label="email" />
@@ -18,8 +23,8 @@
         <base-input custom-label="sender first name" />
         <base-input custom-label="sender last name" />
       </v-col>
-      <v-col v-if="isOther" cols="12" md="4">
-        <div class="form__title">Custom settings</div>
+      <v-col v-if="isOther" class="pt-5" cols="12" md="4" max-width="300">
+        <div class="form__title">Custom Settings</div>
         <v-divider class="mb-10 mt-1" />
         <base-input custom-label="SMTP username" />
         <base-input custom-label="SMTP password" />
@@ -44,21 +49,34 @@
         </v-row>
         <base-checkbox class="mt-0" label="Use IMAP SSL/TLS" />
       </v-col>
-      <v-col cols="12" :md="isOther ? '4' : '6'">
+      <v-col class="pt-5" cols="12" :md="isOther ? '4' : '6'" max-width="300">
         <div class="form__title">Sending Schedule</div>
         <v-divider class="mb-10 mt-1" />
-        <base-input custom-label="starting baseline" help-text="(Suggested 0, Max 40)" />
-        <base-input custom-label="increase per day" help-text="(Suggested 2, Max 4)" />
-        <base-input custom-label="max sends per day" help-text="(Suggested 40, Max 50)" />
+        <base-input
+          custom-label="starting baseline"
+          help-text="(Suggested 0, Max 40)"
+          tooltip="The starting number of emails we should send on day one."
+        />
+        <base-input
+          custom-label="increase per day"
+          help-text="(Suggested 2, Max 4)"
+          tooltip="The number of emails we will increase by each day."
+        />
+        <base-input
+          custom-label="max sends per day"
+          help-text="(Suggested 40, Max 50)"
+          tooltip="We will never send more than  this number of new inital emails per day."
+        />
         <base-input
           custom-label="reply rate %"
           help-text="(Suggested 30%, Max 50%)"
           append-icon="mdi-percent-outline"
+          tooltip="We automatically reply to X percent of the emails that are received within the inbox. These are additional emails added on top of the Max Send Per Day rate."
         />
         <div class="form__limit-hint pt-2">
-          <i>Want to increase these limits? <a href="#">Chat with us.</a></i>
+          Want to increase these limits? <a :href="`mailto:${process.env.VUE_APP_SUPPORT_EMAIL}`">Chat with us.</a>
         </div>
-        <base-button class="float-right mt-5 px-9 text-capitalize">Save</base-button>
+        <base-button class="float-right mt-5 px-9 text-capitalize form__submit">Save</base-button>
       </v-col>
     </v-row>
   </v-container>
@@ -78,7 +96,7 @@ export default class AddInboxForm extends Vue {
 
   // TODO: Create a form
   form = {
-    provider: 'google_workspace'
+    provider: ''
   }
 
   get isGoogleWorkspace () {
@@ -102,7 +120,8 @@ export default class AddInboxForm extends Vue {
       font-weight: $font-weight-bold;
     }
     &__setup-hint {
-      font-size: $font-sm;
+      font-size: $font-xs !important;
+      font-style: italic;
       i {
         font-size: $font-sm;
         color: $color-denim !important;
@@ -112,6 +131,11 @@ export default class AddInboxForm extends Vue {
       font-size: 9px;
       font-family: $label-font;
       letter-spacing: 0.9px;
+      font-style: italic;
+    }
+    &__submit {
+      font-size: 11px !important;
+      font-weight: bold;
     }
   }
 </style>

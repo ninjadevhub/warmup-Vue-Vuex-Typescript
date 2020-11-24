@@ -22,7 +22,7 @@
                 Change password
               </div>
               <v-divider />
-              <v-row class="mt-7">
+              <v-row class="mt-4">
                 <v-col cols="12" sm="4" class="d-flex align-end">
                   <base-input custom-label="Old password" variant="normal" class="account-details__input" />
                 </v-col>

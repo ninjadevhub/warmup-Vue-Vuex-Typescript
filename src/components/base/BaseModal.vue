@@ -9,7 +9,7 @@
       </div>
     </template>
     <v-card>
-      <v-card-title class="modal__title d-flex justify-space-between px-0 py-0">
+      <v-card-title class="modal__title d-flex justify-space-between px-0 py-0" :class="titleClass">
         {{ title }}
         <v-btn v-if="closeButton" class="black--text" icon dark text @click="dialog = false">
           <v-icon>mdi-close</v-icon>
@@ -29,13 +29,18 @@ export default class BaseModal extends Vue {
   @Prop({
     type: String
   })
-  readonly title!: string
+  readonly title?: string
 
   @Prop({
     type: Boolean,
     default: true
   })
   readonly closeButton!: boolean
+
+  @Prop({
+    type: String
+  })
+  readonly titleClass?: string
 
   dialog = false;
 }
@@ -57,7 +62,11 @@ export default class BaseModal extends Vue {
     &__title {
       font-family: $label-font;
       font-weight: $font-weight-bold !important;
-      font-size: $font-lg;
+      font-size: $font-lg !important;
     }
+  }
+
+  .title--sm {
+    font-size: $font-md-x !important;
   }
 </style>

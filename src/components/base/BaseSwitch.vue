@@ -42,14 +42,19 @@ export default class BaseSwitch extends Vue {
       &--switch {
         &__track {
           opacity: 1;
+          height: 22px !important;
         }
         &__thumb {
           color: #FFFFFF !important;
+          top: calc(50% - 11px);
+          height: 16px;
+          width: 16px;
         }
       }
     }
     .v-label {
       font-size: 14px;
+      padding-bottom: 10px !important;
     }
   }
 </style>
