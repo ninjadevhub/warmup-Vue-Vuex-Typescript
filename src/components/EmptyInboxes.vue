@@ -5,7 +5,7 @@
       <v-divider class="pb-3"></v-divider>
       <div class="px-2">
         Thanks for signing up for Warmup Inbox! Get started by adding an inbox. If you get stuck just
-        <a :href="`mailto:${process.env.VUE_APP_SUPPORT_EMAIL}`">let us know</a>.
+        <a :href="`mailto:${supportEmail}`">let us know</a>.
       </div>
       <div class="px-2 pt-5">
         <add-inbox-modal />
@@ -59,7 +59,11 @@ import { Component, Vue } from 'vue-property-decorator'
 import AddInboxModal from '@/components/modals/AddInboxModal.vue'
 
 @Component({ components: { AddInboxModal } })
-export default class EmptyInboxes extends Vue {}
+export default class EmptyInboxes extends Vue {
+  get supportEmail() {
+    return process.env.VUE_APP_SUPPORT_EMAIL
+  }
+}
 </script>
 
 <style lang="scss" scoped>

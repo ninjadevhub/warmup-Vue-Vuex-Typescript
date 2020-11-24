@@ -74,7 +74,7 @@
           tooltip="We automatically reply to X percent of the emails that are received within the inbox. These are additional emails added on top of the Max Send Per Day rate."
         />
         <div class="form__limit-hint pt-2">
-          Want to increase these limits? <a :href="`mailto:${process.env.VUE_APP_SUPPORT_EMAIL}`">Chat with us.</a>
+          Want to increase these limits? <a :href="`mailto:${supportEmail}`">Chat with us.</a>
         </div>
         <base-button class="float-right mt-5 px-9 text-capitalize form__submit">Save</base-button>
       </v-col>
@@ -109,6 +109,10 @@ export default class AddInboxForm extends Vue {
 
   get isOther () {
     return this.form.provider === 'other' // TODO: Use ENUM
+  }
+
+  get supportEmail () {
+    return process.env.VUE_APP_SUPPORT_EMAIL
   }
 }
 </script>
