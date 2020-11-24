@@ -60,7 +60,7 @@ import AddInboxModal from '@/components/modals/AddInboxModal.vue'
 
 @Component({ components: { AddInboxModal } })
 export default class EmptyInboxes extends Vue {
-  get supportEmail() {
+  get supportEmail () {
     return process.env.VUE_APP_SUPPORT_EMAIL
   }
 }
