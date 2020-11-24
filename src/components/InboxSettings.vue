@@ -1,9 +1,9 @@
 <template>
-  <v-container>
+  <v-container class="pr-0 pr-md-16" fluid>
     <v-row class="mb-6">
       <div class="settings__title">
         <div class="font-weight-bold">john.smith@acme.com</div>
-        <base-switch v-model="isRunning" class="d-inline-block" />
+        <base-switch v-model="isRunning" class="d-inline-block py-0 mt-3" />
         <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
         <span v-else class="label label__paused font-weight-bold">Paused</span>
         <v-divider />
@@ -86,11 +86,11 @@ export default class InboxSettings extends Vue {
   .settings {
     &__title {
       font-family: $label-font;
-      font-size: $font-lg;
+      font-size: $font-md-x;
       width: 100%;
       padding-left: 10px;
       .label {
-        font-size: $font-md-x;
+        font-size: 15px;
         &__running {
           color: $color-mountain-meadow;
         }
@@ -111,7 +111,7 @@ export default class InboxSettings extends Vue {
         }
         &__value {
           font-weight: $font-weight-bold;
-          font-size: $font-lg-x;
+          font-size: $font-lg;
         }
       }
     }

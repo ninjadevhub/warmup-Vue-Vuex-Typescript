@@ -93,6 +93,9 @@ export default class BaseButton extends Vue {
     &--text {
       color: #000000 !important;
       background-color: transparent !important;
+      &:before {
+        background-color: transparent !important;
+      }
       &:hover {
         background-color: #D6D6D6 !important;
       }

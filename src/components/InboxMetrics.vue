@@ -1,10 +1,10 @@
 <template>
-  <v-container>
+  <v-container class="pr-0 pr-md-16" fluid>
     <v-row>
       <v-col cols="12" class="pt-0">
         <div class="metrics__title mb-0">
           <div class="font-weight-bold">john.smith@acme.com</div>
-          <base-switch v-model="isRunning" class="d-inline-block py-0" />
+          <base-switch v-model="isRunning" class="d-inline-block py-0 mt-3" />
           <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
           <span v-else class="label label__paused font-weight-bold">Paused</span>
           <v-divider />
@@ -18,7 +18,7 @@
           <v-divider class="mb-2 mt-1" />
           <div class="data__wrapper">
             <div class="data__value">5</div>
-            <div class="data__info">Sent last 24 hours</div>
+            <div class="data__info">Sent today</div>
           </div>
           <div class="data__wrapper">
             <div class="data__value">10</div>
@@ -34,7 +34,7 @@
           <v-divider class="mb-2 mt-1" />
           <div class="data__wrapper">
             <div class="data__value">12</div>
-            <div class="data__info">Received last 24 hours</div>
+            <div class="data__info">Sent today</div>
           </div>
           <div class="data__wrapper">
             <div class="data__value">30</div>
@@ -99,7 +99,6 @@
               :chart-data="computedChartData"
               :options="barChartOptions"
               :height="100"
-              @blla="console.log('event')"
             />
           </v-col>
           <v-col cols="12" md="2">
@@ -269,19 +268,19 @@ export default class InboxMetrics extends Vue {
   get currentLandedInInbox (): number | string {
     return this.barChartData.datasets[0].data[this.currentIndex]
       ? this.barChartData.datasets[0].data[this.currentIndex]
-      : '-'
+      : '0'
   }
 
   get currentLandedInSpam (): number | string {
     return this.barChartData.datasets[1].data[this.currentIndex]
       ? this.barChartData.datasets[1].data[this.currentIndex]
-      : '-'
+      : '0'
   }
 
   get currentScheduled (): number | string {
     return this.barChartData.datasets[2].data[this.currentIndex]
       ? this.barChartData.datasets[2].data[this.currentIndex]
-      : '-'
+      : '0'
   }
 
   changeCurrentIndex (index: number): void {
@@ -334,10 +333,10 @@ export default class InboxMetrics extends Vue {
   .metrics {
     &__title {
       font-family: $label-font;
-      font-size: $font-lg;
+      font-size: $font-md-x;
       width: 100%;
       .label {
-        font-size: $font-md-x;
+        font-size: 15px;
         &__running {
           color: $color-mountain-meadow;
         }
@@ -358,7 +357,7 @@ export default class InboxMetrics extends Vue {
         }
         &__value {
           font-weight: $font-weight-bold;
-          font-size: $font-lg-x;
+          font-size: $font-lg;
         }
         &__doughnut-legend {
           &-inbox {

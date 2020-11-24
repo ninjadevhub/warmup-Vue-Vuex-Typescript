@@ -1,7 +1,7 @@
 <template>
   <div class="inboxes-wrapper">
-    <empty-inboxes v-if="!hasInboxes" class="px-4 py-4" />
-    <inboxes-list v-else class="px-4 py-4" />
+    <empty-inboxes v-if="!hasInboxes" class="px-8 py-8" />
+    <inboxes-list v-else class="px-8 py-8" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <base-modal max-width="550" title="Update Subscription" :close-button="false">
+  <base-modal max-width="550" title="Update Subscription" title-class="title--sm">
     <template #button>
       <v-btn
         class="edit-subscription__link text-capitalize pl-0"

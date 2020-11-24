@@ -22,7 +22,7 @@
           append-icon="mdi-percent-outline"
         />
         <div class="form__limit-hint pt-2">
-          <i>Want to increase these limits? <a href="#">Chat with us.</a></i>
+          <i>Want to increase these limits? <a :href="`mailto:${process.env.VUE_APP_SUPPORT_EMAIL}`">Chat with us.</a></i>
         </div>
         <div class="d-flex justify-end">
           <base-button class="mt-5 px-9 text-capitalize">Save</base-button>

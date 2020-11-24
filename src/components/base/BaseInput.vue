@@ -1,11 +1,22 @@
 <template>
   <div :class="`input--${variant} input__wrapper`">
-    <label class="d-block">
+    <label v-if="!tooltip" class="d-block">
       {{ customLabel }}
       <span v-if="helpText" class="input__help-text text-capitalize">
         <i>{{ helpText }}</i>
       </span>
     </label>
+    <v-tooltip v-else max-width="300" top>
+      <template v-slot:activator="{ on, attrs }">
+        <label class="d-block" v-bind="attrs" v-on="on">
+          {{ customLabel }}
+          <span v-if="helpText" class="input__help-text text-capitalize">
+            <i>{{ helpText }}</i>
+          </span>
+        </label>
+      </template>
+      <span>{{ tooltip }}</span>
+    </v-tooltip>
     <v-text-field
       :placeholder="placeholder"
       v-bind="{ ...$attrs, ...$props }"
@@ -45,13 +56,18 @@ export default class BaseInput extends Vue {
     default: 'main'
   })
   readonly variant?: string
+
+  @Prop({
+    type: String
+  })
+  readonly tooltip?: string
 }
 </script>
 
 <style lang="scss" scoped>
   ::v-deep {
     .v-text-field--outlined.v-input--is-focused fieldset {
-      border-color: #000000;
+      border-color: #000000 !important;
     }
     .v-text-field--outlined .v-input--dense .v-label--active {
       transform: translateY(0) scale(0) !important;
@@ -63,7 +79,19 @@ export default class BaseInput extends Vue {
       font-family: $label-font;
       font-weight: $font-weight-bold;
     }
+    .v-input {
+      &__control {
+        caret-color: #000000;
+        font-size: 11px;
+      }
+    }
   }
+
+  .v-tooltip__content {
+    font-size: $font-xs !important;
+    line-height: 12px;
+  }
+
   .input {
     &__wrapper {
       margin-bottom: 12px;

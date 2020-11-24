@@ -5,10 +5,10 @@
       <v-tab>Settings</v-tab>
     </base-tabs>
     <base-tabs-items v-model="activeTab">
-      <v-tab-item>
+      <v-tab-item :transition="false" :reverse-transition="false">
         <inbox-metrics class="mx-0 px-0 p-2" />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item :transition="false" :reverse-transition="false">
         <inbox-settings class="mx-0 px-0 p-2" />
       </v-tab-item>
     </base-tabs-items>

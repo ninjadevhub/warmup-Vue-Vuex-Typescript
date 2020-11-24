@@ -8,19 +8,17 @@ import { Component, Vue, Model } from 'vue-property-decorator'
 @Component
 export default class BaseCheckbox extends Vue {
   @Model('input', {
-    type: Boolean,
-    required: true
+    type: Boolean
   })
-  readonly value!: boolean
+  readonly value?: boolean
 }
 </script>
 
 <style lang="scss" scoped>
  ::v-deep {
    label {
-    font-size: $font-sm;
+    font-size: $font-xs;
     font-family: $label-font;
-    font-weight: $font-weight-bold;
   }
  }
 </style>
