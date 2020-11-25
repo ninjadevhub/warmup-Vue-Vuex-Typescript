@@ -134,7 +134,7 @@ export default class SubscribeModal extends Vue {
 
     .v-card {
       &__title {
-        font-size: 10px !important;
+        font-size: $font-xs !important;
         color: red;
       }
     }
@@ -160,19 +160,19 @@ export default class SubscribeModal extends Vue {
       background-color: $color-concrete;
       border: 1px solid #000000;
       i {
-        font-size: 14px;
+        font-size: $font-md;
       }
     }
     &__text, &__amount, &__info {
       font-family: $label-font;
     }
     &__info {
-      font-size: 12px;
+      font-size: $font-sm;
     }
     &__action {
       font-family: $base-font;
       button {
-        font-size: 11px;
+        font-size: $font-xs-x;
       }
     }
   }

@@ -2,11 +2,11 @@
   <div class="dashboard ml-md-12 ml-0">
     <v-app-bar class="header" height="50px" app flat>
       <v-container fluid>
-        <v-row>
-          <v-col cols="6" sm="4" class="d-flex align-center">
+        <v-row class="header__row">
+          <v-col cols="6" sm="4" class="d-flex align-center header__col">
             <img src="@/assets/img/logo_white.png" width="20px" @click.stop="sidebar = !sidebar">
           </v-col>
-          <v-col cols="6" sm="4" class="d-none d-sm-block">
+          <v-col cols="6" sm="4" class="d-none d-sm-block header__col">
             <div v-if="title" class="header__title white--text text-center">
               <template v-if="title.icon === 'mdi-inbox-outline'">
                 <span class="header__icon d-inline-block">
@@ -30,7 +30,7 @@
               </template>
             </div>
           </v-col>
-          <v-col cols="6" sm="4" class="d-flex align-center justify-end">
+          <v-col cols="6" sm="4" class="d-flex align-center justify-end header__col">
             <v-menu offset-y>
               <template v-slot:activator="{ on, attrs }">
                 <div>
@@ -195,7 +195,7 @@ export default class TheDashboard extends Vue {
       case 'account-settings':
         return {
           icon: 'mdi-account-outline',
-          title: 'Account details',
+          title: 'Account Details',
           subTitle: 'Settings'
         }
       case 'billing':
@@ -223,13 +223,19 @@ export default class TheDashboard extends Vue {
 
   .header {
     background-color: $secondary-color !important;
+    &__row {
+      max-height: 50px;
+    }
+    &__col {
+      max-height: 50px;
+    }
     ::v-deep {
       .v-toolbar__content {
         padding: 0px !important;
       }
     }
     &__icon {
-      padding: 20px 5px;
+      padding: 5px;
       vertical-align: sub;
       svg {
         fill: #FFFFFF;
@@ -238,6 +244,9 @@ export default class TheDashboard extends Vue {
     &__title {
       font-family: $base-font;
       font-weight: bold;
+      i {
+        padding: 0 !important;
+      }
     }
   }
 
@@ -256,7 +265,7 @@ export default class TheDashboard extends Vue {
       height: 30px;
       width: 30px;
       i {
-        font-size: 18px;
+        font-size: $font-lg;
       }
     }
   }
@@ -266,4 +275,13 @@ export default class TheDashboard extends Vue {
     background-color: $bg-color;
   }
 
+  .v-tooltip__content {
+    font-size: $font-xs-x !important;
+    line-height: 12px;
+    background-color: $secondary-color !important;
+  }
+
+  .v-tooltip__content.menuable__content__active {
+    opacity: 1 !important;
+  }
 </style>

@@ -55,7 +55,7 @@ export default class InboxesList extends Vue {
       font-weight: $font-weight-bold;
     }
     &__new {
-      font-size: 11px;
+      font-size: $font-xs-x;
     }
     &__more {
       color: $color-dodger-blue !important;

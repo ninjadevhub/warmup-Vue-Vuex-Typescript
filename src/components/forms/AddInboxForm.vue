@@ -3,9 +3,10 @@
     <v-row>
       <v-col class="pt-5" cols="12" :md="isOther ? '4' : '6'" max-width="300">
         <div class="form__title">Authentication</div>
-        <v-divider class="mb-10 mt-1" />
+        <v-divider class="mb-5 mt-1" />
         <base-select
           v-model="form.provider"
+          class="mb-3"
           :items="providers"
           custom-label="email provider"
           @change="$emit('resize', $event)"
@@ -25,7 +26,7 @@
       </v-col>
       <v-col v-if="isOther" class="pt-5" cols="12" md="4" max-width="300">
         <div class="form__title">Custom Settings</div>
-        <v-divider class="mb-10 mt-1" />
+        <v-divider class="mb-5 mt-1" />
         <base-input custom-label="SMTP username" />
         <base-input custom-label="SMTP password" />
         <v-row>
@@ -51,7 +52,7 @@
       </v-col>
       <v-col class="pt-5" cols="12" :md="isOther ? '4' : '6'" max-width="300">
         <div class="form__title">Sending Schedule</div>
-        <v-divider class="mb-10 mt-1" />
+        <v-divider class="mb-5 mt-1" />
         <base-input
           custom-label="starting baseline"
           help-text="(Suggested 0, Max 40)"
@@ -127,7 +128,7 @@ export default class AddInboxForm extends Vue {
       font-size: $font-xs !important;
       font-style: italic;
       i {
-        font-size: $font-sm;
+        font-size: $font-sm-x;
         color: $color-denim !important;
       }
     }
@@ -138,7 +139,7 @@ export default class AddInboxForm extends Vue {
       font-style: italic;
     }
     &__submit {
-      font-size: 11px !important;
+      font-size: $font-xs-x !important;
       font-weight: bold;
     }
   }

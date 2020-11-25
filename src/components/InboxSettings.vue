@@ -66,7 +66,8 @@
           Delete Inbox
         </div>
         <v-divider class="mb-2 mt-1" />
-        Delete this inbox by  <a href="#" class="settings__delete-link">clicking once here</a>.
+        Delete this inbox by <a href="#" class="settings__delete-link">clicking once here</a>.
+        Note, when deleting the inbox you also delete all of your historical metrics.
       </v-col>
     </v-row>
   </v-container>

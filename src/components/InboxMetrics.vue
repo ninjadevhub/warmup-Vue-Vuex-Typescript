@@ -85,7 +85,7 @@
       </v-col>
     </v-row>
     <v-row class="metrics__data data">
-      <v-col cols="12" class="pt-0">
+      <v-col cols="12" class="pt-10">
         <div class="data__title">
           Inbox Activity
           <div class="float-right">
@@ -95,8 +95,8 @@
         <v-divider class="mb-6 mt-1" />
         <v-row>
           <v-col cols="12" md="10">
-            <bar-chart
-              :chart-data="computedChartData"
+            <custom-bar-chart
+              :chartdata="computedChartData"
               :options="barChartOptions"
               :height="100"
             />
@@ -155,16 +155,28 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
-import BarChart from '@/components/charts/BarChart.vue'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
+import CustomBarChart from '@/components/charts/CustomBarChart.vue'
 
-@Component({ components: { DoughnutChart, BarChart, EditScheduleModal } })
+@Component({ components: { DoughnutChart, EditScheduleModal, CustomBarChart } })
 export default class InboxMetrics extends Vue {
   isRunning = false // TODO: need computed getter?
   isScheduledVisible = true;
   isLandedInInboxVixible = true
   isLandedInSpamVisible = true
   currentIndex = 0
+
+  testData = {
+    labels: [
+      'Nov 5', 'Nov 6', 'Nov 7', 'Nov 8', 'Nov 9', 'Nov 10', 'Nov 11', 'Nov 12', 'Nov 13',
+      'Nov 14', 'Nov 15', 'Nov 16', 'Nov 17', 'Nov 18', 'Nov 19', 'Nov 20', 'Nov 21'
+    ],
+    datasets: [{
+      backgroundColor: '#E19695',
+      type: 'bar',
+      data: [...Array(17)].map(() => Math.floor(Math.random() * 9))
+    }]
+  }
 
   doughnutChartData = {
     labels: ['Inbox', 'Spam'],
@@ -209,17 +221,20 @@ export default class InboxMetrics extends Vue {
       {
         label: ['Inboxes'],
         backgroundColor: '#9BCAA0',
-        data: [...Array(17)].map(() => Math.floor(Math.random() * 9))
+        data: [...Array(17)].map(() => Math.floor(Math.random() * 9)),
+        type: 'bar'
       },
       {
         label: ['Spam'],
         backgroundColor: '#E19695',
-        data: [...Array(17)].map(() => Math.floor(Math.random() * 9))
+        data: [...Array(17)].map(() => Math.floor(Math.random() * 9)),
+        type: 'bar'
       },
       {
         label: ['Scheduled'],
         backgroundColor: '#303234',
-        data: [...Array(17)].map(() => Math.floor(Math.random() * 9))
+        data: [...Array(17)].map(() => Math.floor(Math.random() * 9)),
+        type: 'bar'
       }
     ]
   }
@@ -227,7 +242,8 @@ export default class InboxMetrics extends Vue {
   barChartOptions = {
     legend: false,
     tooltips: {
-      enabled: false
+      enabled: false,
+      intersect: false
     },
     scales: {
       xAxes: [
@@ -326,7 +342,7 @@ export default class InboxMetrics extends Vue {
       font-weight: $font-weight-bold;
     }
     &__name {
-      font-size: 12px;
+      font-size: $font-sm;
     }
   }
 
@@ -358,6 +374,9 @@ export default class InboxMetrics extends Vue {
         &__value {
           font-weight: $font-weight-bold;
           font-size: $font-lg;
+        }
+        &__doughnut-chart {
+          min-width: 150px !important;
         }
         &__doughnut-legend {
           &-inbox {

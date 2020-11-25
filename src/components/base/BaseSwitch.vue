@@ -39,10 +39,14 @@ export default class BaseSwitch extends Vue {
 <style lang="scss" scoped>
   ::v-deep {
     .v-input {
+      &--selection-controls__input {
+        margin-right: 0px;
+      }
       &--switch {
         &__track {
           opacity: 1;
           height: 22px !important;
+          width: 45px;
         }
         &__thumb {
           color: #FFFFFF !important;
