@@ -66,8 +66,15 @@ export default class BaseInput extends Vue {
 
 <style lang="scss" scoped>
   ::v-deep {
-    .v-text-field--outlined.v-input--is-focused fieldset {
-      border-color: #000000 !important;
+    .v-text-field--outlined.v-input--is-focused {
+      fieldset {
+        border-color: #000000 !important;
+      }
+      .v-input {
+        &__icon i {
+          color: #000000 !important;
+        }
+      }
     }
     .v-text-field--outlined .v-input--dense .v-label--active {
       transform: translateY(0) scale(0) !important;
@@ -82,7 +89,10 @@ export default class BaseInput extends Vue {
     .v-input {
       &__control {
         caret-color: #000000;
-        font-size: 11px;
+        font-size: $font-md;
+      }
+      &__icon i {
+        font-size: 20px !important;
       }
     }
   }
@@ -90,6 +100,11 @@ export default class BaseInput extends Vue {
   .v-tooltip__content {
     font-size: $font-xs !important;
     line-height: 12px;
+    background-color: $secondary-color !important;
+  }
+
+  .v-tooltip__content.menuable__content__active {
+    opacity: 1 !important;
   }
 
   .input {

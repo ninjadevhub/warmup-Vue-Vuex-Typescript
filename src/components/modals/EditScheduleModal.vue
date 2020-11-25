@@ -21,11 +21,11 @@
           help-text="(Suggested 30%, Max 50%)"
           append-icon="mdi-percent-outline"
         />
-        <div class="form__limit-hint pt-2">
+        <div class="form__limit-hint pt-0">
           <i>Want to increase these limits? <a :href="`mailto:${supportEmail}`">Chat with us.</a></i>
         </div>
         <div class="d-flex justify-end">
-          <base-button class="mt-5 px-9 text-capitalize">Save</base-button>
+          <base-button class="edit-schedule__submit mt-5 px-9 text-capitalize">Save</base-button>
         </div>
       </div>
     </template>
@@ -60,6 +60,10 @@ export default class EditScheduleModal extends Vue {
       font-size: $font-md;
       color: $color-dodger-blue !important;
       font-weight: $font-weight-bold;
+    }
+    &__submit {
+      width: 95px;
+      height: 30px;
     }
   }
 </style>

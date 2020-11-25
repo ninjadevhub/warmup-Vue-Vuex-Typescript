@@ -81,7 +81,7 @@ export default class BaseSelect extends Vue {
     .v-input {
       &__control {
         caret-color: #000000;
-        font-size: 11px;
+        font-size: $font-md;
       }
       &__icon {
         i {

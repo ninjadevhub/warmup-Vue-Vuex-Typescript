@@ -1,9 +1,9 @@
 <template>
   <base-modal
     :max-width="modalMaxWidth"
-    title="Add inbox"
+    title="Add Inbox"
   >
-    <template #button>
+    <template class="blablaaa" #button>
       <base-button class="text-capitalize" small>
         <base-icon class="pr-0 pl-0" variant="secondary" size="14">mdi-plus</base-icon> Add Inbox
       </base-button>

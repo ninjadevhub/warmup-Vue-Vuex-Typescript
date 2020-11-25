@@ -85,7 +85,7 @@
       </v-col>
     </v-row>
     <v-row class="metrics__data data">
-      <v-col cols="12" class="pt-0">
+      <v-col cols="12" class="pt-10">
         <div class="data__title">
           Inbox Activity
           <div class="float-right">
@@ -294,6 +294,7 @@ export default class InboxMetrics extends Vue {
     #doughnut-chart {
       max-width: 150px;
       max-height: 150px;
+      width: min-content;
     }
   }
 

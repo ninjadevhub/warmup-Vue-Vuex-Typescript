@@ -36,7 +36,7 @@
                 link below so you can share on your blog, podcast, twitter or to your email newsletter list. After your
                 first sign up, we’ll email you a form to get you set up for payouts.
               </p>
-              <base-button class="text-capitalize mt-5 px-6 font-weight-bold">
+              <base-button class="billing__referal text-capitalize mt-5 px-6 font-weight-bold">
                 Copy Referral Link
               </base-button>
             </v-col>
@@ -55,7 +55,7 @@ import SubscribeModal from '@/components/modals/SubscribeModal.vue'
 @Component({ components: { UpdateSubscriptionModal, SubscribeModal } })
 export default class TheBilling extends Vue {
   activeTab = 0
-  hasSubscription = false; // TODO: Make computed
+  hasSubscription = true; // TODO: Make computed
 }
 </script>
 
@@ -67,6 +67,12 @@ export default class TheBilling extends Vue {
     &__title {
       font-size: $font-md-x;
       font-weight: $font-weight-bold;
+    }
+    &__referal {
+      width: 130px !important;
+      height: 30px !important;
+      font-size: 11px !important;
+      letter-spacing: -0.2px;
     }
   }
 </style>

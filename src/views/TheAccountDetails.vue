@@ -30,7 +30,7 @@
                   <base-input custom-label="New password" variant="normal" class="account-details__input" />
                 </v-col>
                 <v-col cols="12" sm="4" class="d-flex align-end">
-                  <base-button class="text-capitalize px-6">
+                  <base-button class="account-details__submit text-capitalize px-6">
                     Save
                   </base-button>
                 </v-col>
@@ -63,6 +63,10 @@ export default class TheAccountDetails extends Vue {
     }
     &__input {
       margin-bottom: 0 !important;
+      width: 100%;
+    }
+    &__submit {
+      height: 40px !important;
     }
   }
 </style>

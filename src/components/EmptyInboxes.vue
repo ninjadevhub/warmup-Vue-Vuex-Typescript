@@ -7,7 +7,7 @@
         Thanks for signing up for Warmup Inbox! Get started by adding an inbox. If you get stuck just
         <a :href="`mailto:${supportEmail}`">let us know</a>.
       </div>
-      <div class="px-2 pt-5">
+      <div class="px-2 pt-5 inboxes__modal-wrapper">
         <add-inbox-modal />
       </div>
     </div>
@@ -77,6 +77,11 @@ export default class EmptyInboxes extends Vue {
     }
     &__new {
       font-size: 11px;
+    }
+    &__modal-wrapper::v-deep {
+      div[role=button] {
+        max-width: min-content !important;
+      }
     }
 
     .help-text {
