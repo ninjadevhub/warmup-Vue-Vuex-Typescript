@@ -72,7 +72,7 @@ export default class BaseSelect extends Vue {
     }
     fieldset {
       border-radius: 0;
-      font-size: 11px;
+      font-size: $font-xs-x;
     }
     label {
       font-family: $label-font;
@@ -104,7 +104,7 @@ export default class BaseSelect extends Vue {
     &--normal {
       ::v-deep {
         label {
-          font-size: 12px;
+          font-size: $font-sm;
           color: $secondary-color;
         }
       }

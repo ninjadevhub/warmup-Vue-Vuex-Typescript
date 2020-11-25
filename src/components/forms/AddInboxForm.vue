@@ -128,7 +128,7 @@ export default class AddInboxForm extends Vue {
       font-size: $font-xs !important;
       font-style: italic;
       i {
-        font-size: $font-sm;
+        font-size: $font-sm-x;
         color: $color-denim !important;
       }
     }
@@ -139,7 +139,7 @@ export default class AddInboxForm extends Vue {
       font-style: italic;
     }
     &__submit {
-      font-size: 11px !important;
+      font-size: $font-xs-x !important;
       font-weight: bold;
     }
   }

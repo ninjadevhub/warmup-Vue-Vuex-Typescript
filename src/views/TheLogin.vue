@@ -62,7 +62,7 @@ export default class TheLogin extends Vue {}
       font-weight: $font-weight-bold;
     }
     &__footer {
-      font-size: $font-sm;
+      font-size: $font-sm-x;
       a {
         text-decoration: none;
       }

@@ -265,7 +265,7 @@ export default class TheDashboard extends Vue {
       height: 30px;
       width: 30px;
       i {
-        font-size: 18px;
+        font-size: $font-lg;
       }
     }
   }
@@ -275,4 +275,13 @@ export default class TheDashboard extends Vue {
     background-color: $bg-color;
   }
 
+  .v-tooltip__content {
+    font-size: $font-xs-x !important;
+    line-height: 12px;
+    background-color: $secondary-color !important;
+  }
+
+  .v-tooltip__content.menuable__content__active {
+    opacity: 1 !important;
+  }
 </style>

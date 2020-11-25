@@ -71,7 +71,7 @@ export default class TheBilling extends Vue {
     &__referal {
       width: 130px !important;
       height: 30px !important;
-      font-size: 11px !important;
+      font-size: $font-xs-x !important;
       letter-spacing: -0.2px;
     }
   }

@@ -92,7 +92,7 @@ export default class BaseInput extends Vue {
         font-size: $font-md;
       }
       &__icon i {
-        font-size: 20px !important;
+        font-size: 17px !important;
       }
     }
   }
@@ -127,7 +127,7 @@ export default class BaseInput extends Vue {
     &--normal {
       ::v-deep {
         label {
-          font-size: 12px;
+          font-size: $font-sm;
           color: $secondary-color;
         }
       }
