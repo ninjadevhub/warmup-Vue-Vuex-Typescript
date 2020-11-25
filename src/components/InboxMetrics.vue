@@ -294,7 +294,6 @@ export default class InboxMetrics extends Vue {
     #doughnut-chart {
       max-width: 150px;
       max-height: 150px;
-      width: min-content;
     }
   }
 
@@ -359,6 +358,9 @@ export default class InboxMetrics extends Vue {
         &__value {
           font-weight: $font-weight-bold;
           font-size: $font-lg;
+        }
+        &__doughnut-chart {
+          min-width: 150px !important;
         }
         &__doughnut-legend {
           &-inbox {

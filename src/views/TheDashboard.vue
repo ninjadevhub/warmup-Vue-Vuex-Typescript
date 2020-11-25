@@ -244,6 +244,9 @@ export default class TheDashboard extends Vue {
     &__title {
       font-family: $base-font;
       font-weight: bold;
+      i {
+        padding: 0 !important;
+      }
     }
   }
 
