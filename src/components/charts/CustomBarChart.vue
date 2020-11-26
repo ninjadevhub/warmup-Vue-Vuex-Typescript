@@ -5,6 +5,7 @@ import { generateChart } from 'vue-chartjs'
 Chart.defaults.BarWithLine = Chart.defaults.bar
 
 Chart.pluginService.register({
+  id: 'lineOnHoverPlugin',
   beforeDraw: function (chart) {
     if (chart.tooltip._active && chart.tooltip._active.length) {
       const activePoint = chart.controller.tooltip._active[0]
@@ -48,6 +49,11 @@ export default {
   },
   mounted () {
     this.renderChart(this.chartdata, this.options)
+  },
+  watch: {
+    chartdata: function (val) {
+      this.renderChart(val, this.options)
+    }
   }
 }
 </script>

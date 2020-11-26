@@ -13,13 +13,26 @@
 
     <template #content>
       <div class="pt-2">
-        <base-input custom-label="starting baseline" help-text="(Suggested 0, Max 40)" />
-        <base-input custom-label="increase per day" help-text="(Suggested 2, Max 4)" />
-        <base-input custom-label="max sends per day" help-text="(Suggested 40, Max 50)" />
+        <base-input
+          custom-label="starting baseline"
+          help-text="(Suggested 0, Max 40)"
+          tooltip="The starting number of emails we should send on day one."
+        />
+        <base-input
+          custom-label="increase per day"
+          help-text="(Suggested 2, Max 4)"
+          tooltip="The number of emails we will increase by each day."
+        />
+        <base-input
+          custom-label="max sends per day"
+          help-text="(Suggested 40, Max 50)"
+          tooltip="We will never send more than  this number of new inital emails per day."
+        />
         <base-input
           custom-label="reply rate %"
           help-text="(Suggested 30%, Max 50%)"
           append-icon="mdi-percent-outline"
+          tooltip="We automatically reply to X percent of the emails that are received within the inbox. These are additional emails added on top of the Max Send Per Day rate."
         />
         <div class="form__limit-hint pt-0">
           <i>Want to increase these limits? <a :href="`mailto:${supportEmail}`">Chat with us.</a></i>
