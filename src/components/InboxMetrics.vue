@@ -156,7 +156,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
-import CustomBarChart from '@/components/charts/CustomBarChart.vue'
+import CustomBarChart, { BarChartEventBus } from '@/components/charts/CustomBarChart.vue'
 
 @Component({ components: { DoughnutChart, EditScheduleModal, CustomBarChart } })
 export default class InboxMetrics extends Vue {
@@ -164,7 +164,7 @@ export default class InboxMetrics extends Vue {
   isScheduledVisible = true;
   isLandedInInboxVixible = true
   isLandedInSpamVisible = true
-  currentIndex = 0
+  currentIndex = -1
 
   testData = {
     labels: [
@@ -244,6 +244,7 @@ export default class InboxMetrics extends Vue {
     legend: false,
     tooltips: {
       enabled: false,
+      mode: 'index',
       intersect: false
     },
     scales: {
@@ -302,6 +303,12 @@ export default class InboxMetrics extends Vue {
 
   changeCurrentIndex (index: number): void {
     this.currentIndex = index
+  }
+
+  mounted () {
+    BarChartEventBus.$on('bar-hover', (barIndex: number) => {
+      this.changeCurrentIndex(barIndex)
+    })
   }
 }
 </script>
