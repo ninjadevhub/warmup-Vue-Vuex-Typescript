@@ -1,6 +1,9 @@
 <script>
 import Chart from 'chart.js'
+import Vue from 'vue'
 import { generateChart } from 'vue-chartjs'
+
+export const BarChartEventBus = new Vue()
 
 Chart.defaults.BarWithLine = Chart.defaults.bar
 
@@ -22,6 +25,10 @@ Chart.pluginService.register({
       ctx.strokeStyle = '#333333'
       ctx.stroke()
       ctx.restore()
+
+      const barIndex = chart.controller.tooltip._active[0]._index
+
+      BarChartEventBus.$emit('bar-hover', barIndex)
     }
   }
 })
