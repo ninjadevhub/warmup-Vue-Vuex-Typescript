@@ -74,7 +74,7 @@
             Upgrade to see your score
           </div>
         </div>
-        <div class="data__title">Listed On Any Blacklists</div>
+        <div class="data__title mt-9">Listed On Any Blacklists</div>
         <v-divider class="mb-2 mt-1" />
         <div class="data__wrapper">
           <div class="data__value">?</div>
@@ -198,6 +198,7 @@ export default class InboxMetrics extends Vue {
 
   doughnutOptions = {
     legend: false,
+    plugins: { lineOnHoverPlugin: false },
     tooltips: {
       mode: 'label',
       callbacks: {
