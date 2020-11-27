@@ -261,12 +261,6 @@ export default class InboxMetrics extends Vue {
           stacked: true
         }
       ]
-    },
-    hover: {
-      // eslint-disable-next-line
-      onHover: (self: Chart, event: any) => {
-        if (event && event[0]) this.changeCurrentIndex(event[0]._index)
-      }
     }
   }
 
