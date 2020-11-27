@@ -18,21 +18,29 @@
       <span>{{ tooltip }}</span>
     </v-tooltip>
     <v-text-field
+      v-model="localValue"
       :placeholder="placeholder"
       v-bind="{ ...$attrs, ...$props }"
       outlined
       dense
       single-line
       hide-details="auto"
+      v-on="$listeners"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop, Model } from 'vue-property-decorator'
 
 @Component
 export default class BaseInput extends Vue {
+  @Model('change', {
+    type: String || Number
+    // required: true // TODO: Uncomment when API integration completed
+  })
+  readonly value!: string | number
+
   @Prop({
     type: String,
     default: ''
@@ -61,23 +69,39 @@ export default class BaseInput extends Vue {
     type: String
   })
   readonly tooltip?: string
+
+  get localValue (): string | number {
+    return this.value
+  }
+
+  set localValue (value: string | number) {
+    this.$emit('change', value)
+  }
 }
 </script>
 
 <style lang="scss" scoped>
   ::v-deep {
-    .v-text-field--outlined.v-input--is-focused {
-      fieldset {
-        border-color: #000000 !important;
+    .v-text-field {
+      &__details {
+        padding: 0 !important;
+        font-size: $font-xs-x;
       }
-      .v-input {
-        &__icon i {
-          color: #000000 !important;
+      &--outlined {
+        &.v-input--is-focused {
+          fieldset {
+            border-color: #000000 !important;
+          }
+          .v-input {
+            &__icon i {
+              color: #000000 !important;
+            }
+          }
         }
       }
-    }
-    .v-text-field--outlined .v-input--dense .v-label--active {
-      transform: translateY(0) scale(0) !important;
+      &.v-input--dense .v-label--active {
+        transform: translateY(0) scale(0) !important;
+      }
     }
     fieldset {
       border-radius: 0;
