@@ -10,16 +10,30 @@
     <v-row>
       <v-col cols="12">
         <v-card class="sign-up mx-auto pa-8 mx-11 mt-3" width="560px" elevation="0">
+          <base-alert v-if="isError" variant="error">
+            {{ errorMessage }}
+          </base-alert>
           <v-card-title>
             <div class="sign-up__title">The easiest way to warm up your inboxes.</div>
             <div class="sign-up__sub-title">Create an account, no credit card required.</div>
           </v-card-title>
-          <sign-up-form />
-          <v-card-actions class="py-0 px-3">
-            <base-button class="text-capitalize font-weight-bold" variant="secondary" large block tile>
-              Sign up free
-            </base-button>
-          </v-card-actions>
+          <validation-observer v-slot="{ invalid }">
+            <sign-up-form v-model="userForm" />
+            <v-card-actions class="py-0 px-3">
+              <base-button
+                class="text-capitalize font-weight-bold"
+                variant="secondary"
+                @click="onSubmit"
+                :loading="isLoading"
+                large
+                block
+                tile
+                :disabled="invalid"
+              >
+                Sign up free
+              </base-button>
+            </v-card-actions>
+          </validation-observer>
           <v-card-text>
             <div>
               By signing up you agree to the <a href="#">terms of service</a> and <a href="#">privacy policy</a>.
@@ -32,12 +46,58 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import SignUpForm from '@/components/forms/SignUpForm.vue'
+import UserForm from '@/types/UserForm'
+import UserRepository from '@/data/repository/UserRepository'
+import RequestStatus from '@/constants/RequestStatus'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import { ValidationObserver } from 'vee-validate'
 
-@Component({ components: { SignUpForm } })
-export default class TheSignUpForm extends Vue {}
+@Component({ components: { SignUpForm, ValidationObserver } })
+export default class TheSignUpForm extends Vue {
+  status: RequestStatus = RequestStatus.Initial
+  errorMessage = ''
+  userForm: UserForm = {
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    referred_by: this.refferalCode
+  }
+
+  get isError (): boolean {
+    return this.status === RequestStatus.Error
+  }
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  get refferalCode (): string | null {
+    return this.$route.query.code ? this.$route.query.code as string : null
+  }
+
+  async onSubmit (): Promise<void> {
+    if (this.status === RequestStatus.Loading) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new UserRepository().register(this.userForm)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      this.errorMessage = (response as FailureResponse).reason
+
+      return
+    }
+
+    this.status = RequestStatus.Success
+    localStorage.api_key = (response as { status: string; key: string }).key
+    this.$router.push({ name: 'inboxes' })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -3,25 +3,102 @@
     <v-container>
       <v-row>
         <v-col cols="6" class="py-0">
-          <base-input custom-label="First name" height="40" />
+          <validation-provider v-slot="{ errors }" name="First name" rules="required">
+            <base-input
+              v-model="firstName"
+              :error-messages="errors"
+              custom-label="First name"
+              height="40"
+            />
+          </validation-provider>
         </v-col>
         <v-col cols="6" class="py-0">
-          <base-input custom-label="Last name" height="40" />
+          <validation-provider v-slot="{ errors }" name="Last name" rules="required">
+            <base-input
+              v-model="lastName"
+              :error-messages="errors"
+              custom-label="Last name"
+              height="40"
+            />
+          </validation-provider>
         </v-col>
         <v-col cols="12" class="py-0">
-          <base-input custom-label="Email address" height="40" />
+          <validation-provider v-slot="{ errors }" name="Email address" rules="required|email">
+            <base-input
+              v-model="email"
+              :error-messages="errors"
+              custom-label="Email address"
+              height="40"
+            />
+          </validation-provider>
         </v-col>
         <v-col cols="12" class="py-0">
-          <base-input custom-label="Create password" height="40" />
+          <validation-provider v-slot="{ errors }" name="Password" rules="required|min:6">
+            <base-input
+              v-model="password"
+              :error-messages="errors"
+              custom-label="Create password"
+              type="password"
+              height="40"
+            />
+          </validation-provider>
         </v-col>
       </v-row>
     </v-container>
   </div>
 </template>
 
-<script>
-import { Component, Vue } from 'vue-property-decorator'
+<script lang="ts">
+import { Component, Vue, Model } from 'vue-property-decorator'
+import UserForm from '@/types/UserForm'
+import { ValidationProvider, extend } from 'vee-validate'
+import { required, email, min } from 'vee-validate/dist/rules'
 
-@Component
-export default class SignUpform extends Vue {}
+extend('required', required)
+extend('email', email)
+extend('min', {
+  ...min,
+  message: '{_field_} may not be less than {length} characters'
+})
+
+@Component({ components: { ValidationProvider } })
+export default class SignUpForm extends Vue {
+  @Model('input', {
+    type: Object as () => UserForm,
+    required: true
+  })
+  readonly userForm!: UserForm
+
+  get firstName (): string {
+    return this.userForm.first_name
+  }
+
+  set firstName (value: string) {
+    this.$emit('input', { ...this.userForm, ...{ first_name: value } })
+  }
+
+  get lastName (): string {
+    return this.userForm.last_name
+  }
+
+  set lastName (value: string) {
+    this.$emit('input', { ...this.userForm, ...{ last_name: value } })
+  }
+
+  get email (): string {
+    return this.userForm.email
+  }
+
+  set email (value: string) {
+    this.$emit('input', { ...this.userForm, ...{ email: value } })
+  }
+
+  get password (): string {
+    return this.userForm.password
+  }
+
+  set password (value: string) {
+    this.$emit('input', { ...this.userForm, ...{ password: value } })
+  }
+}
 </script>

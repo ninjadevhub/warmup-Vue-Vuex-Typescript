@@ -7,6 +7,7 @@ import BaseModal from './BaseModal.vue'
 import BaseSelect from './BaseSelect.vue'
 import BaseCheckbox from './BaseCheckbox.vue'
 import BaseSwitch from './BaseSwitch.vue'
+import BaseAlert from './BaseAlert.vue'
 
 export {
   BaseInput,
@@ -17,5 +18,6 @@ export {
   BaseModal,
   BaseSelect,
   BaseCheckbox,
-  BaseSwitch
+  BaseSwitch,
+  BaseAlert
 }
