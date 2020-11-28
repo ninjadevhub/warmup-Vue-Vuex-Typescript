@@ -58,9 +58,9 @@
                 </v-list-item>
                 <v-list-item link>
                   <v-list-item-title>
-                    <router-link class="menu__link" to="/logout">
+                    <a class="menu__link" @click="onLogout" text>
                       Log out
-                    </router-link>
+                    </a>
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -168,6 +168,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import AuthModule from '@/store/modules/AuthModule'
 
 @Component
 export default class TheDashboard extends Vue {
@@ -205,6 +206,11 @@ export default class TheDashboard extends Vue {
           subTitle: 'Settings'
         }
     }
+  }
+
+  onLogout (): void {
+    AuthModule.logout()
+    window.location.href = '/login'
   }
 }
 </script>

@@ -15,23 +15,55 @@
             <div class="login__title text-capitalize">Log in</div>
           </v-card-title>
           <v-divider class="mx-2 my-2" />
-          <v-container class="px-2" fluid>
-            <v-row>
-              <v-col col="12" class="py-0">
-                <base-input custom-label="Email address" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col col="12" class="py-0">
-                <base-input custom-label="Password" />
-              </v-col>
-            </v-row>
-          </v-container>
-          <v-card-actions class="py-0">
-            <base-button to="/inboxes" class="text-capitalize font-weight-bold" variant="secondary" large block tile>
-              Sign in
-            </base-button>
-          </v-card-actions>
+          <validation-observer v-slot="{ invalid }">
+            <v-container class="px-2" fluid>
+              <v-row>
+                <v-col col="12" class="py-0">
+                  <base-alert v-if="isError" variant="error">
+                    {{ errorMessage }}
+                  </base-alert>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col col="12" class="py-0">
+                  <validation-provider v-slot="{ errors }" name="Email address" rules="required|email">
+                    <base-input
+                      v-model="form.email"
+                      custom-label="Email address"
+                      :error-messages="errors"
+                      type="email"
+                    />
+                  </validation-provider>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col col="12" class="py-0">
+                  <validation-provider v-slot="{ errors }" name="Password" rules="required">
+                    <base-input
+                      v-model="form.password"
+                      custom-label="Password"
+                      :error-messages="errors"
+                      type="password"
+                    />
+                  </validation-provider>
+                </v-col>
+              </v-row>
+            </v-container>
+            <v-card-actions class="py-0">
+              <base-button
+                class="text-capitalize font-weight-bold"
+                variant="secondary"
+                :disabled="invalid"
+                :loading="isLoading"
+                @click="onSubmit"
+                large
+                block
+                tile
+              >
+                Sign in
+              </base-button>
+            </v-card-actions>
+          </validation-observer>
           <v-card-text class="px-2 login__footer">
             <div>
               Don’t have an account? <router-link to="/sign-up">Sign up</router-link>.
@@ -46,11 +78,55 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { required, email } from 'vee-validate/dist/rules'
+import UserLoginForm from '@/types/UserLoginForm'
+import RequestStatus from '@/constants/RequestStatus'
+import UserRepository from '@/data/repository/UserRepository'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import AuthModule from '@/store/modules/AuthModule'
 
-@Component
-export default class TheLogin extends Vue {}
+extend('required', required)
+extend('email', email)
+
+@Component({ components: { ValidationProvider, ValidationObserver } })
+export default class TheLogin extends Vue {
+  status: RequestStatus = RequestStatus.Initial
+  errorMessage = ''
+  form: UserLoginForm = {
+    email: '',
+    password: ''
+  }
+
+  get isError () {
+    return this.status === RequestStatus.Error
+  }
+
+  get isLoading () {
+    return this.status === RequestStatus.Loading
+  }
+
+  async onSubmit (): Promise<void> {
+    if (this.isLoading) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new UserRepository().login(this.form)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      this.errorMessage = (response as FailureResponse).reason
+
+      return
+    }
+
+    await AuthModule.login(response as { status: string; key: string })
+    this.status = RequestStatus.Success
+    window.location.href = '/inboxes'
+  }
+}
 </script>
 
 <style lang="scss" scoped>
