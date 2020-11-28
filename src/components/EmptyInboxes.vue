@@ -8,7 +8,7 @@
         <a :href="`mailto:${supportEmail}`">let us know</a>.
       </div>
       <div class="px-2 pt-5 inboxes__modal-wrapper">
-        <add-inbox-modal />
+        <add-inbox-modal @created="$emit('created')" />
       </div>
     </div>
     <v-container fluid>
