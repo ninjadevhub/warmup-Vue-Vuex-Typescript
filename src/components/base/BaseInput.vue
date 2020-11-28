@@ -24,7 +24,6 @@
       outlined
       dense
       single-line
-      hide-details="auto"
       v-on="$listeners"
     />
   </div>
@@ -82,9 +81,13 @@ export default class BaseInput extends Vue {
 
 <style lang="scss" scoped>
   ::v-deep {
+    .v-messages__message {
+      font-size: $font-xs;
+    }
     .v-text-field {
       &__details {
         padding: 0 !important;
+        margin-bottom: 0px !important;
         font-size: $font-xs-x;
       }
       &--outlined {
@@ -133,7 +136,6 @@ export default class BaseInput extends Vue {
 
   .input {
     &__wrapper {
-      margin-bottom: 12px;
       label {
         margin-bottom: 8px;
       }

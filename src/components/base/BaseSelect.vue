@@ -9,6 +9,7 @@
     <v-select
       v-model="localValue"
       :items="items"
+      v-bind="{ ...$attrs, ...$props }"
       dense
       outlined
       hide-details="auto"

@@ -10,7 +10,15 @@
     </template>
 
     <template #content>
-      <add-inbox-form @resize="onResize" />
+      <base-alert v-if="isError" class="mt-3" variant="error">
+        {{ errorMessage }}
+      </base-alert>
+      <add-inbox-form
+        v-model="inboxForm"
+        :status="status"
+        @resize="onResize"
+        @submit="onSubmit"
+      />
     </template>
   </base-modal>
 </template>
@@ -18,14 +26,79 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AddInboxForm from '@/components/forms/AddInboxForm.vue'
+import { InboxForm } from '@/types/InboxForm'
+import EmailProvider from '@/constants/EmailProvider'
+import RequestStatus from '@/constants/RequestStatus'
+import InboxRepository from '@/data/repository/InboxRepository'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
 
 @Component({ components: { AddInboxForm } })
 export default class AddInboxModal extends Vue {
+  status: RequestStatus = RequestStatus.Initial
+  errorMessage = ''
   dialog = false;
   modalMaxWidth = '640'
+  inboxForm: InboxForm | null = null
 
-  onResize (provider: string) {
+  get isError (): boolean {
+    return this.status === RequestStatus.Error
+  }
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  initForm (provider: EmailProvider = '' as EmailProvider): void {
+    this.inboxForm = {
+      api_key: '',
+      provider: provider,
+      email: '',
+      password: '',
+      sender_first: '',
+      sender_last: '',
+      smtp_username: '',
+      smtp_password: '',
+      smtp_host: '',
+      smtp_port: '',
+      smtp_ssl: false,
+      imap_username: '',
+      imap_password: '',
+      imap_host: '',
+      imap_port: '',
+      imap_ssl: false,
+      starting_baseline: '',
+      increase_per_day: '',
+      max_sends_per_day: '',
+      reply_rate_percent: ''
+    }
+  }
+
+  onResize (provider: EmailProvider) {
+    this.initForm(provider)
     provider === 'other' ? this.modalMaxWidth = '960' : this.modalMaxWidth = '640'
+  }
+
+  async onSubmit (): Promise<void> {
+    if (this.isLoading || !this.inboxForm) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new InboxRepository().add(this.inboxForm)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      this.errorMessage = (response as FailureResponse).reason
+
+      return
+    }
+
+    this.status = RequestStatus.Success
+    this.dialog = false
+    this.$emit('created')
+  }
+
+  mounted () {
+    this.initForm()
   }
 }
 </script>
