@@ -49,17 +49,18 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import SignUpForm from '@/components/forms/SignUpForm.vue'
-import UserForm from '@/types/UserForm'
+import UserRegistrationForm from '@/types/UserRegistrationForm'
 import UserRepository from '@/data/repository/UserRepository'
 import RequestStatus from '@/constants/RequestStatus'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { ValidationObserver } from 'vee-validate'
+import AuthModule from '@/store/modules/AuthModule'
 
 @Component({ components: { SignUpForm, ValidationObserver } })
 export default class TheSignUpForm extends Vue {
   status: RequestStatus = RequestStatus.Initial
   errorMessage = ''
-  userForm: UserForm = {
+  userForm: UserRegistrationForm = {
     first_name: '',
     last_name: '',
     email: '',
@@ -80,7 +81,7 @@ export default class TheSignUpForm extends Vue {
   }
 
   async onSubmit (): Promise<void> {
-    if (this.status === RequestStatus.Loading) return
+    if (this.isLoading) return
 
     this.status = RequestStatus.Loading
 
@@ -93,9 +94,9 @@ export default class TheSignUpForm extends Vue {
       return
     }
 
+    await AuthModule.login(response as { status: string; key: string })
     this.status = RequestStatus.Success
-    localStorage.api_key = (response as { status: string; key: string }).key
-    this.$router.push({ name: 'inboxes' })
+    window.location.href = '/inboxes'
   }
 }
 </script>

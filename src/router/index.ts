@@ -10,6 +10,8 @@ import TheInboxes from '@/views/TheInboxes.vue'
 import TheInbox from '@/views/TheInbox.vue'
 import TheAccountDetails from '@/views/TheAccountDetails.vue'
 import TheBilling from '@/views/TheBilling.vue'
+import ThePageNotFound from '@/views/ThePageNotFound.vue'
+import AuthModule from '@/store/modules/AuthModule'
 
 Vue.use(VueRouter)
 
@@ -25,7 +27,8 @@ const routes: Array<RouteConfig> = [
         name: 'inboxes',
         component: TheInboxes,
         meta: {
-          title: 'Inboxes'
+          title: 'Inboxes',
+          authRequired: true
         }
       },
       {
@@ -33,7 +36,8 @@ const routes: Array<RouteConfig> = [
         name: 'inbox-details',
         component: TheInbox,
         meta: {
-          title: '{email}' // TODO: make dynamic
+          title: '{email}', // TODO: make dynamic
+          authRequired: true
         }
       },
       {
@@ -41,7 +45,8 @@ const routes: Array<RouteConfig> = [
         name: 'account-settings',
         component: TheAccountDetails,
         meta: {
-          title: 'Account Settings'
+          title: 'Account Settings',
+          authRequired: true
         }
       },
       {
@@ -49,7 +54,8 @@ const routes: Array<RouteConfig> = [
         name: 'billing',
         component: TheBilling,
         meta: {
-          title: 'Billing'
+          title: 'Billing',
+          authRequired: true
         }
       }
     ]
@@ -59,7 +65,8 @@ const routes: Array<RouteConfig> = [
     name: 'sign-up',
     component: TheSignUp,
     meta: {
-      title: 'Sign Up'
+      title: 'Sign Up',
+      guest: true
     }
   },
   {
@@ -67,7 +74,8 @@ const routes: Array<RouteConfig> = [
     name: 'Email verification',
     component: TheEmailVerification,
     meta: {
-      title: 'Email Verification'
+      title: 'Email Verification',
+      guest: true
     }
   },
   {
@@ -75,7 +83,8 @@ const routes: Array<RouteConfig> = [
     name: 'login',
     component: TheLogin,
     meta: {
-      title: 'Log In'
+      title: 'Log In',
+      guest: true
     }
   },
   {
@@ -83,7 +92,8 @@ const routes: Array<RouteConfig> = [
     name: 'password-reset',
     component: ThePasswordReset,
     meta: {
-      title: 'Password Reset'
+      title: 'Password Reset',
+      guest: true
     }
   },
   {
@@ -91,7 +101,16 @@ const routes: Array<RouteConfig> = [
     name: 'new-password',
     component: TheNewPassword,
     meta: {
-      title: 'New Password'
+      title: 'New Password',
+      guest: true
+    }
+  },
+  {
+    path: '*',
+    name: 'page-not-found',
+    component: ThePageNotFound,
+    meta: {
+      title: '404 Page Not Found'
     }
   }
 ]
@@ -104,6 +123,19 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | Warmup Inbox`
+
+  if (to.meta.authRequired) {
+    AuthModule.isAuthenticated ? next() : next({ path: '/login', replace: true })
+
+    return
+  }
+
+  if (to.meta.guest) {
+    !AuthModule.isAuthenticated ? next() : next({ path: '/inboxes', replace: true })
+
+    return
+  }
+
   next()
 })
 

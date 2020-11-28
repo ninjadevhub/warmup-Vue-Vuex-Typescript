@@ -28,6 +28,7 @@
               v-model="email"
               :error-messages="errors"
               custom-label="Email address"
+              type="email"
               height="40"
             />
           </validation-provider>
@@ -50,7 +51,7 @@
 
 <script lang="ts">
 import { Component, Vue, Model } from 'vue-property-decorator'
-import UserForm from '@/types/UserForm'
+import UserRegistrationForm from '@/types/UserRegistrationForm'
 import { ValidationProvider, extend } from 'vee-validate'
 import { required, email, min } from 'vee-validate/dist/rules'
 
@@ -64,10 +65,10 @@ extend('min', {
 @Component({ components: { ValidationProvider } })
 export default class SignUpForm extends Vue {
   @Model('input', {
-    type: Object as () => UserForm,
+    type: Object as () => UserRegistrationForm,
     required: true
   })
-  readonly userForm!: UserForm
+  readonly userForm!: UserRegistrationForm
 
   get firstName (): string {
     return this.userForm.first_name
