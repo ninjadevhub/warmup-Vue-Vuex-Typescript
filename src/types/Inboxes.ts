@@ -1,4 +1,4 @@
-import InboxSimple from './InboxSimple';
+import InboxSimple from './InboxSimple'
 
 export default interface Inboxes {
   status: string; // TODO: Sould be ENUM

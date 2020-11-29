@@ -5,6 +5,14 @@
       <v-tab>Settings</v-tab>
     </base-tabs>
     <base-tabs-items v-model="activeTab">
+    <base-alert
+      v-if="isError"
+      class="mx-auto"
+      max-width="600"
+      variant="error"
+    >
+      {{ errorMessage }}
+    </base-alert>
       <v-tab-item :transition="false" :reverse-transition="false">
         <inbox-metrics v-if="inbox" :inbox="inbox" class="mx-0 px-0 p-2" />
       </v-tab-item>
@@ -29,6 +37,7 @@ import Inbox from '@/types/Inbox'
 import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
+import { AxiosResponse } from 'axios'
 
 @Component({ components: { InboxMetrics, InboxSettings } })
 export default class TheInbox extends Vue {
@@ -63,7 +72,7 @@ export default class TheInbox extends Vue {
       return
     }
 
-    this.inbox = response as Inbox
+    this.inbox = (response as AxiosResponse<Inbox>).data
     this.status = RequestStatus.Success
   }
 

@@ -1,4 +1,4 @@
-import InboxState from '@/constants/InboxState';
+import InboxState from '@/constants/InboxState'
 
 export default interface InboxSimple {
   inbox_id: string;

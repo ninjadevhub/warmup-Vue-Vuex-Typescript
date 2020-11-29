@@ -66,7 +66,7 @@
           Delete Inbox
         </div>
         <v-divider class="mb-2 mt-1" />
-        Delete this inbox by <a href="#" class="settings__delete-link">clicking once here</a>.
+        Delete this inbox by <a class="settings__delete-link" @click="onDelete">clicking once here</a>.
         Note, when deleting the inbox you also delete all of your historical metrics.
       </v-col>
     </v-row>
@@ -78,6 +78,8 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
 import InboxControl from '@/components/InboxControl.vue'
 import Inbox from '@/types/Inbox'
+import InboxState from '@/constants/InboxState'
+import RequestStatus from '@/constants/RequestStatus'
 
 @Component({ components: { EditScheduleModal, InboxControl } })
 export default class InboxSettings extends Vue {
@@ -86,7 +88,26 @@ export default class InboxSettings extends Vue {
   })
   readonly inbox!: Inbox
 
-  isRunning = false // TODO: need computed getter?
+  status: RequestStatus = RequestStatus.Initial
+  errorMessage = ''
+
+  get isError (): boolean {
+    return this.status === RequestStatus.Error
+  }
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  get isRunning (): boolean {
+    return this.inbox.status === InboxState.Running
+  }
+
+  async onDelete (): Promise<void> {
+    if (this.isLoading || !this.inbox) return
+
+    this.status = RequestStatus.Loading
+  }
 }
 </script>
 

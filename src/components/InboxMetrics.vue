@@ -110,7 +110,7 @@
             />
           </v-col>
           <v-col cols="12" md="2">
-            <div class="font-weight-bold mb-3">{{ currentDate }}, 2020</div>
+            <div class="font-weight-bold mb-3">{{ currentDate }}</div>
             <div class="chart-legend d-flex align-center" @click="isScheduledVisible = !isScheduledVisible">
               <div class="chart-legend__icon">
                 <base-icon
@@ -255,6 +255,12 @@ export default class InboxMetrics extends Vue {
           stacked: true,
           gridLines: {
             display: false
+          },
+          ticks: {
+            // Include a dollar sign in the ticks
+            callback: function (value: any) {
+              return value.split(',')[0]
+            }
           }
         }
       ],

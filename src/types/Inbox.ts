@@ -1,4 +1,4 @@
-import InboxState from '@/constants/InboxState';
+import InboxState from '@/constants/InboxState'
 
 export default interface Inbox {
   inbox_id: string;
@@ -16,9 +16,9 @@ export default interface Inbox {
   };
   inbox_v_spam: {
     inbox_count: number;
-    inbox_percent: number | null,
-    spam_count: number,
-    spam_percent: number | null
+    inbox_percent: number | null;
+    spam_count: number;
+    spam_percent: number | null;
   };
   basic_health: {
     score: number;
@@ -38,18 +38,18 @@ export default interface Inbox {
     };
     about: {
       provider_pretty: string;
-    }
+    };
   };
-  domain:{
+  domain: {
     age_pretty: string;
   };
   chart: {
     [key: string]: {
-      scheduled: number,
-      inbox: number,
-      spam: number,
-      unix_start: number,
-      unix_end: number
-    }
+      scheduled: number;
+      inbox: number;
+      spam: number;
+      unix_start: number;
+      unix_end: number;
+    };
   }[];
 }
