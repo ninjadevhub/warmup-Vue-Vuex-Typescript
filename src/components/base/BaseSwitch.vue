@@ -2,7 +2,8 @@
   <v-switch
     v-model="localValue"
     v-bind="{ ...$attrs, ...$props }"
-    color="#00d474"
+    :color="hasError ? 'red' : '#00d474'"
+    :class="{ 'has-error': hasError }"
     :label="label"
     :ripple="false"
     flat
@@ -25,6 +26,11 @@ export default class BaseSwitch extends Vue {
     default: ''
   })
   readonly label!: string
+
+  @Prop({
+    type: Boolean
+  })
+  readonly hasError!: boolean
 
   get localValue (): boolean | null {
     return this.value
@@ -59,6 +65,11 @@ export default class BaseSwitch extends Vue {
     .v-label {
       font-size: 14px;
       padding-bottom: 10px !important;
+    }
+  }
+  .has-error::v-deep {
+    .v-label {
+      color: red !important;
     }
   }
 </style>

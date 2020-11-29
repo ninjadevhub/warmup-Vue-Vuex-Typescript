@@ -1,7 +1,6 @@
 import EmailProvider from '@/constants/EmailProvider';
 
 export interface InboxForm {
-  api_key: string,
   provider: EmailProvider,
   email: string,
   password: string,

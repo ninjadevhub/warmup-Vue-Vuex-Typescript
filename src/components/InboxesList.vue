@@ -13,7 +13,7 @@
             <v-list-item v-if="key <= inboxesToShow" :key="key" class="pl-0" :ripple="false">
               <v-list-item-content class="py-0">
                 <v-list-item-title>
-                  <base-switch class="pl-3" :label="inbox.email" />
+                  <inbox-control :inbox="inbox" :label="inbox.email" />
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -39,8 +39,9 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import AddInboxModal from '@/components/modals/AddInboxModal.vue'
 import Inboxes from '@/types/Inboxes'
+import InboxControl from '@/components/InboxControl.vue'
 
-@Component({ components: { AddInboxModal } })
+@Component({ components: { AddInboxModal, InboxControl } })
 export default class InboxesList extends Vue {
   @Prop({
     type: Object as () => Inboxes,

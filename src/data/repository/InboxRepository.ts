@@ -24,4 +24,16 @@ export default class InboxRepository {
       .then(response => this.client.toDataResponse(response))
       .catch(error => this.client.toErrorResponse(error))
   }
+
+  async pause (inboxId: string): Promise<{ status: string } | FailureResponse> {
+    return this.client.post('inboxes/actions/pause', { inbox_id: inboxId, api_key: this.apiKey })
+      .then(response => this.client.toDataResponse(response))
+      .catch(error => this.client.toErrorResponse(error))
+  }
+
+  async start (inboxId: string): Promise<{ status: string } | FailureResponse> {
+    return this.client.post('inboxes/actions/start', { inbox_id: inboxId, api_key: this.apiKey })
+      .then(response => this.client.toDataResponse(response))
+      .catch(error => this.client.toErrorResponse(error))
+  }
 }

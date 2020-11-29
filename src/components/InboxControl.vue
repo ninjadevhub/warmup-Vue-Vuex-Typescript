@@ -1,0 +1,68 @@
+<template>
+  <base-switch
+    :value="isRunning"
+    class="pl-3"
+    :has-error="isError"
+    :label="label"
+    :loading="isLoading"
+    @change="onChange"
+  />
+</template>
+
+<script lang="ts">
+import Inbox from '@/types/Inbox'
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import InboxState from '@/constants/InboxState'
+import RequestStatus from '@/constants/RequestStatus'
+import InboxRepository from '@/data/repository/InboxRepository'
+import { isFailureResponse } from '@/types/Response'
+
+@Component
+export default class InboxControl extends Vue {
+  @Prop({
+    type: Object as () => Inbox,
+    required: true
+  })
+  readonly inbox!: Inbox
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  readonly label!: string
+
+  status: RequestStatus = RequestStatus.Initial
+  localState: InboxState = this.inbox.status
+
+  get isError (): boolean {
+    return this.status === RequestStatus.Error
+  }
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  get isRunning (): boolean {
+    return this.localState === InboxState.Running
+  }
+
+  async onChange (): Promise<void> {
+    if (this.isLoading) return
+
+    this.status = RequestStatus.Loading
+
+    const response = this.isRunning
+      ? await new InboxRepository().pause(this.inbox.inbox_id)
+      : await new InboxRepository().start(this.inbox.inbox_id)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+
+      return
+    }
+
+    this.localState = this.isRunning ? InboxState.Paused : InboxState.Running
+    this.status = RequestStatus.Success
+  }
+}
+</script>
