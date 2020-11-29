@@ -56,7 +56,7 @@ export default class Client implements BackendClientInterface {
 
   toErrorResponse (errorResponse: AxiosError) {
     if (errorResponse.response) {
-      return { data: errorResponse.response.data, status: errorResponse.response.status }
+      return { ...errorResponse.response.data, status: errorResponse.response.status }
     }
 
     return { errors: { _internal: 'Unexpected error' }, status: 500 }

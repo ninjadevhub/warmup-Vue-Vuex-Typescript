@@ -34,10 +34,14 @@ export default class BaseAlert extends Vue {
   .v-alert {
     padding: 10px 18px;
     color: #FFFFFF;
+    font-size: $font-sm;
+    font-weight: $font-weight-bold;
     &.alert {
       &--error {
         background-color: $color-amaranth !important;
-        font-size: $font-sm;
+      }
+      &--success {
+        background-color: $color-mountain-meadow;
       }
     }
   }

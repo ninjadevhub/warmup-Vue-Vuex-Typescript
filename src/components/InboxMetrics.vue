@@ -4,9 +4,7 @@
       <v-col cols="12" class="pt-0">
         <div class="metrics__title mb-0">
           <div class="font-weight-bold">{{ inbox.email }}</div>
-          <inbox-control :inbox="inbox" class="d-inline-block py-0 mt-3" />
-          <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
-          <span v-else class="label label__paused font-weight-bold">Paused</span>
+          <inbox-control :inbox="inbox" class="py-0" @changed="$emit('changed')" show-status />
           <v-divider />
         </div>
       </v-col>
@@ -104,6 +102,7 @@
         <v-row>
           <v-col cols="12" md="10">
             <custom-bar-chart
+              :key="chartRenderKey"
               :chartdata="computedChartData"
               :options="barChartOptions"
               :height="100"
@@ -180,6 +179,7 @@ export default class InboxMetrics extends Vue {
   isLandedInInboxVixible = true
   isLandedInSpamVisible = true
   currentIndex = -1
+  chartRenderKey = 1
 
   doughnutChartData = {
     labels: ['Inbox', 'Spam'],
@@ -382,15 +382,6 @@ export default class InboxMetrics extends Vue {
       font-family: $label-font;
       font-size: $font-md-x;
       width: 100%;
-      .label {
-        font-size: 15px;
-        &__running {
-          color: $color-mountain-meadow;
-        }
-        &__paused {
-          color: $color-french-gray
-        }
-      }
     }
     &__data {
       font-family: $label-font;

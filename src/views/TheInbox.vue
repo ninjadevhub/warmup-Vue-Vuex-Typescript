@@ -5,16 +5,16 @@
       <v-tab>Settings</v-tab>
     </base-tabs>
     <base-tabs-items v-model="activeTab">
-    <base-alert
-      v-if="isError"
-      class="mx-auto"
-      max-width="600"
-      variant="error"
-    >
-      {{ errorMessage }}
-    </base-alert>
+      <base-alert
+        v-if="isError"
+        class="mx-auto"
+        max-width="600"
+        variant="error"
+      >
+        {{ errorMessage }}
+      </base-alert>
       <v-tab-item :transition="false" :reverse-transition="false">
-        <inbox-metrics v-if="inbox" :inbox="inbox" class="mx-0 px-0 p-2" />
+        <inbox-metrics v-if="inbox" :inbox="inbox" class="mx-0 px-0 p-2" @changed="fetch()" />
       </v-tab-item>
       <v-tab-item :transition="false" :reverse-transition="false">
         <inbox-settings v-if="inbox" :inbox="inbox" class="mx-0 px-0 p-2" />
@@ -62,6 +62,7 @@ export default class TheInbox extends Vue {
     if (this.isLoading || !this.inboxId) return
 
     this.status = RequestStatus.Loading
+    this.inbox = null
 
     const response = await new InboxRepository().fetch(this.inboxId)
 

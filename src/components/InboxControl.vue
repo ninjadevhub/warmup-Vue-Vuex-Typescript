@@ -1,11 +1,18 @@
 <template>
-  <base-switch
-    :value="isRunning"
-    :has-error="isError"
-    :label="label"
-    :loading="isLoading"
-    @change="onChange"
-  />
+  <div class="d-flex align-center inbox-control">
+    <base-switch
+      :value="isRunning"
+      class="d-inline-block "
+      :has-error="isError"
+      :label="label"
+      :loading="isLoading"
+      @change="onChange"
+    />
+    <span v-if="showStatus" class="d-inline-block mb-2">
+      <span v-if="isRunning" class="inbox-control__running font-weight-bold">Running</span>
+      <span v-else class="inbox-control__paused font-weight-bold">Paused</span>
+    </span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -29,6 +36,12 @@ export default class InboxControl extends Vue {
     type: String
   })
   readonly label!: string
+
+  @Prop({
+    type: Boolean,
+    default: false
+  })
+  readonly showStatus!: boolean
 
   status: RequestStatus = RequestStatus.Initial
   localState: InboxState = this.inbox.status
@@ -62,6 +75,20 @@ export default class InboxControl extends Vue {
 
     this.localState = this.isRunning ? InboxState.Paused : InboxState.Running
     this.status = RequestStatus.Success
+    this.$emit('changed')
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .inbox-control {
+    max-width: min-content;
+    font-size: 15px;
+    &__running {
+      color: $color-mountain-meadow;
+    }
+    &__paused {
+      color: $color-french-gray
+    }
+  }
+</style>
