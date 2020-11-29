@@ -164,10 +164,10 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
-import CustomBarChart from '@/components/charts/CustomBarChart.vue'
 import Inbox from '@/types/Inbox'
 import InboxControl from '@/components/InboxControl.vue'
 import InboxState from '@/constants/InboxState'
+import CustomBarChart, { BarChartEventBus } from '@/components/charts/CustomBarChart.vue'
 
 @Component({ components: { DoughnutChart, EditScheduleModal, CustomBarChart, InboxControl } })
 export default class InboxMetrics extends Vue {
@@ -179,7 +179,7 @@ export default class InboxMetrics extends Vue {
   isScheduledVisible = true;
   isLandedInInboxVixible = true
   isLandedInSpamVisible = true
-  currentIndex = 0
+  currentIndex = -1
 
   doughnutChartData = {
     labels: ['Inbox', 'Spam'],
@@ -247,6 +247,7 @@ export default class InboxMetrics extends Vue {
     legend: false,
     tooltips: {
       enabled: false,
+      mode: 'index',
       intersect: false
     },
     scales: {
@@ -269,12 +270,6 @@ export default class InboxMetrics extends Vue {
           stacked: true
         }
       ]
-    },
-    hover: {
-      // eslint-disable-next-line
-      onHover: (self: Chart, event: any) => {
-        if (event && event[0]) this.changeCurrentIndex(event[0]._index)
-      }
     }
   }
 
@@ -331,6 +326,12 @@ export default class InboxMetrics extends Vue {
 
   changeCurrentIndex (index: number): void {
     this.currentIndex = index
+  }
+
+  mounted () {
+    BarChartEventBus.$on('bar-hover', (barIndex: number) => {
+      this.changeCurrentIndex(barIndex)
+    })
   }
 }
 </script>
