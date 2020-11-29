@@ -8,6 +8,7 @@ import BaseSelect from './BaseSelect.vue'
 import BaseCheckbox from './BaseCheckbox.vue'
 import BaseSwitch from './BaseSwitch.vue'
 import BaseAlert from './BaseAlert.vue'
+import BasePagination from './BasePagination.vue'
 
 export {
   BaseInput,
@@ -19,5 +20,6 @@ export {
   BaseSelect,
   BaseCheckbox,
   BaseSwitch,
-  BaseAlert
+  BaseAlert,
+  BasePagination
 }

@@ -1,7 +1,13 @@
 <template>
   <div class="inboxes-wrapper">
     <empty-inboxes v-if="!hasInboxes" class="px-8 py-8" @created="fetch" />
-    <inboxes-list v-else :inboxes="inboxes" class="px-8 py-8" />
+    <inboxes-list
+      v-else
+      :inboxes="inboxes"
+      :current-page="currentPage"
+      class="px-8 py-8"
+      @page-change="onPageChange"
+    />
     <v-overlay :value="isLoading">
       <v-progress-circular
         indeterminate
@@ -55,6 +61,11 @@ export default class TheInboxes extends Vue {
 
     this.inboxes = response as Inboxes
     this.status = RequestStatus.Success
+  }
+
+  onPageChange (page: number): void {
+    this.currentPage = page
+    this.fetch()
   }
 
   mounted () {

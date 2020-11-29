@@ -20,7 +20,7 @@
           </template>
         </v-list-item-group>
       </v-list>
-      <v-divider class="pb-3"></v-divider>
+      <!-- <v-divider class="pb-3"></v-divider>
       <v-btn
         v-if="inboxes.results.length > 3"
         class="d-block mx-auto text-capitalize font-weight-bold inboxes__more"
@@ -30,7 +30,15 @@
         @click="inboxesToShow += 3"
       >
         Load more
-      </v-btn>
+      </v-btn> -->
+      <div v-if="inboxes.total_pages < 1" class="text-center">
+        <base-pagination
+          :value="inboxes.current_page"
+          :length="inboxes.total_pages"
+          :total-visible="7"
+          @input="$emit('page-change', $event)"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +57,11 @@ export default class InboxesList extends Vue {
   })
   readonly inboxes!: Inboxes
 
+  @Prop({
+    type: Number
+  })
+  readonly currentPage!: number
+
   inboxesToShow = 3 // TODO: move to config file
 }
 </script>
@@ -62,11 +75,45 @@ export default class InboxesList extends Vue {
       font-size: $font-lg;
       font-weight: $font-weight-bold;
     }
+    &__list {
+      min-height: 70vh;
+    }
     &__new {
       font-size: $font-xs-x;
     }
     &__more {
       color: $color-dodger-blue !important;
+    }
+  }
+
+  ::v-deep {
+    .v-pagination {
+      &__item {
+        &--active {
+          color: #000000 !important;
+          &.primary {
+            border: 1px solid #333333 !important;
+            background-color: #FFFFFF !important;
+          }
+        }
+        background-color: #333333 !important;
+        color: #FFFFFF !important;
+        box-shadow: none;
+        font-size: $font-sm !important;
+        height: 25px;
+        min-width: 25px;
+      }
+      &__navigation {
+        background-color: #333333 !important;
+        box-shadow: none;
+        height: 25px;
+        min-width: 25px;
+        width: 25px;
+        i {
+          color: #FFFFFF !important;
+          font-size: $font-md-x;
+        }
+      }
     }
   }
 </style>
