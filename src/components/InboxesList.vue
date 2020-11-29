@@ -22,7 +22,7 @@
       </v-list>
       <v-divider class="pb-3"></v-divider>
       <v-btn
-        v-if="inboxes.results > 3"
+        v-if="inboxes.results.length > 3"
         class="d-block mx-auto text-capitalize font-weight-bold inboxes__more"
         elevation="0"
         :ripple="false"

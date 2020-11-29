@@ -26,8 +26,7 @@ export default class InboxControl extends Vue {
   readonly inbox!: Inbox
 
   @Prop({
-    type: String,
-    required: true
+    type: String
   })
   readonly label!: string
 
