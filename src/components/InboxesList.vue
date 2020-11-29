@@ -10,10 +10,10 @@
       <v-list class="inboxes__list" dense>
         <v-list-item-group>
           <template v-for="(inbox, key) in inboxes.results">
-            <v-list-item v-if="key <= inboxesToShow" :key="key" class="pl-0" :ripple="false">
+            <v-list-item :key="key" class="pl-0" :ripple="false">
               <v-list-item-content class="py-0">
-                <v-list-item-title>
-                  <inbox-control :inbox="inbox" :label="inbox.email" />
+                <v-list-item-title @click.self="onInboxClick(inbox.inbox_id)">
+                  <inbox-control :inbox="inbox" :label="inbox.email" class="d-inline-block pl-3" />
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -62,7 +62,14 @@ export default class InboxesList extends Vue {
   })
   readonly currentPage!: number
 
-  inboxesToShow = 3 // TODO: move to config file
+  // inboxesToShow = 3 // TODO: move to config file
+
+  onInboxClick (inboxId: string): void {
+    this.$router.push({
+      name: 'inbox-details',
+      params: { inboxId }
+    })
+  }
 }
 </script>
 

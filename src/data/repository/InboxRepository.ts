@@ -4,6 +4,7 @@ import BackendClientInterface from '@/types/BackendClientInterface'
 import Inboxes from '@/types/Inboxes'
 import { InboxForm } from '@/types/InboxForm'
 import { FailureResponse } from '@/types/Response'
+import Inbox from '@/types/Inbox'
 
 export default class InboxRepository {
   private readonly client: BackendClientInterface
@@ -15,6 +16,12 @@ export default class InboxRepository {
 
   async fetchAll (page: number): Promise<Inboxes | FailureResponse> {
     return this.client.get(`inboxes/list/${this.apiKey}/${page}`)
+      .then(response => this.client.toDataResponse(response))
+      .catch(error => this.client.toErrorResponse(error))
+  }
+
+  async fetch (inboxId: string): Promise<Inbox | FailureResponse> {
+    return this.client.get(`inboxes/details/${inboxId}`)
       .then(response => this.client.toDataResponse(response))
       .catch(error => this.client.toErrorResponse(error))
   }

@@ -1,7 +1,6 @@
 <template>
   <base-switch
     :value="isRunning"
-    class="pl-3"
     :has-error="isError"
     :label="label"
     :loading="isLoading"
@@ -10,20 +9,21 @@
 </template>
 
 <script lang="ts">
-import Inbox from '@/types/Inbox'
+import InboxSimple from '@/types/InboxSimple'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import InboxState from '@/constants/InboxState'
 import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
 import { isFailureResponse } from '@/types/Response'
+import Inbox from '@/types/Inbox'
 
 @Component
 export default class InboxControl extends Vue {
   @Prop({
-    type: Object as () => Inbox,
+    type: Object as () => InboxSimple | Inbox,
     required: true
   })
-  readonly inbox!: Inbox
+  readonly inbox!: InboxSimple | Inbox
 
   @Prop({
     type: String

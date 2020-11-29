@@ -2,8 +2,8 @@
   <v-container class="pr-0 pr-md-16" fluid>
     <v-row class="mb-6">
       <div class="settings__title">
-        <div class="font-weight-bold">john.smith@acme.com</div>
-        <base-switch v-model="isRunning" class="d-inline-block py-0 mt-3" />
+        <div class="font-weight-bold">{{ inbox.email }}</div>
+        <inbox-control :inbox="inbox" class="d-inline-block py-0 mt-3" />
         <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
         <span v-else class="label label__paused font-weight-bold">Paused</span>
         <v-divider />
@@ -21,25 +21,25 @@
         <v-row class="mb-13">
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">0</div>
+              <div class="data__value">{{ inbox.settings.sending.baseline }}</div>
               <div class="data__info">Starting baseline</div>
             </div>
           </v-col>
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">5</div>
+              <div class="data__value">{{ inbox.settings.sending.increase_rate }}</div>
               <div class="data__info">Increase per day</div>
             </div>
           </v-col>
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">40</div>
+              <div class="data__value">{{ inbox.settings.sending.max_sends }}</div>
               <div class="data__info">Max sends per day</div>
             </div>
           </v-col>
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">30%</div>
+              <div class="data__value">{{ inbox.settings.sending.reply_rate }}%</div>
               <div class="data__info">Reply rate percentage</div>
             </div>
           </v-col>
@@ -51,13 +51,13 @@
         <v-row class="mb-13">
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">Google</div>
+              <div class="data__value">{{ inbox.settings.about.provider_pretty }}</div>
               <div class="data__info">Inbox type</div>
             </div>
           </v-col>
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">80 days</div>
+              <div class="data__value">{{ inbox.domain.age_pretty }}</div>
               <div class="data__info">Domain age</div>
             </div>
           </v-col>
@@ -74,11 +74,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
+import InboxControl from '@/components/InboxControl.vue'
+import Inbox from '@/types/Inbox'
 
-@Component({ components: { EditScheduleModal } })
+@Component({ components: { EditScheduleModal, InboxControl } })
 export default class InboxSettings extends Vue {
+  @Prop({
+    type: Object as () => Inbox
+  })
+  readonly inbox!: Inbox
+
   isRunning = false // TODO: need computed getter?
 }
 </script>

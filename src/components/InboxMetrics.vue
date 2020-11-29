@@ -3,8 +3,8 @@
     <v-row>
       <v-col cols="12" class="pt-0">
         <div class="metrics__title mb-0">
-          <div class="font-weight-bold">john.smith@acme.com</div>
-          <base-switch v-model="isRunning" class="d-inline-block py-0 mt-3" />
+          <div class="font-weight-bold">{{ inbox.email }}</div>
+          <inbox-control :inbox="inbox" class="d-inline-block py-0 mt-3" />
           <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
           <span v-else class="label label__paused font-weight-bold">Paused</span>
           <v-divider />
@@ -17,15 +17,15 @@
           <div class="data__title">Sending</div>
           <v-divider class="mb-2 mt-1" />
           <div class="data__wrapper">
-            <div class="data__value">5</div>
+            <div class="data__value">{{ inbox.sending.today }}</div>
             <div class="data__info">Sent today</div>
           </div>
           <div class="data__wrapper">
-            <div class="data__value">10</div>
+            <div class="data__value">{{ inbox.sending.last_7 }}</div>
             <div class="data__info">Sent last 7 days</div>
           </div>
           <div class="data__wrapper">
-            <div class="data__value">300</div>
+            <div class="data__value">{{ inbox.sending.last_30 }}</div>
             <div class="data__info">Sent last 30 days</div>
           </div>
         </div>
@@ -33,15 +33,15 @@
           <div class="data__title">Receiving</div>
           <v-divider class="mb-2 mt-1" />
           <div class="data__wrapper">
-            <div class="data__value">12</div>
+            <div class="data__value">{{ inbox.receiving.today }}</div>
             <div class="data__info">Sent today</div>
           </div>
           <div class="data__wrapper">
-            <div class="data__value">30</div>
+            <div class="data__value">{{ inbox.receiving.last_7 }}</div>
             <div class="data__info">Received last 7 days</div>
           </div>
           <div class="data__wrapper">
-            <div class="data__value">712</div>
+            <div class="data__value">{{ inbox.receiving.last_30 }}</div>
             <div class="data__info">Received last 30 days</div>
           </div>
         </div>
@@ -55,11 +55,15 @@
           </div>
           <div class="d-flex justify-space-between align-center mt-5 mt-sm-0 d-sm-block ml-10 ml-lg-0">
             <div class="data__doughnut-legend-inbox mb-sm-8 d-inline-block d-sm-block">
-              <div class="data__doughnut-legend-inbox-title font-weight-bold">98.1% (591)</div>
+              <div class="data__doughnut-legend-inbox-title font-weight-bold">
+                {{ inbox.inbox_v_spam.inbox_percent }} ({{ inbox.inbox_v_spam.inbox_count }})
+              </div>
               <div>Landed in <br /> Inbox</div>
             </div>
             <div class="data__doughnut-legend-spam d-inline-block d-sm-block">
-              <div class="data__doughnut-legend-spam-title font-weight-bold">2.9% (11)</div>
+              <div class="data__doughnut-legend-spam-title font-weight-bold">
+                {{ inbox.inbox_v_spam.spam_percent }} ({{ inbox.inbox_v_spam.spam_count }})
+              </div>
               <div>Landed in <br /> Spam & Saved</div>
             </div>
           </div>
@@ -69,17 +73,21 @@
         <div class="data__title">Health Score</div>
         <v-divider class="mb-2 mt-1" />
         <div class="data__wrapper">
-          <div class="data__value">0/0</div>
+          <div class="data__value">
+            {{ inbox.basic_health.score }}/{{ inbox.basic_health.out_of }}
+          </div>
           <div class="data__info">
-            Upgrade to see your score
+            {{ inbox.basic_health.last_checked_string }}
           </div>
         </div>
         <div class="data__title mt-9">Listed On Any Blacklists</div>
         <v-divider class="mb-2 mt-1" />
         <div class="data__wrapper">
-          <div class="data__value">?</div>
+          <div class="data__value">
+            {{ inbox.blacklists.count }}
+          </div>
           <div class="data__info">
-            Upgrade to see your score
+            {{ inbox.blacklists.last_checked_string }}
           </div>
         </div>
       </v-col>
@@ -153,36 +161,34 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
 import CustomBarChart from '@/components/charts/CustomBarChart.vue'
+import Inbox from '@/types/Inbox'
+import InboxControl from '@/components/InboxControl.vue'
+import InboxState from '@/constants/InboxState'
 
-@Component({ components: { DoughnutChart, EditScheduleModal, CustomBarChart } })
+@Component({ components: { DoughnutChart, EditScheduleModal, CustomBarChart, InboxControl } })
 export default class InboxMetrics extends Vue {
-  isRunning = false // TODO: need computed getter?
+  @Prop({
+    type: Object as () => Inbox
+  })
+  readonly inbox!: Inbox
+
   isScheduledVisible = true;
   isLandedInInboxVixible = true
   isLandedInSpamVisible = true
   currentIndex = 0
 
-  testData = {
-    labels: [
-      'Nov 5', 'Nov 6', 'Nov 7', 'Nov 8', 'Nov 9', 'Nov 10', 'Nov 11', 'Nov 12', 'Nov 13',
-      'Nov 14', 'Nov 15', 'Nov 16', 'Nov 17', 'Nov 18', 'Nov 19', 'Nov 20', 'Nov 21'
-    ],
-    datasets: [{
-      backgroundColor: '#E19695',
-      type: 'bar',
-      data: [...Array(17)].map(() => Math.floor(Math.random() * 9))
-    }]
-  }
-
   doughnutChartData = {
     labels: ['Inbox', 'Spam'],
     datasets: [
       {
-        data: [98.1, 2.9],
+        data: [
+          this.inbox.inbox_v_spam.inbox_percent,
+          this.inbox.inbox_v_spam.spam_percent
+        ],
         backgroundColor: [
           '#9BCAA0',
           '#E19695'
@@ -214,27 +220,24 @@ export default class InboxMetrics extends Vue {
   }
 
   barChartData = {
-    labels: [
-      'Nov 5', 'Nov 6', 'Nov 7', 'Nov 8', 'Nov 9', 'Nov 10', 'Nov 11', 'Nov 12', 'Nov 13',
-      'Nov 14', 'Nov 15', 'Nov 16', 'Nov 17', 'Nov 18', 'Nov 19', 'Nov 20', 'Nov 21'
-    ],
+    labels: this.labels,
     datasets: [
       {
         label: ['Inboxes'],
         backgroundColor: '#9BCAA0',
-        data: [...Array(17)].map(() => Math.floor(Math.random() * 9)),
+        data: this.inboxesChartData,
         type: 'bar'
       },
       {
         label: ['Spam'],
         backgroundColor: '#E19695',
-        data: [...Array(17)].map(() => Math.floor(Math.random() * 9)),
+        data: this.spamChartData,
         type: 'bar'
       },
       {
         label: ['Scheduled'],
         backgroundColor: '#303234',
-        data: [...Array(17)].map(() => Math.floor(Math.random() * 9)),
+        data: this.scheduledChartData,
         type: 'bar'
       }
     ]
@@ -267,6 +270,26 @@ export default class InboxMetrics extends Vue {
         if (event && event[0]) this.changeCurrentIndex(event[0]._index)
       }
     }
+  }
+
+  get isRunning (): boolean {
+    return this.inbox.status === InboxState.Running
+  }
+
+  get labels (): string[] {
+    return Object.values(this.inbox.chart).map(day => Object.keys(day)[0])
+  }
+
+  get inboxesChartData (): number[] {
+    return Object.values(this.inbox.chart).map(day => Object.values(day)[0].inbox)
+  }
+
+  get spamChartData (): number[] {
+    return Object.values(this.inbox.chart).map(day => Object.values(day)[0].spam)
+  }
+
+  get scheduledChartData (): number[] {
+    return Object.values(this.inbox.chart).map(day => Object.values(day)[0].scheduled)
   }
 
   get computedChartData () {
