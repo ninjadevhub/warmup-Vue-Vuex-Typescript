@@ -48,7 +48,7 @@ export default class Client implements BackendClientInterface {
 
   toDataResponse (response: AxiosResponse) {
     if (isSuccessfulResponse(response)) {
-      return { ...response.data, status: response.status }
+      return { data: response.data, status: response.status }
     }
 
     return response

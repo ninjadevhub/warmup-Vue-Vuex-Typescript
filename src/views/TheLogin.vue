@@ -87,6 +87,7 @@ import RequestStatus from '@/constants/RequestStatus'
 import UserRepository from '@/data/repository/UserRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import AuthModule from '@/store/modules/AuthModule'
+import { AxiosResponse } from 'axios'
 
 extend('required', required)
 extend('email', email)
@@ -122,7 +123,7 @@ export default class TheLogin extends Vue {
       return
     }
 
-    await AuthModule.login(response as { status: string; key: string })
+    await AuthModule.login(response as AxiosResponse<{ status: string; key: string }>)
     this.status = RequestStatus.Success
     window.location.href = '/inboxes'
   }

@@ -1,6 +1,7 @@
 import { Module, Action, VuexModule, Mutation, getModule } from 'vuex-module-decorators'
 import Cookies from 'js-cookie'
 import store from '@/store/index'
+import { AxiosResponse } from 'axios'
 
 @Module({
   name: 'auth',
@@ -16,7 +17,7 @@ export class AuthModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async login (response: { status: string; key: string }): Promise<void> {
+  async login (response: AxiosResponse<{ status: string; key: string }>): Promise<void> {
     this.context.commit('authSuccess', response)
   }
 
@@ -26,10 +27,10 @@ export class AuthModule extends VuexModule {
   }
 
   @Mutation
-  authSuccess (response: { status: string; key: string }) {
+  authSuccess (response: AxiosResponse<{ status: string; key: string }>) {
     Cookies.set(
       'authKey',
-      (response as { status: string; key: string }).key,
+      (response as AxiosResponse<{ status: string; key: string }>).data.key,
       {
         domain: location.hostname,
         sameSite: 'strict'

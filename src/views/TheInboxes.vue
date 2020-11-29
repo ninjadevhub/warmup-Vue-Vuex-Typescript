@@ -1,7 +1,13 @@
 <template>
   <div class="inboxes-wrapper">
     <empty-inboxes v-if="!hasInboxes" class="px-8 py-8" @created="fetch" />
-    <inboxes-list v-else :inboxes="inboxes" class="px-8 py-8" />
+    <inboxes-list
+      v-else
+      :inboxes="inboxes"
+      :current-page="currentPage"
+      class="px-8 py-8"
+      @page-change="onPageChange"
+    />
     <v-overlay :value="isLoading">
       <v-progress-circular
         indeterminate
@@ -19,6 +25,7 @@ import Inboxes from '@/types/Inboxes'
 import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
+import { AxiosResponse } from 'axios'
 
 @Component({ components: { EmptyInboxes, InboxesList } })
 export default class TheInboxes extends Vue {
@@ -53,8 +60,13 @@ export default class TheInboxes extends Vue {
       return
     }
 
-    this.inboxes = response as Inboxes
+    this.inboxes = (response as AxiosResponse<Inboxes>).data
     this.status = RequestStatus.Success
+  }
+
+  onPageChange (page: number): void {
+    this.currentPage = page
+    this.fetch()
   }
 
   mounted () {

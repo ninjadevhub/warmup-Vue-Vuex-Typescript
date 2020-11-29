@@ -55,6 +55,7 @@ import RequestStatus from '@/constants/RequestStatus'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { ValidationObserver } from 'vee-validate'
 import AuthModule from '@/store/modules/AuthModule'
+import { AxiosResponse } from 'axios'
 
 @Component({ components: { SignUpForm, ValidationObserver } })
 export default class TheSignUpForm extends Vue {
@@ -94,7 +95,7 @@ export default class TheSignUpForm extends Vue {
       return
     }
 
-    await AuthModule.login(response as { status: string; key: string })
+    await AuthModule.login(response as AxiosResponse<{ status: string; key: string }>)
     this.status = RequestStatus.Success
     window.location.href = '/inboxes'
   }

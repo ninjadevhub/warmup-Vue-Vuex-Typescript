@@ -50,7 +50,6 @@ export default class AddInboxModal extends Vue {
 
   initForm (provider: EmailProvider = '' as EmailProvider): void {
     this.inboxForm = {
-      api_key: '',
       provider: provider,
       email: '',
       password: '',

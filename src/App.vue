@@ -8,7 +8,6 @@
 
 <style lang="scss">
   @import url(./scss/_fonts.scss);
-
   #app {
     background-color: $bg-color;
     font-size: $font-md;

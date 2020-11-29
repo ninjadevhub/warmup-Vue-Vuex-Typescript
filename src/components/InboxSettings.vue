@@ -1,13 +1,21 @@
 <template>
   <v-container class="pr-0 pr-md-16" fluid>
     <v-row class="mb-6">
-      <div class="settings__title">
-        <div class="font-weight-bold">john.smith@acme.com</div>
-        <base-switch v-model="isRunning" class="d-inline-block py-0 mt-3" />
-        <span v-if="isRunning" class="label label__running font-weight-bold">Running</span>
-        <span v-else class="label label__paused font-weight-bold">Paused</span>
-        <v-divider />
-      </div>
+      <v-col cols="12" class="px-0 py-0">
+        <base-alert
+          v-if="isError"
+          class="mx-auto"
+          max-width="600"
+          variant="error"
+        >
+          {{ errorMessage }}
+        </base-alert>
+        <div class="settings__title">
+          <div class="font-weight-bold">{{ inbox.email }}</div>
+          <inbox-control :inbox="inbox" class="d-inline-block py-0" show-status/>
+          <v-divider />
+        </div>
+      </v-col>
     </v-row>
     <v-row class="settings__data data">
       <v-col cols="12" md="8">
@@ -21,25 +29,25 @@
         <v-row class="mb-13">
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">0</div>
+              <div class="data__value">{{ inbox.settings.sending.baseline }}</div>
               <div class="data__info">Starting baseline</div>
             </div>
           </v-col>
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">5</div>
+              <div class="data__value">{{ inbox.settings.sending.increase_rate }}</div>
               <div class="data__info">Increase per day</div>
             </div>
           </v-col>
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">40</div>
+              <div class="data__value">{{ inbox.settings.sending.max_sends }}</div>
               <div class="data__info">Max sends per day</div>
             </div>
           </v-col>
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">30%</div>
+              <div class="data__value">{{ inbox.settings.sending.reply_rate }}%</div>
               <div class="data__info">Reply rate percentage</div>
             </div>
           </v-col>
@@ -51,13 +59,13 @@
         <v-row class="mb-13">
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">Google</div>
+              <div class="data__value">{{ inbox.settings.about.provider_pretty }}</div>
               <div class="data__info">Inbox type</div>
             </div>
           </v-col>
           <v-col cols="6" md="3">
             <div class="data__wrapper">
-              <div class="data__value">80 days</div>
+              <div class="data__value">{{ inbox.domain.age_pretty }}</div>
               <div class="data__info">Domain age</div>
             </div>
           </v-col>
@@ -66,20 +74,71 @@
           Delete Inbox
         </div>
         <v-divider class="mb-2 mt-1" />
-        Delete this inbox by <a href="#" class="settings__delete-link">clicking once here</a>.
+        Delete this inbox by <a class="settings__delete-link" @click="onDelete">clicking once here</a>.
         Note, when deleting the inbox you also delete all of your historical metrics.
+
+        <!-- Overlay -->
+        <v-overlay :value="isLoading">
+          <v-progress-circular
+            indeterminate
+            size="64"
+          ></v-progress-circular>
+        </v-overlay>
+
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
+import InboxControl from '@/components/InboxControl.vue'
+import Inbox from '@/types/Inbox'
+import InboxState from '@/constants/InboxState'
+import RequestStatus from '@/constants/RequestStatus'
+import InboxRepository from '@/data/repository/InboxRepository'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
 
-@Component({ components: { EditScheduleModal } })
+@Component({ components: { EditScheduleModal, InboxControl } })
 export default class InboxSettings extends Vue {
-  isRunning = false // TODO: need computed getter?
+  @Prop({
+    type: Object as () => Inbox
+  })
+  readonly inbox!: Inbox
+
+  status: RequestStatus = RequestStatus.Initial
+  errorMessage = ''
+
+  get isError (): boolean {
+    return this.status === RequestStatus.Error
+  }
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  get isRunning (): boolean {
+    return this.inbox.status === InboxState.Running
+  }
+
+  async onDelete (): Promise<void> {
+    if (this.isLoading || !this.inbox) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new InboxRepository().delete(this.inbox.inbox_id)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      this.errorMessage = (response as FailureResponse).reason
+
+      return
+    }
+
+    this.status = RequestStatus.Success
+    this.$router.push({ name: 'inboxes' })
+  }
 }
 </script>
 
