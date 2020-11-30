@@ -104,39 +104,56 @@
         <v-col class="pt-5" cols="12" :md="isOther ? '4' : '6'" max-width="300">
           <div class="form__title">Sending Schedule</div>
           <v-divider class="mb-5 mt-1" />
-          <validation-provider v-slot="{ errors }" name="Starting baseline" rules="required">
+          <validation-provider
+            v-slot="{ errors }"
+            name="Starting baseline"
+            :rules="{ required: true, max_value: inboxCapabilities.starting_baseline }"
+          >
             <base-input
               v-model="starting_baseline"
               :error-messages="errors"
               custom-label="starting baseline"
-              help-text="(Suggested 0, Max 40)"
+              :help-text="`(Suggested 0, Max ${inboxCapabilities.starting_baseline})`"
               tooltip="The starting number of emails we should send on day one."
+              :disabled="inboxCapabilities.starting_baseline === 0"
             />
           </validation-provider>
-          <validation-provider v-slot="{ errors }" name="Increase per day" rules="required">
+          <validation-provider
+            v-slot="{ errors }"
+            name="Increase per day"
+            :rules="{ required: true, max_value: inboxCapabilities.increase_per_day }"
+          >
             <base-input
               v-model="increase_per_day"
               :error-messages="errors"
               custom-label="increase per day"
-              help-text="(Suggested 2, Max 4)"
+              :help-text="`(Suggested 2, Max ${inboxCapabilities.increase_per_day})`"
               tooltip="The number of emails we will increase by each day."
             />
           </validation-provider>
-          <validation-provider v-slot="{ errors }" name="Max sends per day" rules="required">
+          <validation-provider
+            v-slot="{ errors }"
+            name="Max sends per day"
+            :rules="{ required: true, max_value: inboxCapabilities.max_sends_per_day }"
+          >
             <base-input
               v-model="max_sends_per_day"
               :error-messages="errors"
               custom-label="max sends per day"
-              help-text="(Suggested 40, Max 50)"
+              :help-text="`(Suggested 40, Max ${inboxCapabilities.max_sends_per_day})`"
               tooltip="We will never send more than  this number of new inital emails per day."
             />
           </validation-provider>
-          <validation-provider v-slot="{ errors }" name="Reply rate" rules="required">
+          <validation-provider
+            v-slot="{ errors }"
+            name="Reply rate"
+            :rules="{ required: true, max_value: inboxCapabilities.reply_rate }"
+          >
             <base-input
               v-model="reply_rate_percent"
               :error-messages="errors"
               custom-label="reply rate %"
-              help-text="(Suggested 30%, Max 50%)"
+              :help-text="`(Suggested 30%, Max ${inboxCapabilities.reply_rate}%)`"
               append-icon="mdi-percent-outline"
               tooltip="We automatically reply to X percent of the emails that are received within the inbox. These are additional emails added on top of the Max Send Per Day rate."
             />
@@ -166,11 +183,14 @@ import EmailProvider from '@/constants/EmailProvider'
 import { InboxForm } from '@/types/InboxForm'
 import { Component, Vue, Model, Prop } from 'vue-property-decorator'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
-import { required, email } from 'vee-validate/dist/rules'
+import { required, email, max_value } from 'vee-validate/dist/rules'
 import RequestStatus from '@/constants/RequestStatus'
+import AuthModule from '@/store/modules/AuthModule'
+import InboxCapabilites from '@/types/InboxCapabilities'
 
 extend('required', required)
 extend('email', email)
+extend('max_value', max_value)
 
 @Component({ components: { ValidationObserver, ValidationProvider } })
 export default class AddInboxForm extends Vue {
@@ -194,6 +214,10 @@ export default class AddInboxForm extends Vue {
 
   get isLoading (): boolean {
     return this.status === RequestStatus.Loading
+  }
+
+  get inboxCapabilities (): InboxCapabilites | null {
+    return AuthModule.inboxCapabilities
   }
 
   get isGoogleWorkspace () {
