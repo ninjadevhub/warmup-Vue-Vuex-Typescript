@@ -2,6 +2,7 @@
   <v-alert
     :class="`alert--${variant}`"
     v-bind="{ ...$attrs, ...$props }"
+    v-on="$listeners"
     close-icon="mdi-close"
     dismissible
   >

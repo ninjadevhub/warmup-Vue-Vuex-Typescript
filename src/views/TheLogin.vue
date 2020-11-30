@@ -88,6 +88,7 @@ import UserRepository from '@/data/repository/UserRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import AuthModule from '@/store/modules/AuthModule'
 import { AxiosResponse } from 'axios'
+import { getErrorMessage } from '@/utils/misc'
 
 extend('required', required)
 extend('email', email)
@@ -118,7 +119,7 @@ export default class TheLogin extends Vue {
 
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
-      this.errorMessage = (response as FailureResponse).reason
+      this.errorMessage = getErrorMessage(response as FailureResponse)
 
       return
     }

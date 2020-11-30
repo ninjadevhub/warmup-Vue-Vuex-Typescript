@@ -2,17 +2,14 @@
   <v-container class="pr-0 pr-md-16" fluid>
     <v-row class="mb-6">
       <v-col cols="12" class="px-0 py-0">
-        <base-alert
-          v-if="isError"
-          class="mx-auto"
-          max-width="600"
-          variant="error"
-        >
-          {{ errorMessage }}
-        </base-alert>
         <div class="settings__title">
           <div class="font-weight-bold">{{ inbox.email }}</div>
-          <inbox-control :inbox="inbox" class="d-inline-block py-0" show-status/>
+          <inbox-control
+            :inbox="inbox"
+            class="d-inline-block py-0"
+            show-status
+            @changed="$emit('changed', $event)"
+          />
           <v-divider />
         </div>
       </v-col>
@@ -74,17 +71,8 @@
           Delete Inbox
         </div>
         <v-divider class="mb-2 mt-1" />
-        Delete this inbox by <a class="settings__delete-link" @click="onDelete">clicking once here</a>.
+        Delete this inbox by <a class="settings__delete-link" @click="$emit('delete')">clicking once here</a>.
         Note, when deleting the inbox you also delete all of your historical metrics.
-
-        <!-- Overlay -->
-        <v-overlay :value="isLoading">
-          <v-progress-circular
-            indeterminate
-            size="64"
-          ></v-progress-circular>
-        </v-overlay>
-
       </v-col>
     </v-row>
   </v-container>
@@ -95,10 +83,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
 import InboxControl from '@/components/InboxControl.vue'
 import Inbox from '@/types/Inbox'
-import InboxState from '@/constants/InboxState'
-import RequestStatus from '@/constants/RequestStatus'
-import InboxRepository from '@/data/repository/InboxRepository'
-import { FailureResponse, isFailureResponse } from '@/types/Response'
 
 @Component({ components: { EditScheduleModal, InboxControl } })
 export default class InboxSettings extends Vue {
@@ -106,39 +90,6 @@ export default class InboxSettings extends Vue {
     type: Object as () => Inbox
   })
   readonly inbox!: Inbox
-
-  status: RequestStatus = RequestStatus.Initial
-  errorMessage = ''
-
-  get isError (): boolean {
-    return this.status === RequestStatus.Error
-  }
-
-  get isLoading (): boolean {
-    return this.status === RequestStatus.Loading
-  }
-
-  get isRunning (): boolean {
-    return this.inbox.status === InboxState.Running
-  }
-
-  async onDelete (): Promise<void> {
-    if (this.isLoading || !this.inbox) return
-
-    this.status = RequestStatus.Loading
-
-    const response = await new InboxRepository().delete(this.inbox.inbox_id)
-
-    if (isFailureResponse(response)) {
-      this.status = RequestStatus.Error
-      this.errorMessage = (response as FailureResponse).reason
-
-      return
-    }
-
-    this.status = RequestStatus.Success
-    this.$router.push({ name: 'inboxes' })
-  }
 }
 </script>
 

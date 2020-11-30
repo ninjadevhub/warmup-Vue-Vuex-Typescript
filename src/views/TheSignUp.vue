@@ -56,6 +56,7 @@ import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { ValidationObserver } from 'vee-validate'
 import AuthModule from '@/store/modules/AuthModule'
 import { AxiosResponse } from 'axios'
+import { getErrorMessage } from '@/utils/misc'
 
 @Component({ components: { SignUpForm, ValidationObserver } })
 export default class TheSignUpForm extends Vue {
@@ -90,7 +91,7 @@ export default class TheSignUpForm extends Vue {
 
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
-      this.errorMessage = (response as FailureResponse).reason
+      this.errorMessage = getErrorMessage(response as FailureResponse)
 
       return
     }

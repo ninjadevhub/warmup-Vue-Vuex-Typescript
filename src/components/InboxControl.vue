@@ -75,7 +75,7 @@ export default class InboxControl extends Vue {
 
     this.localState = this.isRunning ? InboxState.Paused : InboxState.Running
     this.status = RequestStatus.Success
-    this.$emit('changed')
+    this.$emit('changed', { status: this.localState })
   }
 }
 </script>
