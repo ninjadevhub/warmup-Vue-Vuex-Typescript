@@ -5,19 +5,23 @@
       <v-tab>Settings</v-tab>
     </base-tabs>
     <base-tabs-items v-model="activeTab">
-      <base-alert
-        v-if="isError"
-        class="mx-auto"
-        max-width="600"
-        variant="error"
-      >
-        {{ errorMessage }}
-      </base-alert>
       <v-tab-item :transition="false" :reverse-transition="false">
-        <inbox-metrics v-if="inbox" :inbox="inbox" class="mx-0 px-0 p-2" @changed="fetch()" />
+        <inbox-metrics
+          v-if="inbox"
+          :inbox="inbox"
+          class="mx-0 px-0 p-2"
+          @changed="onStatusChanged"
+          @schedule-updated="fetch"
+        />
       </v-tab-item>
       <v-tab-item :transition="false" :reverse-transition="false">
-        <inbox-settings v-if="inbox" :inbox="inbox" class="mx-0 px-0 p-2" />
+        <inbox-settings
+          v-if="inbox"
+          :inbox="inbox"
+          class="mx-0 px-0 p-2"
+          @changed="onStatusChanged"
+          @delete="onDelete"
+        />
       </v-tab-item>
     </base-tabs-items>
     <v-overlay :value="isLoading">
@@ -38,6 +42,8 @@ import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { AxiosResponse } from 'axios'
+import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
+import InboxState from '@/constants/InboxState'
 
 @Component({ components: { InboxMetrics, InboxSettings } })
 export default class TheInbox extends Vue {
@@ -45,13 +51,10 @@ export default class TheInbox extends Vue {
   status: RequestStatus = RequestStatus.Initial
   errorMessage = ''
   inbox: Inbox | null = null
+  inboxActiavted = false
 
   get inboxId (): string {
     return this.$route.params.inboxId
-  }
-
-  get isError (): boolean {
-    return this.status === RequestStatus.Error
   }
 
   get isLoading (): boolean {
@@ -68,13 +71,51 @@ export default class TheInbox extends Vue {
 
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
-      this.errorMessage = (response as FailureResponse).reason
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
 
       return
     }
 
     this.inbox = (response as AxiosResponse<Inbox>).data
     this.status = RequestStatus.Success
+  }
+
+  async onDelete (): Promise<void> {
+    if (this.isLoading || !this.inbox) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new InboxRepository().delete(this.inbox.inbox_id)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
+
+      return
+    }
+
+    this.status = RequestStatus.Success
+    this.$router.push({ name: 'inboxes' })
+    sendFlashMessage({
+      status: 'success',
+      message: 'You have successfully delete the inbox.'
+    })
+  }
+
+  onStatusChanged (event: { status: string }): void {
+    if (event.status === InboxState.Running) {
+      sendFlashMessage({
+        status: 'success',
+        message: 'Success! The first email on this inbox will send in the next few minutes.'
+      })
+    }
+    this.fetch()
   }
 
   mounted () {

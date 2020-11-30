@@ -6,6 +6,7 @@ import { InboxForm } from '@/types/InboxForm'
 import { FailureResponse } from '@/types/Response'
 import Inbox from '@/types/Inbox'
 import { AxiosResponse } from 'axios'
+import ScheduleForm from '@/types/ScheduleForm'
 
 export default class InboxRepository {
   private readonly client: BackendClientInterface
@@ -47,6 +48,11 @@ export default class InboxRepository {
 
   async delete (inboxId: string): Promise<AxiosResponse<{ status: string }> | FailureResponse> {
     return this.client.delete(`inboxes/${inboxId}`)
+      .catch(error => this.client.toErrorResponse(error))
+  }
+
+  async editSchedule (form: ScheduleForm): Promise<{ status: string } | FailureResponse> {
+    return this.client.post('inboxes/actions/reschedule', { ...form, ...{ api_key: this.apiKey } })
       .catch(error => this.client.toErrorResponse(error))
   }
 }

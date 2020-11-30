@@ -160,6 +160,7 @@
         </v-list-item>
       </v-navigation-drawer>
 
+      <flash-message />
       <router-view />
 
     </div>
@@ -169,8 +170,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AuthModule from '@/store/modules/AuthModule'
+import FlashMessage from '@/components/FlashMessage.vue'
 
-@Component
+@Component({ components: { FlashMessage } })
 export default class TheDashboard extends Vue {
   sidebar = null
   hasSubscription = true // TODO: Make computed getter
@@ -212,10 +214,18 @@ export default class TheDashboard extends Vue {
     AuthModule.logout()
     window.location.href = '/login'
   }
+
+  mounted () {
+    AuthModule.getUser()
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+  .alert-wrapper {
+    position: absolute;
+    width: 100%;
+  }
   .dashboard {
     height: 100%;
     &__content {

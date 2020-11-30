@@ -4,7 +4,7 @@
       <v-col cols="12" class="pt-0">
         <div class="metrics__title mb-0">
           <div class="font-weight-bold">{{ inbox.email }}</div>
-          <inbox-control :inbox="inbox" class="py-0" @changed="$emit('changed')" show-status />
+          <inbox-control :inbox="inbox" class="py-0" @changed="$emit('changed', $event)" show-status />
           <v-divider />
         </div>
       </v-col>
@@ -95,7 +95,7 @@
         <div class="data__title">
           Inbox Activity
           <div class="float-right">
-            <edit-schedule-modal />
+            <edit-schedule-modal :inbox="inbox" @updated="$emit('schedule-updated')" />
           </div>
         </div>
         <v-divider class="mb-6 mt-1" />
@@ -165,7 +165,6 @@ import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
 import Inbox from '@/types/Inbox'
 import InboxControl from '@/components/InboxControl.vue'
-import InboxState from '@/constants/InboxState'
 import CustomBarChart, { BarChartEventBus } from '@/components/charts/CustomBarChart.vue'
 
 @Component({ components: { DoughnutChart, EditScheduleModal, CustomBarChart, InboxControl } })
@@ -271,10 +270,6 @@ export default class InboxMetrics extends Vue {
         }
       ]
     }
-  }
-
-  get isRunning (): boolean {
-    return this.inbox.status === InboxState.Running
   }
 
   get labels (): string[] {

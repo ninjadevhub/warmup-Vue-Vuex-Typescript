@@ -31,6 +31,7 @@ import EmailProvider from '@/constants/EmailProvider'
 import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
+import { getErrorMessage } from '@/utils/misc'
 
 @Component({ components: { AddInboxForm } })
 export default class AddInboxModal extends Vue {
@@ -86,7 +87,7 @@ export default class AddInboxModal extends Vue {
 
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
-      this.errorMessage = (response as FailureResponse).reason
+      this.errorMessage = getErrorMessage(response as FailureResponse)
 
       return
     }

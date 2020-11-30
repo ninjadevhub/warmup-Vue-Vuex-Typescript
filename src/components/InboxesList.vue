@@ -13,24 +13,18 @@
             <v-list-item :key="key" class="pl-0" :ripple="false">
               <v-list-item-content class="py-0">
                 <v-list-item-title @click.self="onInboxClick(inbox.inbox_id)">
-                  <inbox-control :inbox="inbox" :label="inbox.email" class="d-inline-block pl-3" />
+                  <inbox-control
+                    :inbox="inbox"
+                    :label="inbox.email"
+                    class="d-inline-block pl-3"
+                    @changed="$emit('changed', $event)"
+                  />
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </template>
         </v-list-item-group>
       </v-list>
-      <!-- <v-divider class="pb-3"></v-divider>
-      <v-btn
-        v-if="inboxes.results.length > 3"
-        class="d-block mx-auto text-capitalize font-weight-bold inboxes__more"
-        elevation="0"
-        :ripple="false"
-        text
-        @click="inboxesToShow += 3"
-      >
-        Load more
-      </v-btn> -->
       <div v-if="inboxes.total_pages < 1" class="text-center">
         <base-pagination
           :value="inboxes.current_page"
@@ -61,8 +55,6 @@ export default class InboxesList extends Vue {
     type: Number
   })
   readonly currentPage!: number
-
-  // inboxesToShow = 3 // TODO: move to config file
 
   onInboxClick (inboxId: string): void {
     this.$router.push({

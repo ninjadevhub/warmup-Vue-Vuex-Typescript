@@ -1,3 +1,7 @@
+import { EventBus } from '@/main'
+import FlashMessage from '@/types/FlashMessage'
+import { FailureResponse } from '@/types/Response'
+
 export function appendUrlSearchParams (url: URL, params: { [key: string]: any }, prefix = '') {
   const name = (key: string) => prefix ? `${prefix}[${key}]` : key
   Object.keys(params)
@@ -18,4 +22,12 @@ export function appendDataToUrlQueryString (url: string, base: string, data: { [
   appendUrlSearchParams(obj, data)
 
   return obj.href
+}
+
+export function getErrorMessage (response: FailureResponse) {
+  return response.reason ? response.reason : 'Something is gone wrong, please contact support'
+}
+
+export function sendFlashMessage (flash: FlashMessage): void {
+  EventBus.$emit('flash-message', flash)
 }

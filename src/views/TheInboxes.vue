@@ -7,6 +7,7 @@
       :current-page="currentPage"
       class="px-8 py-8"
       @page-change="onPageChange"
+      @changed="onStatusChanged"
     />
     <v-overlay :value="isLoading">
       <v-progress-circular
@@ -26,6 +27,8 @@ import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { AxiosResponse } from 'axios'
+import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
+import InboxState from '@/constants/InboxState'
 
 @Component({ components: { EmptyInboxes, InboxesList } })
 export default class TheInboxes extends Vue {
@@ -33,10 +36,7 @@ export default class TheInboxes extends Vue {
   errorMessage = ''
   currentPage = 1
   inboxes: Inboxes | null = null
-
-  get isError (): boolean {
-    return this.status === RequestStatus.Error
-  }
+  inboxActiavted = false
 
   get isLoading (): boolean {
     return this.status === RequestStatus.Loading
@@ -55,7 +55,10 @@ export default class TheInboxes extends Vue {
 
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
-      this.errorMessage = (response as FailureResponse).reason
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
 
       return
     }
@@ -69,6 +72,17 @@ export default class TheInboxes extends Vue {
     this.fetch()
   }
 
+  onStatusChanged (event: { status: string }): void {
+    if (event.status === InboxState.Running) {
+      sendFlashMessage({
+        status: 'success',
+        message: 'Success! The first email on this inbox will send in the next few minutes.'
+      })
+    }
+
+    this.fetch()
+  }
+
   mounted () {
     this.fetch()
   }
@@ -76,6 +90,10 @@ export default class TheInboxes extends Vue {
 </script>
 
 <style lang="scss" scoped>
+  .alert-wrapper {
+    position: absolute;
+    width: 100%;
+  }
   .inboxes-wrapper {
     width: 100%;
   }

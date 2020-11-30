@@ -10,6 +10,8 @@ Vue.use(Vuetify)
 
 Vue.config.productionTip = false
 
+export const EventBus = new Vue({})
+
 Object.entries(BaseComponents).forEach(([name, component]) => Vue.component(name, component))
 
 new Vue({
