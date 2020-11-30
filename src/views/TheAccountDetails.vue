@@ -12,8 +12,8 @@
                 Account Information
               </div>
               <v-divider />
-              <div class="mt-3 mb-2">Michael Benson</div>
-              <div>mike@acme.com</div>
+              <div class="mt-3 mb-2">{{ userFullName }}</div>
+              <div>{{ user.data.email }}</div>
             </v-col>
           </v-row>
           <v-row class="mt-16">
@@ -40,15 +40,60 @@
         </v-container>
       </v-tab-item>
     </base-tabs-items>
+    <v-overlay :value="isLoading">
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
 <script lang="ts">
+import RequestStatus from '@/constants/RequestStatus'
+import UserRepository from '@/data/repository/UserRepository'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import User from '@/types/User'
+import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
+import { AxiosResponse } from 'axios'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class TheAccountDetails extends Vue {
   activeTab = 0
+  status: RequestStatus = RequestStatus.Initial
+  user: User | null = null
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  get userFullName (): string | null {
+    return this.user && `${this.user.data.first_name} ${this.user.data.last_name}`
+  }
+
+  async fetch (): Promise<void> {
+    if (this.isLoading) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new UserRepository().fetch()
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
+    }
+
+    this.user = (response as AxiosResponse<User>).data
+    this.status = RequestStatus.Success
+  }
+
+  mounted () {
+    this.fetch()
+  }
 }
 </script>
 
