@@ -28,6 +28,7 @@
             custom-label="starting baseline"
             :help-text="`(Suggested 0, Max ${inboxCapabilities.starting_baseline})`"
             tooltip="The starting number of emails we should send on day one."
+            :disabled="inboxCapabilities.starting_baseline === 0"
           />
         </validation-provider>
         <validation-provider

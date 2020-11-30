@@ -21,6 +21,7 @@
       v-model="localValue"
       :placeholder="placeholder"
       v-bind="{ ...$attrs, ...$props }"
+      :class="{ 'disabled': $attrs.disabled }"
       outlined
       dense
       single-line
@@ -81,6 +82,11 @@ export default class BaseInput extends Vue {
 
 <style lang="scss" scoped>
   ::v-deep {
+    .disabled {
+      .v-input__slot {
+        background-color: $color-alto;
+      }
+    }
     .v-messages__message {
       font-size: $font-xs;
     }
