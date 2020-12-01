@@ -28,7 +28,8 @@ const routes: Array<RouteConfig> = [
         component: TheInboxes,
         meta: {
           title: 'Inboxes',
-          authRequired: true
+          authRequired: true,
+          verifyRequired: true
         }
       },
       {
@@ -37,7 +38,8 @@ const routes: Array<RouteConfig> = [
         component: TheInbox,
         meta: {
           title: '{email}', // TODO: make dynamic
-          authRequired: true
+          authRequired: true,
+          verifyRequired: true
         }
       },
       {
@@ -46,7 +48,8 @@ const routes: Array<RouteConfig> = [
         component: TheAccountDetails,
         meta: {
           title: 'Account Settings',
-          authRequired: true
+          authRequired: true,
+          verifyRequired: true
         }
       },
       {
@@ -55,7 +58,8 @@ const routes: Array<RouteConfig> = [
         component: TheBilling,
         meta: {
           title: 'Billing',
-          authRequired: true
+          authRequired: true,
+          verifyRequired: true
         }
       }
     ]
@@ -74,8 +78,7 @@ const routes: Array<RouteConfig> = [
     name: 'Email verification',
     component: TheEmailVerification,
     meta: {
-      title: 'Email Verification',
-      guest: true
+      title: 'Email Verification'
     }
   },
   {
@@ -124,14 +127,20 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | Warmup Inbox`
 
-  if (to.meta.authRequired) {
-    AuthModule.isAuthenticated ? next() : next({ path: '/login', replace: true })
+  if (to.meta.authRequired && !AuthModule.isAuthenticated) {
+    next({ path: '/login', replace: true })
 
     return
   }
 
-  if (to.meta.guest) {
-    !AuthModule.isAuthenticated ? next() : next({ path: '/inboxes', replace: true })
+  if (to.meta.verifyRequired && !AuthModule.isAccountVerified) {
+    next({ path: '/email-verification', replace: true })
+
+    return
+  }
+
+  if (to.meta.guest && AuthModule.isAuthenticated) {
+    next({ path: '/inboxes', replace: true })
 
     return
   }
