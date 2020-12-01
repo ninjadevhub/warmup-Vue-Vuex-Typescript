@@ -1,6 +1,7 @@
 import Client from '@/data/Client'
 import AuthModule from '@/store/modules/AuthModule'
 import BackendClientInterface from '@/types/BackendClientInterface'
+import ChangePasswordForm from '@/types/ChangePasswordForm'
 import { FailureResponse } from '@/types/Response'
 import User from '@/types/User'
 import UserLoginForm from '@/types/UserLoginForm'
@@ -30,6 +31,11 @@ export default class UserRepository {
   async register (form: UserRegistrationForm): Promise<AxiosResponse<{ status: string; key: string }> | FailureResponse> {
     return this.client.post('users/create', form)
       .then(response => this.client.toDataResponse(response))
+      .catch(error => this.client.toErrorResponse(error))
+  }
+
+  async changePassword (form: ChangePasswordForm): Promise<AxiosResponse<{ status: string }> | FailureResponse> {
+    return this.client.post('/users/change-password', { ...form, ...{ api_key: this.apiKey } })
       .catch(error => this.client.toErrorResponse(error))
   }
 }

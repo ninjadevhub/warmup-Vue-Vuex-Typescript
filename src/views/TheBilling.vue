@@ -36,7 +36,7 @@
                 link below so you can share on your blog, podcast, twitter or to your email newsletter list. After your
                 first sign up, we’ll email you a form to get you set up for payouts.
               </p>
-              <base-button class="billing__referal text-capitalize mt-5 px-6 font-weight-bold">
+              <base-button class="billing__referal text-capitalize mt-5 px-6 font-weight-bold" @click="onCopyLink">
                 Copy Referral Link
               </base-button>
             </v-col>
@@ -51,11 +51,26 @@
 import { Component, Vue } from 'vue-property-decorator'
 import UpdateSubscriptionModal from '@/components/modals/UpdateSubscriptionModal.vue'
 import SubscribeModal from '@/components/modals/SubscribeModal.vue'
+import { copyToClipboard, sendFlashMessage } from '@/utils/misc'
+import AuthModule from '@/store/modules/AuthModule'
 
 @Component({ components: { UpdateSubscriptionModal, SubscribeModal } })
 export default class TheBilling extends Vue {
   activeTab = 0
-  hasSubscription = true; // TODO: Make computed
+  hasSubscription = true // TODO: Make computed
+
+  onCopyLink (): void {
+    const shareableCode = AuthModule.shareableCode
+
+    if (shareableCode) {
+      copyToClipboard(`${process.env.VUE_APP_BASE_URL}/sign-up?code=${shareableCode}`)
+
+      sendFlashMessage({
+        status: 'success',
+        message: 'Referal link copied to your clipbloard'
+      })
+    }
+  }
 }
 </script>
 

@@ -57,8 +57,8 @@
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item link>
-                  <v-list-item-title>
-                    <a class="menu__link" @click="onLogout" text>
+                  <v-list-item-title @click="onLogout" >
+                    <a class="menu__link" text>
                       Log out
                     </a>
                   </v-list-item-title>
