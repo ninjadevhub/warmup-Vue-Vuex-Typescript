@@ -25,6 +25,10 @@ export class AuthModule extends VuexModule {
     return this.user && this.user.data.inbox_capabilities
   }
 
+  get shareableCode (): string | null {
+    return this.user && this.user.data.affilate.shareable_code
+  }
+
   @Action({ rawError: true })
   async login (response: AxiosResponse<{ status: string; key: string }>): Promise<void> {
     this.context.commit('authSuccess', response)

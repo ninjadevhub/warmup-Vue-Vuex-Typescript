@@ -44,7 +44,12 @@
               You can earn a 20% commission every month for every customer you refer. Use your unqiue link below so
               you can share on your blog, podcast, etc…
             </div>
-            <base-button to="#" class="help-text__action text-capitalize mt-5" small>
+            <base-button
+              to="#"
+              class="help-text__action text-capitalize mt-5"
+              small
+              @click="onCopyLink"
+            >
               Copy Referral Link
             </base-button>
           </div>
@@ -57,11 +62,26 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AddInboxModal from '@/components/modals/AddInboxModal.vue'
+import { copyToClipboard, sendFlashMessage } from '@/utils/misc'
+import AuthModule from '@/store/modules/AuthModule'
 
 @Component({ components: { AddInboxModal } })
 export default class EmptyInboxes extends Vue {
   get supportEmail () {
     return process.env.VUE_APP_SUPPORT_EMAIL
+  }
+
+  onCopyLink (): void {
+    const shareableCode = AuthModule.shareableCode
+
+    if (shareableCode) {
+      copyToClipboard(`${process.env.VUE_APP_BASE_URL}/sign-up?code=${shareableCode}`)
+
+      sendFlashMessage({
+        status: 'success',
+        message: 'Referal link copied to your clipbloard'
+      })
+    }
   }
 }
 </script>

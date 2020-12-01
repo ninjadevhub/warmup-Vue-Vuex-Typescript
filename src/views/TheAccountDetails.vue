@@ -6,7 +6,7 @@
     <base-tabs-items v-model="activeTab">
       <v-tab-item>
         <v-container fluid>
-          <v-row>
+          <v-row v-if="user">
             <v-col cols="12" md="7">
               <div class="account-details__title mb-1">
                 Account Information
@@ -22,19 +22,44 @@
                 Change password
               </div>
               <v-divider />
-              <v-row class="mt-4">
-                <v-col cols="12" sm="4" class="d-flex align-end">
-                  <base-input custom-label="Old password" variant="normal" class="account-details__input" />
-                </v-col>
-                <v-col cols="12" sm="4" class="d-flex align-end">
-                  <base-input custom-label="New password" variant="normal" class="account-details__input" />
-                </v-col>
-                <v-col cols="12" sm="4" class="d-flex align-end">
-                  <base-button class="account-details__submit text-capitalize px-6">
-                    Save
-                  </base-button>
-                </v-col>
-              </v-row>
+                <validation-observer v-slot="{ invalid }">
+                  <v-row class="mt-4">
+                      <v-col cols="12" sm="4" class="d-flex align-end">
+                        <validation-provider v-slot="{ errors }" name="Old password" rules="required">
+                          <base-input
+                            v-model="passwordForm.old_password"
+                            custom-label="Old password"
+                            :error-messages="errors"
+                            variant="normal"
+                            type="password"
+                            class="account-details__input pb-5"
+                          />
+                        </validation-provider>
+                      </v-col>
+                      <v-col cols="12" sm="4" class="d-flex align-end">
+                        <validation-provider v-slot="{ errors }" name="New password" rules="required|min:6">
+                          <base-input
+                            v-model="passwordForm.new_password"
+                            custom-label="New password"
+                            :error-messages="errors"
+                            variant="normal"
+                            type="password"
+                            class="account-details__input pb-5"
+                          />
+                        </validation-provider>
+                      </v-col>
+                      <v-col cols="12" sm="4" class="d-flex align-end">
+                        <base-button
+                          class="account-details__submit text-capitalize px-6 mb-5"
+                          :loading="isPasswordChangeLoading"
+                          :disabled="invalid"
+                          @click="onPasswordChange"
+                        >
+                          Save
+                        </base-button>
+                      </v-col>
+                  </v-row>
+                </validation-observer>
             </v-col>
           </v-row>
         </v-container>
@@ -57,15 +82,30 @@ import User from '@/types/User'
 import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
 import { AxiosResponse } from 'axios'
 import { Component, Vue } from 'vue-property-decorator'
+import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import ChangePasswordForm from '@/types/ChangePasswordForm'
+import { required, min } from 'vee-validate/dist/rules'
 
-@Component
+extend('required', required)
+extend('min', min)
+
+@Component({ components: { ValidationObserver, ValidationProvider } })
 export default class TheAccountDetails extends Vue {
   activeTab = 0
   status: RequestStatus = RequestStatus.Initial
+  changePasswordStatus: RequestStatus = RequestStatus.Initial
   user: User | null = null
+  passwordForm: ChangePasswordForm = {
+    old_password: '',
+    new_password: ''
+  }
 
   get isLoading (): boolean {
     return this.status === RequestStatus.Loading
+  }
+
+  get isPasswordChangeLoading (): boolean {
+    return this.changePasswordStatus === RequestStatus.Loading
   }
 
   get userFullName (): string | null {
@@ -85,10 +125,37 @@ export default class TheAccountDetails extends Vue {
         status: 'error',
         message: getErrorMessage(response as FailureResponse)
       })
+
+      return
     }
 
     this.user = (response as AxiosResponse<User>).data
     this.status = RequestStatus.Success
+  }
+
+  async onPasswordChange (): Promise<void> {
+    if (this.isPasswordChangeLoading) return
+
+    this.changePasswordStatus = RequestStatus.Loading
+
+    const response = await new UserRepository().changePassword(this.passwordForm)
+
+    if (isFailureResponse(response)) {
+      this.changePasswordStatus = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
+
+      return
+    }
+
+    this.changePasswordStatus = RequestStatus.Success
+    this.passwordForm = { new_password: '', old_password: '' }
+    sendFlashMessage({
+      status: 'success',
+      message: 'Password was successfully changed'
+    })
   }
 
   mounted () {
@@ -98,6 +165,13 @@ export default class TheAccountDetails extends Vue {
 </script>
 
 <style lang="scss" scoped>
+  ::v-deep {
+    .v-input {
+      height: 40px;
+      width: 230px;
+    }
+  }
+
   .account-details {
     font-family: $label-font;
     width: 100%;

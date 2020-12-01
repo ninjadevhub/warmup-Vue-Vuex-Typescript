@@ -31,3 +31,12 @@ export function getErrorMessage (response: FailureResponse) {
 export function sendFlashMessage (flash: FlashMessage): void {
   EventBus.$emit('flash-message', flash)
 }
+
+export function copyToClipboard (string: string) {
+  const fullLink = document.createElement('input')
+  document.body.appendChild(fullLink)
+  fullLink.value = string
+  fullLink.select()
+  document.execCommand('copy', false)
+  fullLink.remove()
+}
