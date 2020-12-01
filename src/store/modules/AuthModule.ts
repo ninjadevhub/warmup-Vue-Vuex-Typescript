@@ -17,6 +17,10 @@ export class AuthModule extends VuexModule {
   key: string = Cookies.get('authKey') || ''
   user: User | null = null
 
+  get isAccountVerified (): boolean {
+    return !!this.user && !!this.user.data.verified_account
+  }
+
   get isAuthenticated (): boolean {
     return !!this.key
   }

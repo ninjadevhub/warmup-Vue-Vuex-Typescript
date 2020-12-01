@@ -10,15 +10,40 @@
               We just sent a verification code to {email_address}. Please enter the code below to verify your account.
             </div>
           </v-card-title>
-          <base-input custom-label="Code" class="mb-4 px-2" />
-          <v-card-actions class="py-0">
-            <base-button class="text-capitalize font-weight-bold" variant="secondary" large block tile>
-              Verify
-            </base-button>
-          </v-card-actions>
+          <validation-observer v-slot="{ invalid }">
+            <validation-provider v-slot="{ errors }" name="code" rules="required">
+              <base-input
+                v-model="code"
+                :error-messages="errors"
+                custom-label="Code"
+                class="mb-4 px-2"
+              />
+            </validation-provider>
+            <v-card-actions class="py-0">
+              <base-button
+                class="text-capitalize font-weight-bold"
+                variant="secondary"
+                :disabled="invalid"
+                :loading="isLoading"
+                large
+                block
+                tile
+                @click="onSubmit"
+              >
+                Verify
+              </base-button>
+            </v-card-actions>
+          </validation-observer>
           <v-card-text class="verify__footer px-2">
             <div>
-              <a href="#">Resend code</a>
+              <a v-if="!isResendLoading" @click="onResendCode">Resend code</a>
+              <v-progress-circular
+                v-else
+                :width="2"
+                size="20"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
             </div>
           </v-card-text>
         </v-card>
@@ -27,11 +52,76 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { required } from 'vee-validate/dist/rules'
+import RequestStatus from '@/constants/RequestStatus'
+import UserRepository from '@/data/repository/UserRepository'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
 
-@Component
-export default class TheEmailVerification extends Vue {}
+extend('required', required)
+
+@Component({ components: { ValidationObserver, ValidationProvider } })
+export default class TheEmailVerification extends Vue {
+  status: RequestStatus = RequestStatus.Initial
+  resendStatus: RequestStatus = RequestStatus.Initial
+  code = ''
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  get isResendLoading (): boolean {
+    return this.resendStatus === RequestStatus.Loading
+  }
+
+  async onSubmit (): Promise<void> {
+    if (this.isLoading) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new UserRepository().verifyEmail(this.code)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
+
+      return
+    }
+
+    this.status = RequestStatus.Success
+    this.$router.push({ name: 'iniboxes' })
+  }
+
+  async onResendCode (): Promise<void> {
+    if (this.isResendLoading) return
+
+    this.resendStatus = RequestStatus.Loading
+
+    const response = await new UserRepository().resendCode()
+
+    if (isFailureResponse(response)) {
+      this.resendStatus = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
+
+      return
+    }
+
+    this.resendStatus = RequestStatus.Success
+    sendFlashMessage({
+      status: 'success',
+      message: 'We just resent your verification code. Please check your email.'
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

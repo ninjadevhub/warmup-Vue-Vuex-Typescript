@@ -8,34 +8,112 @@
             <div class="new-password__title text-capitalize">Reset your password</div>
           </v-card-title>
           <v-divider class="mx-2 my-2" />
-          <v-container class="px-2" fluid>
-            <v-row>
-              <v-col col="12" class="py-0">
-                <base-input custom-label="New password" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col col="12" class="py-0">
-                <base-input custom-label="Confirm password" />
-              </v-col>
-            </v-row>
-          </v-container>
-          <v-card-actions class="py-0 pb-6">
-            <base-button class="text-capitalize font-weight-bold" variant="secondary" large block tile>
-              Reset password
-            </base-button>
-          </v-card-actions>
+          <validation-observer v-slot="{ invalid }">
+            <div class="px-2">
+              <validation-provider
+                v-slot="{ errors }"
+                vid="confirm"
+                name="New password"
+                rules="required|min:6"
+              >
+                <base-input
+                  v-model="passwordForm.new_password"
+                  custom-label="New password"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Confirm password"
+                rules="required|min:6|password:@confirm"
+              >
+                <base-input
+                  v-model="passwordForm.confirm_password"
+                  custom-label="Confirm password"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </div>
+            <v-card-actions class="py-0 pb-6 mt-2">
+              <base-button
+                class="text-capitalize font-weight-bold"
+                variant="secondary"
+                :disabled="invalid"
+                :loading="isLoading"
+                large
+                block
+                tile
+                @click="onSubmit"
+              >
+                Reset password
+              </base-button>
+            </v-card-actions>
+          </validation-observer>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import ResetPasswordForm from '@/types/ResetPasswordForm'
+import { required, min } from 'vee-validate/dist/rules'
+import RequestStatus from '@/constants/RequestStatus'
+import UserRepository from '@/data/repository/UserRepository'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
 
-@Component
-export default class TheNewPassword extends Vue {}
+extend('required', required)
+extend('min', min)
+extend('password', {
+  params: ['target'],
+  validate (value: any, { target }: any) {
+    return value === target
+  },
+  message: 'Password confirmation does not match'
+})
+
+@Component({ components: { ValidationObserver, ValidationProvider } })
+export default class TheNewPassword extends Vue {
+  status: RequestStatus = RequestStatus.Initial
+  passwordForm: ResetPasswordForm = {
+    token: this.$route.query.token as string,
+    new_password: '',
+    confirm_password: ''
+  }
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  async onSubmit (): Promise<void> {
+    if (this.isLoading) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new UserRepository().passwordReset(this.passwordForm)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
+
+      return
+    }
+
+    this.status = RequestStatus.Success
+    this.$router.push({ name: 'login' })
+
+    sendFlashMessage({
+      status: 'success',
+      message: 'Your password was successfully reset. Please log into your account.'
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

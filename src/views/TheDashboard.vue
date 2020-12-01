@@ -160,7 +160,6 @@
         </v-list-item>
       </v-navigation-drawer>
 
-      <flash-message />
       <router-view />
 
     </div>
