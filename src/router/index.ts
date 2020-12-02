@@ -133,11 +133,11 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  if (to.meta.verifyRequired && !AuthModule.isAccountVerified) {
-    next({ path: '/email-verification', replace: true })
+  // if (to.meta.verifyRequired && !AuthModule.isAccountVerified) {
+  //   next({ path: '/email-verification', replace: true })
 
-    return
-  }
+  //   return
+  // }
 
   if (to.meta.guest && AuthModule.isAuthenticated) {
     next({ path: '/inboxes', replace: true })
