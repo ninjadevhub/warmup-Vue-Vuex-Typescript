@@ -14,7 +14,7 @@
     <template #content>
       <div class="mt-5 d-block d-sm-flex align-center">
         <div class="d-flex align-end">
-          <base-input v-model="updatedInboxes" class="edit-subscription__input d-inline-block" />
+          <base-input v-model="updatedInboxes" class="edit-subscription__input d-inline-block" hide-details />
           <v-btn
             class="edit-subscription__input-control d-inline-block"
             elevation="0"

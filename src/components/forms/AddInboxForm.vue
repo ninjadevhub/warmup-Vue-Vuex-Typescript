@@ -104,7 +104,7 @@
         <v-col class="pt-5" cols="12" :md="isOther ? '4' : '6'" max-width="300">
           <div class="form__title">Sending Schedule</div>
           <v-divider class="mb-5 mt-1" />
-          <validation-provider v-slot="{ errors }" name="Starting baseline" rules="required">
+          <validation-provider v-slot="{ errors }" name="Starting baseline" rules="required|numeric">
             <base-input
               v-model="starting_baseline"
               :error-messages="errors"
@@ -113,7 +113,7 @@
               tooltip="The starting number of emails we should send on day one."
             />
           </validation-provider>
-          <validation-provider v-slot="{ errors }" name="Increase per day" rules="required">
+          <validation-provider v-slot="{ errors }" name="Increase per day" rules="required|numeric">
             <base-input
               v-model="increase_per_day"
               :error-messages="errors"
@@ -122,7 +122,7 @@
               tooltip="The number of emails we will increase by each day."
             />
           </validation-provider>
-          <validation-provider v-slot="{ errors }" name="Max sends per day" rules="required">
+          <validation-provider v-slot="{ errors }" name="Max sends per day" rules="required|numeric">
             <base-input
               v-model="max_sends_per_day"
               :error-messages="errors"
@@ -131,7 +131,7 @@
               tooltip="We will never send more than  this number of new inital emails per day."
             />
           </validation-provider>
-          <validation-provider v-slot="{ errors }" name="Reply rate" rules="required">
+          <validation-provider v-slot="{ errors }" name="Reply rate" rules="required|numeric">
             <base-input
               v-model="reply_rate_percent"
               :error-messages="errors"
@@ -166,11 +166,12 @@ import EmailProvider from '@/constants/EmailProvider'
 import { InboxForm } from '@/types/InboxForm'
 import { Component, Vue, Model, Prop } from 'vue-property-decorator'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
-import { required, email } from 'vee-validate/dist/rules'
+import { required, email, numeric } from 'vee-validate/dist/rules'
 import RequestStatus from '@/constants/RequestStatus'
 
 extend('required', required)
 extend('email', email)
+extend('numeric', numeric)
 
 @Component({ components: { ValidationObserver, ValidationProvider } })
 export default class AddInboxForm extends Vue {

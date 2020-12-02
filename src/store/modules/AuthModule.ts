@@ -33,6 +33,22 @@ export class AuthModule extends VuexModule {
     return this.user && this.user.data.affilate.shareable_code
   }
 
+  get planCredits (): number | null {
+    return this.user && this.user.data.plan_credits
+  }
+
+  get availableCredits (): number | null {
+    return this.user && this.user.data.avail_credits
+  }
+
+  get trialEndsPretty (): string | null {
+    return this.user && this.user.data.trial_ends_pretty
+  }
+
+  get plan (): string | null {
+    return this.user && this.user.data.plan
+  }
+
   @Action({ rawError: true })
   async login (response: AxiosResponse<{ status: string; key: string }>): Promise<void> {
     this.context.commit('authSuccess', response)

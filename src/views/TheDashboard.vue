@@ -143,12 +143,12 @@
               <v-tooltip right>
                 <template v-slot:activator="{ on, attrs }">
                   <base-button
-                    to="/logout"
                     class="mx-auto"
                     variant="text"
                     icon
                     v-bind="attrs"
                     v-on="on"
+                    @click="onLogout"
                   >
                     <base-icon >mdi-exit-to-app</base-icon>
                   </base-button>

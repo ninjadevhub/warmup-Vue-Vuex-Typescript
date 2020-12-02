@@ -6,7 +6,7 @@
     <base-tabs-items v-model="activeTab">
       <v-tab-item>
         <v-container fluid>
-          <v-row>
+          <v-row v-if="billing">
             <v-col cols="12" md="7">
               <div class="billing__title mb-1">
                 Current Subscription
@@ -15,12 +15,12 @@
                 </div>
               </div>
               <v-divider />
-              <div class="mt-3 mb-2">Using 0/1 Inboxes</div>
+              <div class="mt-3 mb-2">Using {{ creditsInUse }}/{{ availableCredits }} Inboxes</div>
               <div v-if="hasSubscription">Your plan will renew on Dec 1, 2020 for $10.00.</div>
               <div v-else>
-                Your free trial ends Nov 17, 2020
+                Your free trial ends {{ trialEndsPretty }}
                 (<div class="d-inline-block">
-                  <subscribe-modal />
+                  <subscribe-modal :billing="billing" @changed="onPlanChanged" />
                 </div>)
               </div>
             </v-col>
@@ -44,20 +44,80 @@
         </v-container>
       </v-tab-item>
     </base-tabs-items>
+    <v-overlay :value="isLoading">
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import UpdateSubscriptionModal from '@/components/modals/UpdateSubscriptionModal.vue'
 import SubscribeModal from '@/components/modals/SubscribeModal.vue'
-import { copyToClipboard, sendFlashMessage } from '@/utils/misc'
+import { copyToClipboard, getErrorMessage, sendFlashMessage } from '@/utils/misc'
 import AuthModule from '@/store/modules/AuthModule'
+import RequestStatus from '@/constants/RequestStatus'
+import BillingRepository from '@/data/repository/BillingRepository'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import Billing from '@/types/Billing'
+import { AxiosResponse } from 'axios'
+import SubscriptionPlan from '@/constants/SubscriptionPlan'
 
 @Component({ components: { UpdateSubscriptionModal, SubscribeModal } })
 export default class TheBilling extends Vue {
   activeTab = 0
-  hasSubscription = true // TODO: Make computed
+  status: RequestStatus = RequestStatus.Initial
+  billing: Billing | null = null
+
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  get hasSubscription (): boolean {
+    return !!AuthModule.plan && AuthModule.plan !== SubscriptionPlan.Free
+  }
+
+  get planCredits (): number | null {
+    return AuthModule.planCredits
+  }
+
+  get availableCredits (): number | null {
+    return AuthModule.availableCredits
+  }
+
+  get trialEndsPretty (): string | null {
+    return AuthModule.trialEndsPretty
+  }
+
+  get creditsInUse (): number | undefined {
+    return this.planCredits && this.availableCredits
+      ? this.planCredits - this.availableCredits
+      : undefined
+  }
+
+  async fetch (): Promise<void> {
+    if (this.isLoading || (this.planCredits === null)) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new BillingRepository().fetch(this.planCredits)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
+
+      return
+    }
+
+    this.status = RequestStatus.Success
+    this.billing = (response as AxiosResponse<Billing>).data
+  }
 
   onCopyLink (): void {
     const shareableCode = AuthModule.shareableCode
@@ -70,6 +130,15 @@ export default class TheBilling extends Vue {
         message: 'Referal link copied to your clipbloard'
       })
     }
+  }
+
+  mounted () {
+    this.fetch()
+  }
+
+  @Watch('planCredits')
+  onCreditsChange(value: number) {
+    this.fetch()
   }
 }
 </script>
