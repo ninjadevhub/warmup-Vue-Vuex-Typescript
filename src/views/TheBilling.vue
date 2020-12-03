@@ -65,6 +65,7 @@ import { FailureResponse, isFailureResponse } from '@/types/Response'
 import Billing from '@/types/Billing'
 import { AxiosResponse } from 'axios'
 import SubscriptionPlan from '@/constants/SubscriptionPlan'
+import SubscriptionState from '@/constants/SubscriptionState'
 
 @Component({ components: { UpdateSubscriptionModal, SubscribeModal } })
 export default class TheBilling extends Vue {
@@ -77,7 +78,8 @@ export default class TheBilling extends Vue {
   }
 
   get hasSubscription (): boolean {
-    return !!AuthModule.plan && AuthModule.plan !== SubscriptionPlan.Free
+    return (!!AuthModule.plan && AuthModule.plan !== SubscriptionPlan.Free) ||
+      (!!this.billing && this.billing.display_code === SubscriptionState.Resubscribe)
   }
 
   get planCredits (): number | null {
