@@ -1,11 +1,19 @@
 <template>
-  <base-modal max-width="550" title="Update Subscription" title-class="title--sm">
+  <base-modal
+    :dialog="dialog"
+    max-width="550"
+    :title="billing && billing.header_text"
+    title-class="title--sm"
+    :small-spinner="isFetchLoading"
+    @input="fetch()"
+  >
     <template #button>
       <v-btn
         class="edit-subscription__link text-capitalize pl-0"
         small
         text
         elevation="0"
+        @click="dialog = true"
       >
         Edit Subscription
       </v-btn>
@@ -14,7 +22,7 @@
     <template #content>
       <div class="mt-5 d-block d-sm-flex align-center">
         <div class="d-flex align-end">
-          <base-input v-model="updatedInboxes" class="edit-subscription__input d-inline-block" hide-details />
+          <base-input v-model="computedCredits" class="edit-subscription__input d-inline-block" hide-details />
           <v-btn
             class="edit-subscription__input-control d-inline-block"
             elevation="0"
@@ -40,53 +48,58 @@
       <div>
         <v-container class="py-0 px-0">
           <v-row>
-            <v-col cols="6" sm="4" class="py-0">
-              <b>{{ inboxesChanged ? 'New total per month:' : 'Total per month:' }}</b>
+            <v-col cols="6" sm="5" class="py-0">
+              <b>{{ billing && billing.per_month_label }}:</b>
             </v-col>
-            <v-col cols="6" sm="8" class="py-0">
-              <span class="edit-subscription__amount">{{ totalPerMonth }}</span>
+            <v-col cols="6" sm="7" class="py-0">
+              <span class="edit-subscription__amount">{{ billing && billing.per_month_value }}</span>
+            </v-col>
+          </v-row>
+          <v-row v-if="isNoChange">
+            <v-col cols="12" class="pt-2">
+              <div class="edit-subscription__info">{{ billing.helper_text }}</div>
             </v-col>
           </v-row>
         </v-container>
       </div>
-      <v-divider class="my-3" />
-      <v-container v-if="inboxesChanged && dueDateVisible" class="py-0 px-0">
-        <v-row>
-          <v-col cols="6" sm="4" class="py-0">
-            <b>Due today:</b>
-          </v-col>
-          <v-col cols="6" sm="8" class="py-0">
-            <span class="edit-subscription__amount">$3.42</span>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" class="pt-2">
-            <div class="edit-subscription__info">The next charge after today will be $15.00 on Dec 1, 2020.</div>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-container v-if="inboxesChanged && accountCreditVisible" class="py-0 px-0">
-        <v-row>
-          <v-col cols="6" sm="4" class="py-0">
-            <b>Account credit:</b>
-          </v-col>
-          <v-col cols="6" sm="8" class="py-0">
-            <span class="edit-subscription__amount">$1.42</span>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" class="pt-2">
-            <div class="edit-subscription__info">
-              With this change your account will have a total credit balance of $1.42.
-              The next charge will be $3.58 on Dec 1, 2020.
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-divider v-if="inboxesChanged" class="mt-1 mb-3" />
-      <div class="d-flex justify-end edit-subscription__action">
-        <base-button class="text-capitalize font-weight-bold" :disabled="!inboxesChanged">
-          Confirm changes
+      <v-divider class="mt-2 mb-3" />
+      <template v-if="billing && billing.secondary_label">
+        <v-container class="py-0 px-0">
+          <v-row>
+            <v-col cols="6" sm="5" class="py-0">
+              <b>{{ billing.secondary_label }}:</b>
+            </v-col>
+            <v-col cols="6" sm="7" class="py-0">
+              <span class="edit-subscription__amount">{{ billing.secondary_value }}</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" class="pt-2">
+              <div class="edit-subscription__info">{{ billing.helper_text }}</div>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-divider class="mt-2 mb-3" />
+      </template>
+      <div class="d-flex justify-space-between align-center edit-subscription__action">
+        <div v-if="cardOnFile">
+          <div class="mb-1">
+            <b>Charge Card On File:</b>
+          </div>
+          <div class="d-flex align-center ml-n1">
+            <img class="edit-subscription__card-icon mr-2" :src="cardOnFile.card_icon" />
+            <span class="edit-subscription__card-text">
+              {{ cardOnFile.card_brand }} ending in {{ cardOnFile.card_last4 }}
+            </span>
+          </div>
+        </div>
+        <base-button
+          class="text-capitalize font-weight-bold"
+          :disabled="isError || isNoChange"
+          :loading="isSubmitLoading"
+          @click="onSubmit"
+        >
+          {{ submitButtonText }}
         </base-button>
       </div>
     </template>
@@ -96,31 +109,132 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AddInboxForm from '@/components/forms/AddInboxForm.vue'
+import Billing from '@/types/Billing'
+import RequestStatus from '@/constants/RequestStatus'
+import SubscriptionState from '@/constants/SubscriptionState'
+import AuthModule from '@/store/modules/AuthModule'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import { getErrorMessage } from '@/utils/misc'
+import BillingRepository from '@/data/repository/BillingRepository'
+import BillingForm from '@/types/BillingForm'
+import BillingCard from '@/types/BillingCard'
+import { AxiosResponse } from 'axios'
 
 @Component({ components: { AddInboxForm } })
 export default class UpdateSubscriptionModal extends Vue {
   dialog = false
-  currentInboxes = 1
-  updatedInboxes = 1
-  rate = 500; // TODO: Add configuration (5$ in cents)
-
-  dueDateVisible = true; // TODO: should be a computed getter
-  accountCreditVisible = false; // TODO: should be a compted getter
-
-  get inboxesChanged (): boolean {
-    return this.currentInboxes !== this.updatedInboxes
+  billing: Billing | null = null
+  submitStatus: RequestStatus = RequestStatus.Initial
+  fetchStatus: RequestStatus = RequestStatus.Initial
+  errorMessage = ''
+  mask = '/^[a-z][0-9]+(-[a-z][0-9]+)*$/'
+  billingForm: BillingForm = {
+    new_seat_count: this.planCredits,
+    use_card_on_file: true,
+    card_number: null,
+    exp_month: null,
+    exp_year: null,
+    security_code: null,
+    postal_code: null
   }
 
-  get totalPerMonth (): string {
-    return (this.updatedInboxes * this.rate / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+  get isError (): boolean {
+    return this.fetchStatus === RequestStatus.Error || this.submitStatus === RequestStatus.Error
+  }
+
+  get isFetchLoading (): boolean {
+    return this.fetchStatus === RequestStatus.Loading
+  }
+
+  get isSubmitLoading (): boolean {
+    return this.submitStatus === RequestStatus.Loading
+  }
+
+  get isNoChange (): boolean {
+    return !!this.billing && this.billing.display_code === SubscriptionState.NoChange
+  }
+
+  get submitButtonText (): string {
+    if (!!this.billing && this.billing.display_code === SubscriptionState.Unsubscribe) {
+      return 'Cancel Subscription'
+    }
+
+    if (!!this.billing && this.billing.display_code === SubscriptionState.Resubscribe) {
+      return `Subscribe & Pay ${this.billing.secondary_value}`
+    }
+
+    return 'Confirm Changes'
+  }
+
+  get planCredits (): number {
+    return AuthModule.planCredits ? AuthModule.planCredits : 1
+  }
+
+  get cardOnFile (): BillingCard | null {
+    return AuthModule.cardOnFile
+  }
+
+  get computedCredits (): number {
+    return this.billingForm.new_seat_count
+  }
+
+  set computedCredits (value: number) {
+    if (!isNaN(value) || Number(value) === 0) {
+      this.billingForm.new_seat_count = value
+      this.fetch()
+    }
   }
 
   increase (): void {
-    this.updatedInboxes++
+    this.computedCredits++
   }
 
   decrease (): void {
-    if (this.updatedInboxes !== 0) this.updatedInboxes--
+    if (this.computedCredits !== 0) this.computedCredits--
+  }
+
+  async fetch (): Promise<void> {
+    this.fetchStatus = RequestStatus.Loading
+
+    const response = await new BillingRepository().fetch(this.billingForm.new_seat_count)
+
+    if (isFailureResponse(response)) {
+      this.fetchStatus = RequestStatus.Error
+      this.errorMessage = getErrorMessage(response as FailureResponse)
+      if (this.billing) {
+        this.billing.per_month_value = ''
+        this.billing.secondary_value = ''
+        this.billing.helper_text = ''
+      }
+
+      return
+    }
+
+    this.fetchStatus = RequestStatus.Success
+    this.billing = (response as AxiosResponse<Billing>).data
+  }
+
+  async onSubmit (): Promise<void> {
+    if (this.isSubmitLoading) return
+
+    this.submitStatus = RequestStatus.Loading
+
+    const response = await new BillingRepository().save(this.billingForm)
+
+    if (isFailureResponse(response)) {
+      this.submitStatus = RequestStatus.Error
+      this.errorMessage = getErrorMessage(response as FailureResponse)
+
+      return
+    }
+
+    this.submitStatus = RequestStatus.Success
+    this.dialog = false
+    this.$emit('updated')
+  }
+
+  mounted () {
+    this.fetch()
   }
 }
 </script>
@@ -171,6 +285,12 @@ export default class UpdateSubscriptionModal extends Vue {
       button {
         font-size: $font-xs-x;
       }
+    }
+    &__card-icon {
+      width: 35px
+    }
+    &__card-text {
+      font-size: $font-sm;
     }
   }
 </style>

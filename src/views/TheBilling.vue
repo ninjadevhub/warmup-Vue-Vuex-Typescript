@@ -11,16 +11,16 @@
               <div class="billing__title mb-1">
                 Current Subscription
                 <div class="float-none float-sm-right">
-                  <update-subscription-modal v-if="hasSubscription" />
+                  <update-subscription-modal :billing="billing" v-if="hasSubscription" @updated="onUpdate" />
                 </div>
               </div>
               <v-divider />
               <div class="mt-3 mb-2">Using {{ creditsInUse }}/{{ availableCredits }} Inboxes</div>
-              <div v-if="hasSubscription">Your plan will renew on Dec 1, 2020 for $10.00.</div>
+              <div v-if="hasSubscription">{{ billing.helper_text }}</div>
               <div v-else>
                 Your free trial ends {{ trialEndsPretty }}
                 (<div class="d-inline-block">
-                  <subscribe-modal :billing="billing" @changed="onPlanChanged" />
+                  <subscribe-modal :billing="billing" @updated="onUpdate" />
                 </div>)
               </div>
             </v-col>
@@ -81,7 +81,7 @@ export default class TheBilling extends Vue {
   }
 
   get planCredits (): number | null {
-    return AuthModule.planCredits
+    return AuthModule.planCredits ? AuthModule.planCredits : 1
   }
 
   get availableCredits (): number | null {
@@ -95,7 +95,7 @@ export default class TheBilling extends Vue {
   get creditsInUse (): number | undefined {
     return this.planCredits && this.availableCredits
       ? this.planCredits - this.availableCredits
-      : undefined
+      : 0
   }
 
   async fetch (): Promise<void> {
@@ -132,12 +132,17 @@ export default class TheBilling extends Vue {
     }
   }
 
+  async onUpdate (): Promise<void> {
+    await AuthModule.getUser()
+    this.fetch()
+  }
+
   mounted () {
     this.fetch()
   }
 
   @Watch('planCredits')
-  onCreditsChange(value: number) {
+  onCreditsChange () {
     this.fetch()
   }
 }

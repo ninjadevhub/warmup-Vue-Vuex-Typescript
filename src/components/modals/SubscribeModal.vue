@@ -1,160 +1,294 @@
 <template>
-  <base-modal max-width="550" title="Subscribe to Warmup Inbox" title-class="title--sm">
+  <base-modal
+    :dialog="dialog"
+    max-width="550"
+    :title="billing && billing.header_text"
+    title-class="title--sm"
+    :small-spinner="isFetchLoading"
+  >
     <template #button>
-      <a class="subscribe__link text-capitalize pl-0">
+      <a class="subscribe__link text-capitalize pl-0" @click="dialog = true">
         Upgrade now
       </a>
     </template>
 
     <template #content>
-      <div class="mt-5 d-block d-sm-flex align-center">
-        <div class="d-flex align-end">
-          <base-input v-model="updatedInboxes" class="subscribe__input d-inline-block" hide-details />
-          <v-btn
-            class="subscribe__input-control d-inline-block"
-            elevation="0"
-            tile
-            @click="decrease"
-          >
-            <base-icon class="pr-0 pl-0 pt-0 pb-0">mdi-minus</base-icon>
-          </v-btn>
-          <v-btn
-            class="subscribe__input-control d-inline-block"
-            elevation="0"
-            tile
-            @click="increase"
-          >
-            <base-icon class="pr-0 pl-0 pt-0 pb-0">mdi-plus</base-icon>
-          </v-btn>
+      <validation-observer v-slot="{ invalid }">
+        <base-alert v-if="isError" class="mt-3" variant="error">
+          {{ errorMessage }}
+        </base-alert>
+        <div class="mt-5 d-block d-sm-flex align-center">
+          <div class="d-flex align-end">
+            <validation-provider v-slot="{ errors }" name="credits" rules="required|numeric">
+              <base-input
+                v-model="computedCredits"
+                :error-messages="errors"
+                class="subscribe__input d-inline-block"
+                hide-details
+              />
+            </validation-provider>
+            <v-btn
+              class="subscribe__input-control d-inline-block"
+              elevation="0"
+              tile
+              @click="decrease"
+            >
+              <base-icon class="pr-0 pl-0 pt-0 pb-0">mdi-minus</base-icon>
+            </v-btn>
+            <v-btn
+              class="subscribe__input-control d-inline-block"
+              elevation="0"
+              tile
+              @click="increase"
+            >
+              <base-icon class="pr-0 pl-0 pt-0 pb-0">mdi-plus</base-icon>
+            </v-btn>
+          </div>
+          <div class="d-inline-block ml-0 ml-sm-3 mt-3 mt-sm-0 subscribe__text">
+            Please select the desired number of inboxes.
+          </div>
         </div>
-        <div class="d-inline-block ml-0 ml-sm-3 mt-3 mt-sm-0 subscribe__text">
-          Please select the desired number of inboxes.
+        <v-divider class="mt-6 mb-3" />
+        <div>
+          <v-container class="py-0 px-0">
+            <v-row>
+              <v-col cols="6" sm="4" class="py-0">
+                <b>{{ billing && billing.per_month_label }}:</b>
+              </v-col>
+              <v-col cols="6" sm="8" class="py-0">
+                <span class="subscribe__amount">{{ billing && billing.per_month_value }}</span>
+              </v-col>
+            </v-row>
+          </v-container>
         </div>
-      </div>
-      <v-divider class="mt-6 mb-3" />
-      <div>
+        <v-divider class="my-3" />
         <v-container class="py-0 px-0">
           <v-row>
             <v-col cols="6" sm="4" class="py-0">
-              <b>Total per month:</b>
+              <b>{{ billing && billing.secondary_label }}:</b>
             </v-col>
             <v-col cols="6" sm="8" class="py-0">
-              <span class="subscribe__amount">{{ billing.per_month_value }}</span>
+              <span class="subscribe__amount">{{ billing && billing.secondary_value }}</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" class="pt-2">
+              <div class="subscribe__info">{{ billing && billing.helper_text }}</div>
             </v-col>
           </v-row>
         </v-container>
-      </div>
-      <v-divider class="my-3" />
-      <v-container class="py-0 px-0">
-        <v-row>
-          <v-col cols="6" sm="4" class="py-0">
-            <b>Due today:</b>
-          </v-col>
-          <v-col cols="6" sm="8" class="py-0">
-            <span class="subscribe__amount">{{ billing.secondary_value }}</span>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" class="pt-2">
-            <div class="subscribe__info">{{ billing.helper_text }}</div>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-divider class="mb-3" />
-      <v-container class="py-0 px-0">
-        <v-row>
-          <v-col cols="12" class="py-0">
-            <base-input custom-label="Card Number" variant="normal" />
-          </v-col>
-          <v-col cols="12" sm="4" class="py-0">
-            <base-input custom-label="Expiration Date" variant="normal" placeholder="MM/YYYY" />
-          </v-col>
-          <v-col cols="12" sm="4" class="py-0">
-            <base-input custom-label="Security Code" variant="normal" />
-          </v-col>
-          <v-col cols="12" sm="4" class="py-0">
-            <base-input custom-label="Postal Code" variant="normal" />
-          </v-col>
-        </v-row>
-      </v-container>
-      <div class="d-flex justify-end subscribe__action">
-        <base-button class="text-capitalize font-weight-bold">
-          Subscribe & Pay $3.42
-        </base-button>
-      </div>
+        <v-divider class="mb-3" />
+        <v-container class="py-0 px-0">
+          <v-row>
+            <v-col cols="12" class="py-0">
+              <validation-provider v-slot="{ errors }" name="Card number" rules="required|numeric|min:16">
+                <base-input
+                  v-model="billingForm.card_number"
+                  :error-messages="errors"
+                  custom-label="Card Number"
+                  variant="normal"
+                />
+              </validation-provider>
+            </v-col>
+            <v-col cols="12" sm="4" class="py-0">
+              <validation-provider v-slot="{ errors }" name="Expiration date" rules="required|date">
+                <base-input
+                  v-model="computedExpDate"
+                  :error-messages="errors"
+                  custom-label="Expiration Date"
+                  variant="normal"
+                  placeholder="MM/YYYY"
+                />
+              </validation-provider>
+            </v-col>
+            <v-col cols="12" sm="4" class="py-0">
+              <validation-provider v-slot="{ errors }" name="Security code" rules="required|numeric|min:3">
+                <base-input
+                  v-model="billingForm.security_code"
+                  :error-messages="errors"
+                  custom-label="Security Code"
+                  variant="normal"
+                />
+              </validation-provider>
+            </v-col>
+            <v-col cols="12" sm="4" class="py-0">
+              <validation-provider v-slot="{ errors }" name="Postal code" rules="required">
+                <base-input
+                  v-model="billingForm.postal_code"
+                  :error-messages="errors"
+                  custom-label="Postal Code"
+                  variant="normal"
+                />
+              </validation-provider>
+            </v-col>
+          </v-row>
+        </v-container>
+        <div class="d-flex justify-end subscribe__action">
+          <base-button
+            class="text-capitalize font-weight-bold"
+            :disabled="isError || invalid || isNoChange"
+            :loading="isSubmitLoading"
+            @click="onSubmit"
+          >
+            {{ submitButtonText }}
+          </base-button>
+        </div>
+      </validation-observer>
     </template>
   </base-modal>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import AddInboxForm from '@/components/forms/AddInboxForm.vue'
 import Billing from '@/types/Billing'
 import AuthModule from '@/store/modules/AuthModule'
 import RequestStatus from '@/constants/RequestStatus'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
-import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
+import { getErrorMessage } from '@/utils/misc'
 import BillingRepository from '@/data/repository/BillingRepository'
 import { AxiosResponse } from 'axios'
+import BillingForm from '@/types/BillingForm'
+import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { required, numeric, min } from 'vee-validate/dist/rules'
+import SubscriptionState from '@/constants/SubscriptionState'
 
-@Component({ components: { AddInboxForm } })
+extend('required', required)
+extend('numeric', numeric)
+extend('min', min)
+extend('date', {
+  validate: (value) => {
+    const month = value.split('/')[0]
+    const year = value.split('/')[1]
+
+    return (month.length === 2 && Number(month) <= 12) && (year.length === 4 && year >= new Date().getFullYear())
+  },
+  message: '{_field_} not valid'
+})
+
+@Component({ components: { AddInboxForm, ValidationObserver, ValidationProvider } })
 export default class SubscribeModal extends Vue {
   dialog = false
   billing: Billing | null = null
-  status: RequestStatus = RequestStatus.Initial
-  updatedInboxes = 1
-  rate = 500; // TODO: Add configuration (5$ in cents)
+  submitStatus: RequestStatus = RequestStatus.Initial
+  fetchStatus: RequestStatus = RequestStatus.Initial
+  errorMessage = ''
   mask = '/^[a-z][0-9]+(-[a-z][0-9]+)*$/'
-
-  dueDateVisible = true; // TODO: should be a computed getter
-  accountCreditVisible = false; // TODO: should be a compted getter
-
-  get isLoading (): boolean {
-    return this.status === RequestStatus.Loading
+  billingForm: BillingForm = {
+    new_seat_count: this.planCredits,
+    use_card_on_file: false,
+    card_number: '',
+    exp_month: '01',
+    exp_year: new Date().getFullYear().toString(),
+    security_code: '',
+    postal_code: ''
   }
 
-  get planCredits (): number | null {
-    return AuthModule.planCredits
+  get isError (): boolean {
+    return this.fetchStatus === RequestStatus.Error || this.submitStatus === RequestStatus.Error
   }
 
-  get inboxesChanged (): boolean {
-    return this.planCredits !== this.updatedInboxes
+  get isFetchLoading (): boolean {
+    return this.fetchStatus === RequestStatus.Loading
   }
 
-  get totalPerMonth (): string {
-    return (this.updatedInboxes * this.rate / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+  get isSubmitLoading (): boolean {
+    return this.submitStatus === RequestStatus.Loading
+  }
+
+  get isNoChange (): boolean {
+    return !!this.billing && this.billing.display_code === SubscriptionState.NoChange
+  }
+
+  get submitButtonText (): string {
+    if (!!this.billing && this.billing.display_code === SubscriptionState.Unsubscribe) {
+      return 'Cancel Subscription'
+    }
+
+    if (!!this.billing && this.billing.display_code === SubscriptionState.Resubscribe) {
+      return `Subscribe & Pay ${this.billing.secondary_value}`
+    }
+
+    return 'Confirm Changes'
+  }
+
+  get planCredits (): number {
+    return AuthModule.planCredits ? AuthModule.planCredits : 1
+  }
+
+  get computedCredits (): number {
+    return this.billingForm.new_seat_count
+  }
+
+  set computedCredits (value: number) {
+    if (!isNaN(value)) {
+      this.billingForm.new_seat_count = value
+      this.fetch()
+    }
+  }
+
+  get computedExpDate (): string {
+    return `${this.billingForm.exp_month}/${this.billingForm.exp_year}`
+  }
+
+  set computedExpDate (value: string) {
+    const splittedDate = value.split('/')
+    console.log(splittedDate)
+    this.billingForm.exp_month = splittedDate[0] ? splittedDate[0] : ''
+    this.billingForm.exp_year = splittedDate[1] ? splittedDate[1] : ''
   }
 
   increase (): void {
-    this.updatedInboxes++
+    this.computedCredits++
   }
 
   decrease (): void {
-    if (this.updatedInboxes !== 0) this.updatedInboxes--
+    if (this.computedCredits !== 1) this.computedCredits--
   }
 
   async fetch (): Promise<void> {
-    if (this.isLoading || (this.planCredits === null)) return
+    if (!this.billingForm.new_seat_count) return
 
-    this.status = RequestStatus.Loading
+    this.fetchStatus = RequestStatus.Loading
 
-    const response = await new BillingRepository().fetch(this.planCredits)
+    const response = await new BillingRepository().fetch(this.billingForm.new_seat_count)
 
     if (isFailureResponse(response)) {
-      this.status = RequestStatus.Error
-      sendFlashMessage({
-        status: 'error',
-        message: getErrorMessage(response as FailureResponse)
-      })
+      this.fetchStatus = RequestStatus.Error
+      this.errorMessage = getErrorMessage(response as FailureResponse)
+      if (this.billing) {
+        this.billing.per_month_value = ''
+        this.billing.secondary_value = ''
+        this.billing.helper_text = ''
+      }
 
       return
     }
 
-    this.status = RequestStatus.Success
+    this.fetchStatus = RequestStatus.Success
     this.billing = (response as AxiosResponse<Billing>).data
   }
 
-  mounted() {
+  async onSubmit (): Promise<void> {
+    if (this.isSubmitLoading) return
+
+    this.submitStatus = RequestStatus.Loading
+
+    const response = await new BillingRepository().save(this.billingForm)
+
+    if (isFailureResponse(response)) {
+      this.submitStatus = RequestStatus.Error
+      this.errorMessage = getErrorMessage(response as FailureResponse)
+
+      return
+    }
+
+    this.submitStatus = RequestStatus.Success
+    this.dialog = false
+    this.$emit('updated')
+  }
+
+  mounted () {
     this.fetch()
   }
 }

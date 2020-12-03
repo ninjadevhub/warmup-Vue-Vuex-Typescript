@@ -6,6 +6,7 @@ import UserRepository from '@/data/repository/UserRepository'
 import User from '@/types/User'
 import { isFailureResponse } from '@/types/Response'
 import InboxCapabilites from '@/types/InboxCapabilities'
+import BillingCard from '@/types/BillingCard'
 
 @Module({
   name: 'auth',
@@ -47,6 +48,10 @@ export class AuthModule extends VuexModule {
 
   get plan (): string | null {
     return this.user && this.user.data.plan
+  }
+
+  get cardOnFile (): BillingCard | null {
+    return this.user && this.user.data.billing
   }
 
   @Action({ rawError: true })

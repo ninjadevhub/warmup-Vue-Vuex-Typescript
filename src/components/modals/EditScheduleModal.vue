@@ -117,7 +117,6 @@ export default class EditScheduleModal extends Vue {
 
   status: RequestStatus = RequestStatus.Initial
   errorMessage = ''
-  dialog = false
   scheduleForm: ScheduleForm = {
     inbox_id: this.inbox.inbox_id,
     starting_baseline: this.inbox.settings.sending.baseline,
@@ -157,7 +156,6 @@ export default class EditScheduleModal extends Vue {
     }
 
     this.status = RequestStatus.Success
-    this.dialog = false
     this.$emit('updated')
   }
 }
