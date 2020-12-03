@@ -2,6 +2,7 @@
   <v-dialog
     v-model="dialog"
     v-bind="{ ...$attrs, ...$props }"
+    v-on="$listeners"
   >
     <template v-slot:activator="{ on, attrs }">
       <div v-bind="attrs" v-on="on">
@@ -11,9 +12,12 @@
     <v-card>
       <v-card-title class="modal__title d-flex justify-space-between px-0 py-0" :class="titleClass">
         {{ title }}
-        <v-btn v-if="closeButton" class="black--text" icon dark text @click="dialog = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+        <div>
+          <v-progress-circular v-if="smallSpinner" indeterminate color="primary" size="20" width="2" />
+          <v-btn v-if="closeButton" class="black--text" icon dark text @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </div>
       </v-card-title>
       <v-divider class="mb-1 mt-2" />
       <slot name="content" />
@@ -42,7 +46,15 @@ export default class BaseModal extends Vue {
   })
   readonly titleClass?: string
 
-  dialog = false;
+  @Prop({
+    type: Boolean
+  })
+  readonly smallSpinner?: boolean
+
+  @Prop({
+    type: Boolean
+  })
+  readonly dialog?: boolean
 }
 </script>
 

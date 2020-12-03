@@ -1,3 +1,4 @@
+import BillingCard from './BillingCard'
 import InboxCapabilites from './InboxCapabilities'
 
 export default interface User {
@@ -14,11 +15,7 @@ export default interface User {
     plan_credits: number;
     avail_credits: number;
     inbox_capabilities: InboxCapabilites;
-    billing: {
-      card_icon: string;
-      card_brand: string;
-      card_last4: string;
-    };
+    billing: BillingCard;
     affilate: {
       shareable_code: string;
     };

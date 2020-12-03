@@ -37,7 +37,6 @@ import { getErrorMessage } from '@/utils/misc'
 export default class AddInboxModal extends Vue {
   status: RequestStatus = RequestStatus.Initial
   errorMessage = ''
-  dialog = false;
   modalMaxWidth = '640'
   inboxForm: InboxForm | null = null
 
@@ -93,7 +92,6 @@ export default class AddInboxModal extends Vue {
     }
 
     this.status = RequestStatus.Success
-    this.dialog = false
     this.$emit('created')
   }
 

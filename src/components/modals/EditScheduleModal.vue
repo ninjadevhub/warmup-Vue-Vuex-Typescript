@@ -20,7 +20,7 @@
         <validation-provider
           v-slot="{ errors }"
           name="Starting baseline"
-          :rules="{ required: true, max_value: inboxCapabilities.starting_baseline }"
+          :rules="{ required: true, max_value: inboxCapabilities.starting_baseline, numeric: true }"
         >
           <base-input
             v-model="scheduleForm.starting_baseline"
@@ -34,7 +34,7 @@
         <validation-provider
           v-slot="{ errors }"
           name="Increase per day"
-          :rules="{ required: true, max_value: inboxCapabilities.increase_per_day }"
+          :rules="{ required: true, max_value: inboxCapabilities.increase_per_day, numeric: true }"
         >
           <base-input
             v-model="scheduleForm.increase_per_day"
@@ -47,7 +47,7 @@
           <validation-provider
             v-slot="{ errors }"
             name="Max sends per day"
-            :rules="{ required: true, max_value: inboxCapabilities.max_sends_per_day }"
+            :rules="{ required: true, max_value: inboxCapabilities.max_sends_per_day, numeric: true }"
           >
             <base-input
               v-model="scheduleForm.max_sends_per_day"
@@ -60,7 +60,7 @@
           <validation-provider
             v-slot="{ errors }"
             name="Reply rate"
-            :rules="{ required: true, max_value: inboxCapabilities.reply_rate }"
+            :rules="{ required: true, max_value: inboxCapabilities.reply_rate, numeric: true }"
           >
             <base-input
               v-model="scheduleForm.reply_rate_percent"
@@ -100,12 +100,13 @@ import InboxRepository from '@/data/repository/InboxRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { getErrorMessage } from '@/utils/misc'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
-import { required, max_value } from 'vee-validate/dist/rules'
+import { required, max_value, numeric } from 'vee-validate/dist/rules'
 import AuthModule from '@/store/modules/AuthModule'
 import InboxCapabilites from '@/types/InboxCapabilities'
 
 extend('required', required)
 extend('max_value', max_value)
+extend('numeric', numeric)
 
 @Component({ components: { AddInboxForm, ValidationObserver, ValidationProvider } })
 export default class EditScheduleModal extends Vue {
@@ -117,7 +118,6 @@ export default class EditScheduleModal extends Vue {
 
   status: RequestStatus = RequestStatus.Initial
   errorMessage = ''
-  dialog = false
   scheduleForm: ScheduleForm = {
     inbox_id: this.inbox.inbox_id,
     starting_baseline: this.inbox.settings.sending.baseline,
@@ -157,7 +157,6 @@ export default class EditScheduleModal extends Vue {
     }
 
     this.status = RequestStatus.Success
-    this.dialog = false
     this.$emit('updated')
   }
 }
