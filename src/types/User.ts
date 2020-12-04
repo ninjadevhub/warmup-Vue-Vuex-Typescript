@@ -1,3 +1,4 @@
+import SubscriptionPlan from '@/constants/SubscriptionPlan'
 import BillingCard from './BillingCard'
 import InboxCapabilites from './InboxCapabilities'
 
@@ -11,7 +12,7 @@ export default interface User {
     intials: string;
     email: string;
     account_level: string;
-    plan: string;
+    plan: SubscriptionPlan;
     plan_credits: number;
     avail_credits: number;
     inbox_capabilities: InboxCapabilites;

@@ -1,11 +1,12 @@
 <template>
-  <base-modal max-width="320" title="Edit Schedule">
+  <base-modal v-model="dialog" max-width="320" title="Edit Schedule">
     <template #button>
       <v-btn
         class="edit-schedule__link text-capitalize pl-0"
         small
         text
         elevation="0"
+        @click.stop="dialog = !dialog"
       >
         Edit Schedule
       </v-btn>
@@ -116,6 +117,7 @@ export default class EditScheduleModal extends Vue {
   })
   readonly inbox!: Inbox
 
+  dialog = false
   status: RequestStatus = RequestStatus.Initial
   errorMessage = ''
   scheduleForm: ScheduleForm = {

@@ -7,7 +7,7 @@
       <v-tab-item>
         <v-container fluid>
           <v-row v-if="user">
-            <v-col cols="12" md="7">
+            <v-col cols="12" md="10" lg="8">
               <div class="account-details__title mb-1">
                 Account Information
               </div>
@@ -17,14 +17,14 @@
             </v-col>
           </v-row>
           <v-row class="mt-16">
-            <v-col cols="12" md="7">
+            <v-col cols="12" md="10" lg="8">
               <div class="account-details__title mb-1">
                 Change password
               </div>
               <v-divider />
                 <validation-observer v-slot="{ invalid }">
                   <v-row class="mt-4">
-                      <v-col cols="12" sm="4" class="d-flex align-end">
+                      <v-col cols="12" md="4" class="d-flex align-end">
                         <validation-provider v-slot="{ errors }" name="Old password" rules="required">
                           <base-input
                             v-model="passwordForm.old_password"
@@ -36,7 +36,7 @@
                           />
                         </validation-provider>
                       </v-col>
-                      <v-col cols="12" sm="4" class="d-flex align-end">
+                      <v-col cols="12" md="4" class="d-flex align-end">
                         <validation-provider v-slot="{ errors }" name="New password" rules="required|min:6">
                           <base-input
                             v-model="passwordForm.new_password"
@@ -48,7 +48,7 @@
                           />
                         </validation-provider>
                       </v-col>
-                      <v-col cols="12" sm="4" class="d-flex align-end">
+                      <v-col cols="12" md="4" class="d-flex align-end">
                         <base-button
                           class="account-details__submit text-capitalize px-6 mb-5"
                           :loading="isPasswordChangeLoading"
