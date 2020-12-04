@@ -1,13 +1,13 @@
 <template>
   <base-modal
-    :dialog="dialog"
+    v-model="dialog"
     max-width="550"
     :title="billing && billing.header_text"
     title-class="title--sm"
     :small-spinner="isFetchLoading"
   >
     <template #button>
-      <a class="subscribe__link text-capitalize pl-0" @click="dialog = true">
+      <a class="subscribe__link text-capitalize pl-0" @click.stop="dialog = !dialog">
         Upgrade now
       </a>
     </template>
@@ -178,8 +178,8 @@ export default class SubscribeModal extends Vue {
     new_seat_count: this.planCredits,
     use_card_on_file: false,
     card_number: '',
-    exp_month: '01',
-    exp_year: new Date().getFullYear().toString(),
+    exp_month: '',
+    exp_year: '',
     security_code: '',
     postal_code: ''
   }
@@ -200,13 +200,25 @@ export default class SubscribeModal extends Vue {
     return !!this.billing && this.billing.display_code === SubscriptionState.NoChange
   }
 
+  get isUnsubscribe (): boolean {
+    return !!this.billing && this.billing.display_code === SubscriptionState.Unsubscribe
+  }
+
+  get isResubscribe (): boolean {
+    return !!this.billing && this.billing.display_code === SubscriptionState.Resubscribe
+  }
+
+  get isNew (): boolean {
+    return !!this.billing && this.billing.display_code === SubscriptionState.New
+  }
+
   get submitButtonText (): string {
-    if (!!this.billing && this.billing.display_code === SubscriptionState.Unsubscribe) {
+    if (this.isUnsubscribe) {
       return 'Cancel Subscription'
     }
 
-    if (!!this.billing && this.billing.display_code === SubscriptionState.Resubscribe) {
-      return `Subscribe & Pay ${this.billing.secondary_value}`
+    if (this.isResubscribe || this.isNew) {
+      return `Subscribe & Pay ${this.billing?.secondary_value}`
     }
 
     return 'Confirm Changes'
@@ -228,12 +240,13 @@ export default class SubscribeModal extends Vue {
   }
 
   get computedExpDate (): string {
-    return `${this.billingForm.exp_month}/${this.billingForm.exp_year}`
+    return this.billingForm.exp_month || this.billingForm.exp_year
+      ? `${this.billingForm.exp_month}/${this.billingForm.exp_year}`
+      : ''
   }
 
   set computedExpDate (value: string) {
     const splittedDate = value.split('/')
-    console.log(splittedDate)
     this.billingForm.exp_month = splittedDate[0] ? splittedDate[0] : ''
     this.billingForm.exp_year = splittedDate[1] ? splittedDate[1] : ''
   }

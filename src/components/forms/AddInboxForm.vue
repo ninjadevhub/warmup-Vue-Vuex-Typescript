@@ -18,11 +18,21 @@
               @change="$emit('resize', $event)"
             />
           </validation-provider>
-          <a v-if="isGoogleWorkspace" href="#" class="form__setup-hint d-block pt-1 mb-2">
+          <a
+            v-if="isGoogleWorkspace"
+            href="https://www.warmupinbox.com/google-walkthrough"
+            target="blank"
+            class="form__setup-hint d-block pt-1 mb-2"
+          >
             Learn how to configure Gmail
             <base-icon class="pl-2 pt-0 pb-0">mdi-open-in-new</base-icon>
           </a>
-          <a v-if="isMicrosoft365" href="#" class="form__setup-hint d-block pt-1 mb-2">
+          <a
+            v-if="isMicrosoft365"
+            href="https://www.warmupinbox.com/microsoft-walkthrough"
+            target="blank"
+            class="form__setup-hint d-block pt-1 mb-2"
+          >
             Learn how to configure Microsoft 365
             <base-icon class="pl-2 pt-0 pb-0">mdi-open-in-new</base-icon>
           </a>

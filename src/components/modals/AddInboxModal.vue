@@ -1,10 +1,11 @@
 <template>
   <base-modal
+    v-model="dialog"
     :max-width="modalMaxWidth"
     title="Add Inbox"
   >
     <template class="blablaaa" #button>
-      <base-button class="text-capitalize" small>
+      <base-button class="text-capitalize" small @click.stop="dialog = !dialog">
         <base-icon class="pr-0 pl-0" variant="secondary" size="14">mdi-plus</base-icon> Add Inbox
       </base-button>
     </template>
@@ -32,9 +33,12 @@ import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { getErrorMessage } from '@/utils/misc'
+import SubscriptionPlan from '@/constants/SubscriptionPlan'
+import AuthModule from '@/store/modules/AuthModule'
 
 @Component({ components: { AddInboxForm } })
 export default class AddInboxModal extends Vue {
+  dialog = false
   status: RequestStatus = RequestStatus.Initial
   errorMessage = ''
   modalMaxWidth = '640'
@@ -65,11 +69,15 @@ export default class AddInboxModal extends Vue {
       imap_host: '',
       imap_port: '',
       imap_ssl: false,
-      starting_baseline: '',
+      starting_baseline: this.plan && this.plan === SubscriptionPlan.Free ? '0' : '',
       increase_per_day: '',
       max_sends_per_day: '',
       reply_rate_percent: ''
     }
+  }
+
+  get plan (): SubscriptionPlan | null {
+    return AuthModule.plan
   }
 
   onResize (provider: EmailProvider) {

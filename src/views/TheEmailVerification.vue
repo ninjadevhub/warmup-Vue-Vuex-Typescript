@@ -4,10 +4,10 @@
       <v-col cols="12">
         <v-card class="verify mx-auto pa-6 px-11 mt-3" width="560px" elevation="0">
           <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
-          <v-card-title class="px-2 mb-6">
+          <v-card-title class="px-2 mb-1">
             <div class="verify__title mb-2">Please verify your email address.</div>
             <div class="verify__sub-title">
-              We just sent a verification code to {email_address}. Please enter the code below to verify your account.
+              We just sent a verification code to {{ userEmail }}. Please enter the code below to verify your account.
             </div>
           </v-card-title>
           <validation-observer v-slot="{ invalid }">
@@ -16,7 +16,7 @@
                 v-model="code"
                 :error-messages="errors"
                 custom-label="Code"
-                class="mb-4 px-2"
+                class="mb-1 px-2"
               />
             </validation-provider>
             <v-card-actions class="py-0">
@@ -60,6 +60,7 @@ import RequestStatus from '@/constants/RequestStatus'
 import UserRepository from '@/data/repository/UserRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
+import AuthModule from '@/store/modules/AuthModule'
 
 extend('required', required)
 
@@ -75,6 +76,10 @@ export default class TheEmailVerification extends Vue {
 
   get isResendLoading (): boolean {
     return this.resendStatus === RequestStatus.Loading
+  }
+
+  get userEmail (): string {
+    return AuthModule.userEmail ? AuthModule.userEmail : 'your email address'
   }
 
   async onSubmit (): Promise<void> {
@@ -95,7 +100,7 @@ export default class TheEmailVerification extends Vue {
     }
 
     this.status = RequestStatus.Success
-    this.$router.push({ name: 'iniboxes' })
+    this.$router.push({ name: 'inboxes' })
   }
 
   async onResendCode (): Promise<void> {

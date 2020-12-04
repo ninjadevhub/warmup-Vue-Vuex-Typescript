@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="dialog"
+    v-model="localValue"
     v-bind="{ ...$attrs, ...$props }"
     v-on="$listeners"
   >
@@ -14,7 +14,7 @@
         {{ title }}
         <div>
           <v-progress-circular v-if="smallSpinner" indeterminate color="primary" size="20" width="2" />
-          <v-btn v-if="closeButton" class="black--text" icon dark text @click="dialog = false">
+          <v-btn v-if="closeButton" class="black--text" icon dark text @click="localValue = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </div>
@@ -26,10 +26,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop, Model } from 'vue-property-decorator'
 
 @Component
 export default class BaseModal extends Vue {
+  @Model('input', {
+    type: Boolean,
+    required: true
+  })
+  readonly dialog!: boolean
+
   @Prop({
     type: String
   })
@@ -51,10 +57,13 @@ export default class BaseModal extends Vue {
   })
   readonly smallSpinner?: boolean
 
-  @Prop({
-    type: Boolean
-  })
-  readonly dialog?: boolean
+  get localValue (): boolean {
+    return this.dialog
+  }
+
+  set localValue (value: boolean) {
+    this.$emit('input', value)
+  }
 }
 </script>
 

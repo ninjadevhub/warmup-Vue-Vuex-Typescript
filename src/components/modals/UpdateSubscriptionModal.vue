@@ -1,6 +1,6 @@
 <template>
   <base-modal
-    :dialog="dialog"
+    v-model="dialog"
     max-width="550"
     :title="billing && billing.header_text"
     title-class="title--sm"
@@ -13,7 +13,7 @@
         small
         text
         elevation="0"
-        @click="dialog = true"
+        @click.stop="dialog = !dialog"
       >
         Edit Subscription
       </v-btn>
@@ -82,7 +82,7 @@
         <v-divider class="mt-2 mb-3" />
       </template>
       <div class="d-flex justify-space-between align-center edit-subscription__action">
-        <div v-if="cardOnFile">
+        <div v-if="cardOnFile && isResubscrie">
           <div class="mb-1">
             <b>Charge Card On File:</b>
           </div>
@@ -154,13 +154,21 @@ export default class UpdateSubscriptionModal extends Vue {
     return !!this.billing && this.billing.display_code === SubscriptionState.NoChange
   }
 
+  get isUnsubscribe (): boolean {
+    return !!this.billing && this.billing.display_code === SubscriptionState.Unsubscribe
+  }
+
+  get isResubscrie (): boolean {
+    return !!this.billing && this.billing.display_code === SubscriptionState.Resubscribe
+  }
+
   get submitButtonText (): string {
-    if (!!this.billing && this.billing.display_code === SubscriptionState.Unsubscribe) {
+    if (this.isUnsubscribe) {
       return 'Cancel Subscription'
     }
 
-    if (!!this.billing && this.billing.display_code === SubscriptionState.Resubscribe) {
-      return `Subscribe & Pay ${this.billing.secondary_value}`
+    if (this.isResubscrie) {
+      return `Subscribe & Pay ${this.billing?.secondary_value}`
     }
 
     return 'Confirm Changes'

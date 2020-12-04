@@ -20,6 +20,7 @@
                   v-model="passwordForm.new_password"
                   custom-label="New password"
                   :error-messages="errors"
+                  type="password"
                 />
               </validation-provider>
               <validation-provider
@@ -31,6 +32,7 @@
                   v-model="passwordForm.confirm_password"
                   custom-label="Confirm password"
                   :error-messages="errors"
+                  type="password"
                 />
               </validation-provider>
             </div>
@@ -79,13 +81,17 @@ extend('password', {
 export default class TheNewPassword extends Vue {
   status: RequestStatus = RequestStatus.Initial
   passwordForm: ResetPasswordForm = {
-    token: this.$route.query.token as string,
+    token: this.token,
     new_password: '',
     confirm_password: ''
   }
 
   get isLoading (): boolean {
     return this.status === RequestStatus.Loading
+  }
+
+  get token (): string {
+    return this.$route.query.token as string
   }
 
   async onSubmit (): Promise<void> {
@@ -112,6 +118,10 @@ export default class TheNewPassword extends Vue {
       status: 'success',
       message: 'Your password was successfully reset. Please log into your account.'
     })
+  }
+
+  mounted () {
+    if (!this.token) this.$router.push({ name: 'login' })
   }
 }
 </script>

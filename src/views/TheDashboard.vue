@@ -213,10 +213,6 @@ export default class TheDashboard extends Vue {
     AuthModule.logout()
     window.location.href = '/login'
   }
-
-  mounted () {
-    AuthModule.getUser()
-  }
 }
 </script>
 
