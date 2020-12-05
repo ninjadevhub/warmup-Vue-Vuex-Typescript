@@ -20,7 +20,7 @@ export class AuthModule extends VuexModule {
   user: User | null = null
 
   get isAccountVerified (): boolean {
-    return !!this.user && !!this.user.data.verified_account
+    return !!this.user && this.user.data.verified_account
   }
 
   get isAuthenticated (): boolean {
