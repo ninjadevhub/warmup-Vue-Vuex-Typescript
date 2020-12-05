@@ -21,6 +21,7 @@
           class="mx-0 px-0 p-2"
           @changed="onStatusChanged"
           @delete="onDelete"
+          @schedule-updated="fetch"
         />
       </v-tab-item>
     </base-tabs-items>

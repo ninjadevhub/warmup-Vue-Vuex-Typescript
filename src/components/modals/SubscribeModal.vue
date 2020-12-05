@@ -19,12 +19,18 @@
         </base-alert>
         <div class="mt-5 d-block d-sm-flex align-center">
           <div class="d-flex align-end">
-            <validation-provider v-slot="{ errors }" name="credits" rules="required|numeric">
+            <validation-provider
+              v-slot="{ errors, validate }"
+              name="credits"
+              rules="required|numeric"
+              mode="passive"
+            >
               <base-input
                 v-model="computedCredits"
                 :error-messages="errors"
                 class="subscribe__input d-inline-block"
                 hide-details
+                @blur="validate"
               />
             </validation-provider>
             <v-btn
@@ -82,46 +88,66 @@
           <v-row>
             <v-col cols="12" class="py-0">
               <validation-provider
-                v-slot="{ errors }"
+                v-slot="{ errors, validate }"
                 name="Card number"
                 rules="required|regex:[0-9 ]+|min_numbers:16"
+                mode="passive"
               >
                 <base-input
                   v-model="billingForm.card_number"
                   :error-messages="errors"
                   custom-label="Card Number"
                   variant="normal"
+                  @blur="validate"
                 />
               </validation-provider>
             </v-col>
             <v-col cols="12" sm="4" class="py-0">
-              <validation-provider v-slot="{ errors }" name="Expiration date" rules="required|date">
+              <validation-provider
+                v-slot="{ errors, validate }"
+                name="Expiration date"
+                rules="required|date"
+                mode="poassive"
+              >
                 <base-input
                   v-model="computedExpDate"
                   :error-messages="errors"
                   custom-label="Expiration Date"
                   variant="normal"
                   placeholder="MM/YYYY"
+                  @blur="validate"
                 />
               </validation-provider>
             </v-col>
             <v-col cols="12" sm="4" class="py-0">
-              <validation-provider v-slot="{ errors }" name="Security code" rules="required|numeric|min:3">
+              <validation-provider
+                v-slot="{ errors, validate }"
+                name="Security code"
+                rules="required|numeric|min:3"
+                mode="passive"
+              >
                 <base-input
                   v-model="billingForm.security_code"
                   :error-messages="errors"
                   custom-label="Security Code"
                   variant="normal"
+                  @blur="validate"
                 />
               </validation-provider>
             </v-col>
             <v-col cols="12" sm="4" class="py-0">
-              <validation-provider v-slot="{ errors }" name="Postal code" rules="required">
+              <validation-provider
+                v-slot="{ errors, validate }"
+                name="Postal code"
+                rules="required"
+                mode="passive"
+              >
                 <base-input
                   v-model="billingForm.postal_code"
                   :error-messages="errors"
                   custom-label="Postal Code"
                   variant="normal"
+                  @blur="validate"
                 />
               </validation-provider>
             </v-col>

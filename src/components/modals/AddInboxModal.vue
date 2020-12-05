@@ -105,6 +105,7 @@ export default class AddInboxModal extends Vue {
     }
 
     this.status = RequestStatus.Success
+    this.dialog = false
     this.$emit('created')
   }
 

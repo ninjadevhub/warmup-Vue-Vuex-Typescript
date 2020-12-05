@@ -7,6 +7,7 @@
       class="px-8 py-8"
       @page-change="onPageChange"
       @changed="onStatusChanged"
+      @created="fetch"
     />
     <v-overlay :value="isLoading">
       <v-progress-circular

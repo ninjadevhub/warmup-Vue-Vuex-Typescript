@@ -11,12 +11,18 @@
             </div>
           </v-card-title>
           <validation-observer v-slot="{ invalid }">
-            <validation-provider v-slot="{ errors }" name="code" rules="required">
+            <validation-provider
+              v-slot="{ errors, validate }"
+              name="code"
+              rules="required"
+              mode="passive"
+            >
               <base-input
                 v-model="code"
                 :error-messages="errors"
                 custom-label="Code"
                 class="mb-1 px-2"
+                @blur="validate"
               />
             </validation-provider>
             <v-card-actions class="py-0">
@@ -99,6 +105,7 @@ export default class TheEmailVerification extends Vue {
       return
     }
 
+    await AuthModule.getUser()
     this.status = RequestStatus.Success
     this.$router.push({ name: 'inboxes' })
   }

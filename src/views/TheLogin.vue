@@ -15,7 +15,7 @@
             <div class="login__title text-capitalize">Log in</div>
           </v-card-title>
           <v-divider class="mx-2 my-2" />
-          <validation-observer v-slot="{ invalid }">
+          <validation-observer v-slot="{ invalid }" @keydown.enter="onSubmit">
             <v-container class="px-2" fluid>
               <v-row>
                 <v-col col="12" class="py-0">
@@ -26,24 +26,36 @@
               </v-row>
               <v-row>
                 <v-col col="12" class="py-0">
-                  <validation-provider v-slot="{ errors }" name="Email address" rules="required|email">
+                  <validation-provider
+                    v-slot="{ errors, validate }"
+                    name="Email address"
+                    rules="required|email"
+                    mode="passive"
+                  >
                     <base-input
                       v-model="form.email"
                       custom-label="Email address"
                       :error-messages="errors"
                       type="email"
+                      @blur="validate"
                     />
                   </validation-provider>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col col="12" class="py-0">
-                  <validation-provider v-slot="{ errors }" name="Password" rules="required">
+                  <validation-provider
+                    v-slot="{ errors, validate }"
+                    name="Password"
+                    rules="required"
+                    mode="passive"
+                  >
                     <base-input
                       v-model="form.password"
                       custom-label="Password"
                       :error-messages="errors"
                       type="password"
+                      @blur="validate"
                     />
                   </validation-provider>
                 </v-col>

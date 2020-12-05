@@ -17,7 +17,7 @@
             <div class="sign-up__title">The easiest way to warm up your inboxes.</div>
             <div class="sign-up__sub-title">Create an account, no credit card required.</div>
           </v-card-title>
-          <validation-observer v-slot="{ invalid }">
+          <validation-observer v-slot="{ invalid }" @keydown.enter="onSubmit">
             <sign-up-form v-model="userForm" />
             <v-card-actions class="py-0 px-3">
               <base-button
