@@ -6,7 +6,7 @@
         small
         text
         elevation="0"
-        @click.stop="dialog = !dialog"
+        @click.stop="dialog = true"
       >
         Edit Schedule
       </v-btn>
@@ -19,6 +19,7 @@
         </base-alert>
         <validation-observer v-slot="{ invalid }">
         <validation-provider
+          v-if="!isFreePlan"
           v-slot="{ errors }"
           name="Starting baseline"
           :rules="{ required: true, max_value: inboxCapabilities.starting_baseline, numeric: true }"
@@ -32,6 +33,24 @@
             :disabled="inboxCapabilities.starting_baseline === 0"
           />
         </validation-provider>
+
+        <!-- Free plan baseline input tooltip -->
+        <v-tooltip v-else max-width="300" top>
+          <template v-slot:activator="{ on, attrs }">
+            <div v-bind="attrs" v-on="on">
+              <base-input
+                v-model="starting_baseline"
+                custom-label="starting baseline"
+                :help-text="`(Suggested 0, Max ${inboxCapabilities.starting_baseline})`"
+                tooltip="The starting number of emails we should send on day one."
+                :disabled="true"
+              />
+            </div>
+          </template>
+          <span>You need to be on a paid plan in order to adjust the starting baseline.</span>
+        </v-tooltip>
+        <!-- end of tooltip -->
+
         <validation-provider
           v-slot="{ errors }"
           name="Increase per day"
@@ -104,6 +123,7 @@ import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
 import { required, max_value, numeric } from 'vee-validate/dist/rules'
 import AuthModule from '@/store/modules/AuthModule'
 import InboxCapabilites from '@/types/InboxCapabilities'
+import SubscriptionPlan from '@/constants/SubscriptionPlan'
 
 extend('required', required)
 extend('max_value', max_value)
@@ -126,6 +146,14 @@ export default class EditScheduleModal extends Vue {
     increase_per_day: this.inbox.settings.sending.increase_rate,
     max_sends_per_day: this.inbox.settings.sending.max_sends,
     reply_rate_percent: this.inbox.settings.sending.reply_rate
+  }
+
+  get isFreePlan (): boolean {
+    return !!this.plan && this.plan === SubscriptionPlan.Free
+  }
+
+  get plan (): SubscriptionPlan | null {
+    return AuthModule.plan
   }
 
   get isError (): boolean {
@@ -154,6 +182,11 @@ export default class EditScheduleModal extends Vue {
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
       this.errorMessage = getErrorMessage(response as FailureResponse)
+
+      setTimeout(() => {
+        this.status = RequestStatus.Initial
+        this.errorMessage = ''
+      }, 5000)
 
       return
     }

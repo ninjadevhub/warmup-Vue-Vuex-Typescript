@@ -215,6 +215,11 @@ export default class UpdateSubscriptionModal extends Vue {
         this.billing.helper_text = ''
       }
 
+      setTimeout(() => {
+        this.fetchStatus = RequestStatus.Initial
+        this.errorMessage = ''
+      }, 5000)
+
       return
     }
 
@@ -232,6 +237,11 @@ export default class UpdateSubscriptionModal extends Vue {
     if (isFailureResponse(response)) {
       this.submitStatus = RequestStatus.Error
       this.errorMessage = getErrorMessage(response as FailureResponse)
+
+      setTimeout(() => {
+        this.submitStatus = RequestStatus.Initial
+        this.errorMessage = ''
+      }, 5000)
 
       return
     }

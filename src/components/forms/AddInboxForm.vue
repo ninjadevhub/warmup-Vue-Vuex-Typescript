@@ -44,7 +44,12 @@
               type="email"
             />
           </validation-provider>
-          <validation-provider v-slot="{ errors }" name="Password" rules="required" >
+          <validation-provider
+            v-if="!isOther"
+            v-slot="{ errors }"
+            name="Password"
+            rules="required"
+          >
             <base-input
               v-model="password"
               :error-messages="errors"
@@ -71,7 +76,12 @@
             <base-input v-model="smtp_username" :error-messages="errors" custom-label="SMTP username" />
           </validation-provider>
           <validation-provider v-slot="{ errors }" name="SMTP password" :rules="{ 'required': isOther }">
-            <base-input v-model="smtp_password" :error-messages="errors" custom-label="SMTP password" />
+            <base-input
+              v-model="smtp_password"
+              :error-messages="errors"
+              custom-label="SMTP password"
+              type="password"
+            />
           </validation-provider>
           <v-row>
             <v-col cols="6" class="py-0">
@@ -90,7 +100,12 @@
             <base-input v-model="imap_username" :error-messages="errors" custom-label="IMAP username" />
           </validation-provider>
           <validation-provider v-slot="{ errors }" name="IMAP password" :rules="{ 'required': isOther }">
-            <base-input v-model="imap_password" :error-messages="errors" custom-label="IMAP password" />
+            <base-input
+              v-model="imap_password"
+              :error-messages="errors"
+              custom-label="IMAP password"
+              type="password"
+            />
           </validation-provider>
           <v-row>
             <v-col cols="6" class="py-0">
@@ -115,6 +130,7 @@
           <div class="form__title">Sending Schedule</div>
           <v-divider class="mb-5 mt-1" />
           <validation-provider
+            v-if="!isFreePlan"
             v-slot="{ errors }"
             name="Starting baseline"
             :rules="{ required: true, max_value: inboxCapabilities.starting_baseline }"
@@ -125,9 +141,26 @@
               custom-label="starting baseline"
               :help-text="`(Suggested 0, Max ${inboxCapabilities.starting_baseline})`"
               tooltip="The starting number of emails we should send on day one."
-              :disabled="inboxCapabilities.starting_baseline === 0"
             />
           </validation-provider>
+
+          <!-- Free plan baseline input tooltip -->
+          <v-tooltip v-else max-width="300" top>
+            <template v-slot:activator="{ on, attrs }">
+              <div v-bind="attrs" v-on="on">
+                <base-input
+                  v-model="starting_baseline"
+                  custom-label="starting baseline"
+                  :help-text="`(Suggested 0, Max ${inboxCapabilities.starting_baseline})`"
+                  tooltip="The starting number of emails we should send on day one."
+                  :disabled="true"
+                />
+              </div>
+            </template>
+            <span>You need to be on a paid plan in order to adjust the starting baseline.</span>
+          </v-tooltip>
+          <!-- end of tooltip -->
+
           <validation-provider
             v-slot="{ errors }"
             name="Increase per day"
@@ -197,6 +230,7 @@ import { required, email, max_value } from 'vee-validate/dist/rules'
 import RequestStatus from '@/constants/RequestStatus'
 import AuthModule from '@/store/modules/AuthModule'
 import InboxCapabilites from '@/types/InboxCapabilities'
+import SubscriptionPlan from '@/constants/SubscriptionPlan'
 
 extend('required', required)
 extend('email', email)
@@ -221,6 +255,14 @@ export default class AddInboxForm extends Vue {
     { text: 'Microsoft 365', value: EmailProvider.Microsoft },
     { text: 'Other', value: EmailProvider.Other }
   ]
+
+  get isFreePlan (): boolean {
+    return !!this.plan && this.plan === SubscriptionPlan.Free
+  }
+
+  get plan (): SubscriptionPlan | null {
+    return AuthModule.plan
+  }
 
   get isLoading (): boolean {
     return this.status === RequestStatus.Loading
@@ -401,6 +443,16 @@ export default class AddInboxForm extends Vue {
 </script>
 
 <style lang="scss" scoped>
+  .v-tooltip__content {
+    font-size: $font-xs !important;
+    line-height: 12px;
+    background-color: $secondary-color !important;
+  }
+
+  .v-tooltip__content.menuable__content__active {
+    opacity: 1 !important;
+  }
+
   .form {
     &__title {
       font-family: $label-font;

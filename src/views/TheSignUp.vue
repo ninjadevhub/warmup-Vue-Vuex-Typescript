@@ -36,9 +36,13 @@
           </validation-observer>
           <v-card-text>
             <div>
-              By signing up you agree to the <a href="#">terms of service</a> and <a href="#">privacy policy</a>.
+              By signing up you agree to the
+              <a href="https://www.warmupinbox.com/tos" target="blank">terms of service</a> and
+              <a href="https://www.warmupinbox.com/privacy" target="blank">privacy policy</a>.
             </div>
-            <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
+            <a href="https://www.warmupinbox.com" target="blank">
+              <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
+            </a>
           </v-card-text>
         </v-card>
       </v-col>
@@ -92,6 +96,11 @@ export default class TheSignUpForm extends Vue {
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
       this.errorMessage = getErrorMessage(response as FailureResponse)
+
+      setTimeout(() => {
+        this.status = RequestStatus.Initial
+        this.errorMessage = ''
+      }, 5000)
 
       return
     }

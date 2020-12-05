@@ -59,6 +59,14 @@ export class AuthModule extends VuexModule {
     return this.user && this.user.data.email
   }
 
+  get firstName (): string | null {
+    return this.user && this.user.data.first_name
+  }
+
+  get lastName (): string | null {
+    return this.user && this.user.data.last_name
+  }
+
   @Action({ rawError: true })
   async login (response: AxiosResponse<{ status: string; key: string }>): Promise<void> {
     this.context.commit('authSuccess', response)

@@ -15,7 +15,7 @@
                 </div>
               </div>
               <v-divider />
-              <div class="mt-3 mb-2">Using {{ creditsInUse }}/{{ availableCredits }} Inboxes</div>
+              <div class="mt-3 mb-2">Using {{ creditsInUse }}/{{ planCredits }} Inboxes</div>
               <div v-if="hasSubscription">{{ billing.helper_text }}</div>
               <div v-else>
                 Your free trial ends {{ trialEndsPretty }}
@@ -137,9 +137,14 @@ export default class TheBilling extends Vue {
   async onUpdate (): Promise<void> {
     await AuthModule.getUser()
     this.fetch()
+    sendFlashMessage({
+      status: 'success',
+      message: 'Your changes were successfully made.'
+    })
   }
 
-  mounted () {
+  async mounted () {
+    await AuthModule.getUser()
     this.fetch()
   }
 
