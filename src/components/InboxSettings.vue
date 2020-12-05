@@ -19,7 +19,7 @@
         <div class="data__title">
           Sending
           <div class="float-right">
-            <edit-schedule-modal />
+            <edit-schedule-modal :inbox="inbox" @updated="$emit('schedule-updated')" />
           </div>
         </div>
         <v-divider class="mb-2 mt-1" />

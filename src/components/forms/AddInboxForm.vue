@@ -8,7 +8,12 @@
         <v-col class="pt-5" cols="12" :md="isOther ? '4' : '6'" max-width="300">
           <div class="form__title">Authentication</div>
           <v-divider class="mb-5 mt-1" />
-          <validation-provider v-slot="{ errors }" name="Email provider" rules="required">
+          <validation-provider
+            v-slot="{ errors, validate }"
+            name="Email provider"
+            rules="required"
+            mode="passive"
+          >
             <base-select
               v-model="provider"
               class="mb-3"
@@ -16,6 +21,7 @@
               :items="providers"
               custom-label="email provider"
               @change="$emit('resize', $event)"
+              @blur="validate"
             />
           </validation-provider>
           <a
@@ -36,12 +42,18 @@
             Learn how to configure Microsoft 365
             <base-icon class="pl-2 pt-0 pb-0">mdi-open-in-new</base-icon>
           </a>
-          <validation-provider v-slot="{ errors }" name="Email" rules="required|email">
+          <validation-provider
+            v-slot="{ errors, validate }"
+            name="Email"
+            rules="required|email"
+            mode="passive"
+          >
             <base-input
               v-model="email"
               :error-messages="errors"
               custom-label="email"
               type="email"
+              @blur="validate"
             />
           </validation-provider>
           <validation-provider
