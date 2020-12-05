@@ -81,7 +81,10 @@
         </v-container>
         <v-divider class="mt-2 mb-3" />
       </template>
-      <div class="d-flex justify-space-between align-center edit-subscription__action">
+      <div
+        class="edit-subscription__action d-flex justify-end"
+        :class="{ 'justify-space-between align-center': cardOnFile && isResubscrie }"
+      >
         <div v-if="cardOnFile && isResubscrie">
           <div class="mb-1">
             <b>Charge Card On File:</b>
