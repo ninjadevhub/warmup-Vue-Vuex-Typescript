@@ -136,13 +136,11 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  console.log(AuthModule.isAccountVerified)
+  // if (to.meta.verifyRequired && !AuthModule.isAccountVerified) {
+  //   next({ path: '/email-verification', replace: true })
 
-  if (to.meta.verifyRequired && !AuthModule.isAccountVerified) {
-    next({ path: '/email-verification', replace: true })
-
-    return
-  }
+  //   return
+  // }
 
   if (to.meta.guest && AuthModule.isAuthenticated) {
     next({ path: '/inboxes', replace: true })
