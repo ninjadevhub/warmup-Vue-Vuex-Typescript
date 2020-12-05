@@ -121,6 +121,11 @@ export default class TheLogin extends Vue {
       this.status = RequestStatus.Error
       this.errorMessage = getErrorMessage(response as FailureResponse)
 
+      setTimeout(() => {
+        this.status = RequestStatus.Initial
+        this.errorMessage = ''
+      }, 5000)
+
       return
     }
 

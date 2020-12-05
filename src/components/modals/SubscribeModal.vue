@@ -81,7 +81,11 @@
         <v-container class="py-0 px-0">
           <v-row>
             <v-col cols="12" class="py-0">
-              <validation-provider v-slot="{ errors }" name="Card number" rules="required|numeric|min:16">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Card number"
+                rules="required|regex:[0-9 ]+|min_numbers:16"
+              >
                 <base-input
                   v-model="billingForm.card_number"
                   :error-messages="errors"
@@ -150,12 +154,18 @@ import BillingRepository from '@/data/repository/BillingRepository'
 import { AxiosResponse } from 'axios'
 import BillingForm from '@/types/BillingForm'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
-import { required, numeric, min } from 'vee-validate/dist/rules'
+import { required, numeric, regex } from 'vee-validate/dist/rules'
 import SubscriptionState from '@/constants/SubscriptionState'
 
 extend('required', required)
 extend('numeric', numeric)
-extend('min', min)
+extend('min_numbers', {
+  validate: (value) => {
+    return value.replace(/\s/g, '').length >= 16
+  },
+  message: '{_field_} should be not less than 16 digits'
+})
+extend('regex', regex)
 extend('date', {
   validate: (value) => {
     const month = value.split('/')[0]
@@ -274,6 +284,11 @@ export default class SubscribeModal extends Vue {
         this.billing.secondary_value = ''
         this.billing.helper_text = ''
       }
+
+      setTimeout(() => {
+        this.fetchStatus = RequestStatus.Initial
+        this.errorMessage = ''
+      }, 5000)
 
       return
     }

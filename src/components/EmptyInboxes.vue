@@ -20,7 +20,12 @@
               Building up and maintain a positive sending reputation is a complicated process.
               Thankfully we built an effortless way to keep your deliverability high. Learn how we do it.
             </div>
-            <base-button to="/how-it-works" class="help-text__action text-capitalize mt-5" small>
+            <base-button
+              href="https://www.warmupinbox.com/how-it-works"
+              target="blank"
+              class="help-text__action text-capitalize mt-5"
+              small
+            >
               Learn more
             </base-button>
           </div>
@@ -32,7 +37,12 @@
               Maintaining consistent positive engagement within your inboxes is critical for upholding the highest
               possible delivery rates for your emails.
             </div>
-            <base-button to="/always-be-warming-up-your-inbox" class="help-text__action text-capitalize mt-5" small>
+            <base-button
+              href="https://www.warmupinbox.com/always-be-warming-up-your-inbox"
+              target="blank"
+              class="help-text__action text-capitalize mt-5"
+              small
+            >
               Learn why
             </base-button>
           </div>

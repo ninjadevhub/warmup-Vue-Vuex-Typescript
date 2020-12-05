@@ -7,25 +7,26 @@
           <add-inbox-modal @created="$emit('created')" />
         </div>
       </div>
-      <v-list class="inboxes__list" dense>
+      <v-divider />
+      <v-list v-if="inboxes" class="inboxes__list" dense>
         <v-list-item-group>
           <template v-for="(inbox, key) in inboxes.results">
-            <v-list-item :key="key" class="pl-0" :ripple="false">
+            <v-list-item :key="key" class="pl-0 pt-2" :ripple="false">
               <v-list-item-content class="py-0">
-                <v-list-item-title @click.self="onInboxClick(inbox.inbox_id)">
+                <v-list-item-title class="d-flex align-center" @click.self="onInboxClick(inbox.inbox_id)">
                   <inbox-control
                     :inbox="inbox"
-                    :label="inbox.email"
                     class="d-inline-block pl-3"
                     @changed="$emit('changed', $event)"
                   />
+                  <div class="pb-3" @click.self="onInboxClick(inbox.inbox_id)">{{ inbox.email }}</div>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </template>
         </v-list-item-group>
       </v-list>
-      <div v-if="inboxes.total_pages < 1" class="text-center">
+      <div v-if="inboxes && inboxes.total_pages > 1" class="text-center">
         <base-pagination
           :value="inboxes.current_page"
           :length="inboxes.total_pages"
@@ -46,10 +47,9 @@ import InboxControl from '@/components/InboxControl.vue'
 @Component({ components: { AddInboxModal, InboxControl } })
 export default class InboxesList extends Vue {
   @Prop({
-    type: Object as () => Inboxes,
-    required: true
+    type: Object as () => Inboxes
   })
-  readonly inboxes!: Inboxes
+  readonly inboxes!: Inboxes | null
 
   @Prop({
     type: Number
@@ -114,5 +114,21 @@ export default class InboxesList extends Vue {
         }
       }
     }
+
+    .v-input--switch {
+      &__track {
+        width: 40px !important;
+        max-height: 20px !important;
+      }
+      &__thumb {
+        height: 14px !important;
+        width: 14px !important;
+      }
+    }
+  }
+
+  .v-list--dense .v-list-item, .v-list-item--dense {
+    max-height: 42px;
+    border-bottom: 1px solid #e0e0e0;
   }
 </style>

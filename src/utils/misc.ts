@@ -1,6 +1,9 @@
+import InboxRepository from '@/data/repository/InboxRepository'
 import { EventBus } from '@/main'
 import FlashMessage from '@/types/FlashMessage'
-import { FailureResponse } from '@/types/Response'
+import Inbox from '@/types/Inbox'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import { AxiosResponse } from 'axios'
 
 export function appendUrlSearchParams (url: URL, params: { [key: string]: any }, prefix = '') {
   const name = (key: string) => prefix ? `${prefix}[${key}]` : key
@@ -39,4 +42,9 @@ export function copyToClipboard (string: string) {
   fullLink.select()
   document.execCommand('copy', false)
   fullLink.remove()
+}
+
+export async function getEmailByInboxId (inboxId: string): Promise<string> {
+  const response = await new InboxRepository().fetch(inboxId)
+  return isFailureResponse(response) ? '' : (response as AxiosResponse<Inbox>).data.email
 }

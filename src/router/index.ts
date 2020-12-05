@@ -12,6 +12,7 @@ import TheAccountDetails from '@/views/TheAccountDetails.vue'
 import TheBilling from '@/views/TheBilling.vue'
 import ThePageNotFound from '@/views/ThePageNotFound.vue'
 import AuthModule from '@/store/modules/AuthModule'
+import { getEmailByInboxId } from '@/utils/misc'
 
 Vue.use(VueRouter)
 
@@ -37,7 +38,7 @@ const routes: Array<RouteConfig> = [
         name: 'inbox-details',
         component: TheInbox,
         meta: {
-          title: '{email}', // TODO: make dynamic
+          title: '',
           authRequired: true,
           verifyRequired: true
         }
@@ -124,8 +125,10 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  document.title = `${to.meta.title} | Warmup Inbox`
+router.beforeEach(async (to, from, next) => {
+  const title = to.name === 'inbox-details' ? await getEmailByInboxId(to.params.inboxId as string) : to.meta.title
+
+  document.title = `${title} | Warmup Inbox`
 
   if (to.meta.authRequired && !AuthModule.isAuthenticated) {
     next({ path: '/login', replace: true })

@@ -43,7 +43,7 @@
                     elevation="0"
                     text
                   >
-                    MB
+                    {{ initials }}
                     <base-icon class="pl-0 pr-0 pt-0 pb-0" variant="secondary" size="14">mdi-chevron-down</base-icon>
                   </v-btn>
                 </div>
@@ -170,17 +170,25 @@
 import { Component, Vue } from 'vue-property-decorator'
 import AuthModule from '@/store/modules/AuthModule'
 import FlashMessage from '@/components/FlashMessage.vue'
+import { getEmailByInboxId } from '@/utils/misc'
 
 @Component({ components: { FlashMessage } })
 export default class TheDashboard extends Vue {
   sidebar = null
   hasSubscription = true // TODO: Make computed getter
+  selectedInboxEmail = ''
 
   isActiveRoute (route: string): boolean {
     return this.$route.name === route
   }
 
-  get title (): { icon: string; title: string; subTitle: string } | undefined {
+  get initials (): string {
+    return `
+      ${AuthModule.firstName ? AuthModule.firstName[0] : ''}${AuthModule.lastName ? AuthModule.lastName[0] : ''}
+    `
+  }
+
+  get title (): { icon: string; title: string; subTitle: any } | undefined {
     switch (this.$route.name) {
       case 'inboxes':
         return {
@@ -192,7 +200,7 @@ export default class TheDashboard extends Vue {
         return {
           icon: 'mdi-inbox-outline',
           title: 'Inboxes',
-          subTitle: 'dummyemail@main.com'
+          subTitle: this.selectedInboxEmail
         }
       case 'account-settings':
         return {
@@ -209,9 +217,20 @@ export default class TheDashboard extends Vue {
     }
   }
 
+  async getEmail (): Promise<void> {
+    const response = await getEmailByInboxId(this.$route.params.inboxId)
+    this.selectedInboxEmail = response
+  }
+
   onLogout (): void {
     AuthModule.logout()
     window.location.href = '/login'
+  }
+
+  mounted () {
+    if (this.$route.name === 'inbox-details') {
+      this.getEmail()
+    }
   }
 }
 </script>
@@ -255,6 +274,7 @@ export default class TheDashboard extends Vue {
     &__title {
       font-family: $base-font;
       font-weight: bold;
+      min-width: max-content;
       i {
         padding: 0 !important;
       }
