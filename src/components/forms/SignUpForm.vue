@@ -3,44 +3,68 @@
     <v-container>
       <v-row>
         <v-col cols="6" class="py-0">
-          <validation-provider v-slot="{ errors }" name="First name" rules="required">
+          <validation-provider
+            v-slot="{ errors, validate }"
+            name="First name"
+            rules="required"
+            mode="passive"
+          >
             <base-input
               v-model="firstName"
               :error-messages="errors"
               custom-label="First name"
               height="40"
+              @blur="validate"
             />
           </validation-provider>
         </v-col>
         <v-col cols="6" class="py-0">
-          <validation-provider v-slot="{ errors }" name="Last name" rules="required">
+          <validation-provider
+            v-slot="{ errors, validate }"
+            name="Last name"
+            rules="required"
+            mode="passive"
+          >
             <base-input
               v-model="lastName"
               :error-messages="errors"
               custom-label="Last name"
               height="40"
+              @blur="validate"
             />
           </validation-provider>
         </v-col>
         <v-col cols="12" class="py-0">
-          <validation-provider v-slot="{ errors }" name="Email address" rules="required|email">
+          <validation-provider
+            v-slot="{ errors, validate }"
+            name="Email address"
+            rules="required|email"
+            mode="passive"
+          >
             <base-input
               v-model="email"
               :error-messages="errors"
               custom-label="Email address"
               type="email"
               height="40"
+              @blur="validate"
             />
           </validation-provider>
         </v-col>
         <v-col cols="12" class="py-0">
-          <validation-provider v-slot="{ errors }" name="Password" rules="required|min:6">
+          <validation-provider
+            v-slot="{ errors, validate }"
+            name="Password"
+            rules="required|min:6"
+            mode="passive"
+          >
             <base-input
               v-model="password"
               :error-messages="errors"
               custom-label="Create password"
               type="password"
               height="40"
+              @blur="validate"
             />
           </validation-provider>
         </v-col>

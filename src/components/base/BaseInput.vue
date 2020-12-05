@@ -36,8 +36,8 @@ import { Component, Vue, Prop, Model } from 'vue-property-decorator'
 @Component
 export default class BaseInput extends Vue {
   @Model('change', {
-    type: [String, Number]
-    // required: true // TODO: Uncomment when API integration completed
+    type: [String, Number],
+    required: true
   })
   readonly value!: string | number
 

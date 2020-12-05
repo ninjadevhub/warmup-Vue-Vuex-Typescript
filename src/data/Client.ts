@@ -7,11 +7,11 @@ export default class Client implements BackendClientInterface {
   protected readonly client!: AxiosInstance
 
   protected get baseApiUrl (): string {
-    if (!process.env.VUE_APP_BASE_URL) {
-      throw new Error('Enviroment variable VUE_APP_BASE_URL must be defined')
+    if (!process.env.VUE_APP_BASE_API_URL) {
+      throw new Error('Enviroment variable VUE_APP_BASE_API_URL must be defined')
     }
 
-    return process.env.VUE_APP_BASE_URL
+    return process.env.VUE_APP_BASE_API_URL
   }
 
   constructor () {

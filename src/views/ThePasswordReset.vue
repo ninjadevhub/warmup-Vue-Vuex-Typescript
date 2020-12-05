@@ -11,12 +11,18 @@
             </div>
           </v-card-title>
           <validation-observer v-slot="{ invalid }">
-            <validation-provider v-slot="{ errors }" name="Email address" rules="required|email">
+            <validation-provider
+              v-slot="{ errors, validate }"
+              name="Email address"
+              rules="required|email"
+              mode="passive"
+            >
               <base-input
                 v-model="email"
                 :error-messages="errors"
                 custom-label="Email address"
                 class="px-2"
+                @blur="validate"
               />
             </validation-provider>
             <v-card-actions class="py-0">

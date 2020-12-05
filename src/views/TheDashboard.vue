@@ -171,15 +171,19 @@ import { Component, Vue } from 'vue-property-decorator'
 import AuthModule from '@/store/modules/AuthModule'
 import FlashMessage from '@/components/FlashMessage.vue'
 import { getEmailByInboxId } from '@/utils/misc'
+import SubscriptionPlan from '@/constants/SubscriptionPlan'
 
 @Component({ components: { FlashMessage } })
 export default class TheDashboard extends Vue {
   sidebar = null
-  hasSubscription = true // TODO: Make computed getter
   selectedInboxEmail = ''
 
   isActiveRoute (route: string): boolean {
     return this.$route.name === route
+  }
+
+  get hasSubscription (): boolean {
+    return !!AuthModule.plan && AuthModule.plan !== SubscriptionPlan.Free
   }
 
   get initials (): string {
