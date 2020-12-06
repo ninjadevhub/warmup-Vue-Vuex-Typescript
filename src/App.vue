@@ -10,14 +10,9 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 import FlashMessage from '@/components/FlashMessage.vue'
-import AuthModule from '@/store/modules/AuthModule'
 
 @Component({ components: { FlashMessage } })
-export default class App extends Vue {
-  mounted () {
-    AuthModule.getUser()
-  }
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
