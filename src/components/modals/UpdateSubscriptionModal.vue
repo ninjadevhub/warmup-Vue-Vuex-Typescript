@@ -20,6 +20,9 @@
     </template>
 
     <template #content>
+      <base-alert v-if="isError" class="mt-3" variant="error">
+        {{ errorMessage }}
+      </base-alert>
       <div class="mt-5 d-block d-sm-flex align-center">
         <div class="d-flex align-end">
           <base-input v-model="computedCredits" class="edit-subscription__input d-inline-block" hide-details />
@@ -251,6 +254,7 @@ export default class UpdateSubscriptionModal extends Vue {
 
     this.submitStatus = RequestStatus.Success
     this.dialog = false
+    this.fetch()
     this.$emit('updated')
   }
 

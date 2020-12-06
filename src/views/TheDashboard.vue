@@ -49,19 +49,11 @@
                 </div>
               </template>
               <v-list class="menu">
-                <v-list-item link>
-                  <v-list-item-title>
-                    <router-link class="menu__link" to="/account-settings">
-                      Account
-                    </router-link>
-                  </v-list-item-title>
+                <v-list-item to="/account-settings" link>
+                  Account
                 </v-list-item>
-                <v-list-item link>
-                  <v-list-item-title @click="onLogout" >
-                    <a class="menu__link" text>
-                      Log out
-                    </a>
-                  </v-list-item-title>
+                <v-list-item @click="onLogout" link>
+                  Log out
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -170,7 +162,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import AuthModule from '@/store/modules/AuthModule'
 import FlashMessage from '@/components/FlashMessage.vue'
-import { getEmailByInboxId, getErrorMessage, sendFlashMessage } from '@/utils/misc'
+import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
 import SubscriptionPlan from '@/constants/SubscriptionPlan'
 import SubscribeModal from '@/components/modals/SubscribeModal.vue'
 import RequestStatus from '@/constants/RequestStatus'
@@ -178,20 +170,23 @@ import { FailureResponse, isFailureResponse } from '@/types/Response'
 import BillingRepository from '@/data/repository/BillingRepository'
 import { AxiosResponse } from 'axios'
 import Billing from '@/types/Billing'
+import SubscriptionState from '@/constants/SubscriptionState'
+import { EventBus } from '@/main'
 
 @Component({ components: { FlashMessage, SubscribeModal } })
 export default class TheDashboard extends Vue {
   sidebar = null
-  selectedInboxEmail = ''
   status: RequestStatus = RequestStatus.Initial
   billing: Billing | null = null
+  inboxEmail = ''
 
   isActiveRoute (route: string): boolean {
     return this.$route.name === route
   }
 
   get hasSubscription (): boolean {
-    return !!AuthModule.plan && AuthModule.plan !== SubscriptionPlan.Free
+    return (!!AuthModule.plan && AuthModule.plan !== SubscriptionPlan.Free) ||
+      (!!this.billing && this.billing.display_code === SubscriptionState.Resubscribe)
   }
 
   get initials (): string {
@@ -212,7 +207,7 @@ export default class TheDashboard extends Vue {
         return {
           icon: 'mdi-inbox-outline',
           title: 'Inboxes',
-          subTitle: this.selectedInboxEmail
+          subTitle: this.inboxEmail
         }
       case 'account-settings':
         return {
@@ -235,11 +230,6 @@ export default class TheDashboard extends Vue {
 
   get planCredits (): number | null {
     return AuthModule.planCredits ? AuthModule.planCredits : 1
-  }
-
-  async getEmail (): Promise<void> {
-    const response = await getEmailByInboxId(this.$route.params.inboxId)
-    this.selectedInboxEmail = response
   }
 
   async fetch (): Promise<void> {
@@ -277,11 +267,18 @@ export default class TheDashboard extends Vue {
     window.location.href = '/login'
   }
 
-  mounted () {
+  async mounted () {
     this.fetch()
-    if (this.$route.name === 'inbox-details') {
-      this.getEmail()
+
+    await AuthModule.getUser()
+
+    if (this.$route.meta.verifyRequired && !AuthModule.isAccountVerified) {
+      this.$router.push({ path: '/email-verification', replace: true })
     }
+
+    EventBus.$on('inboxEmail', (email: string) => {
+      this.inboxEmail = email
+    })
   }
 }
 </script>
@@ -325,13 +322,6 @@ export default class TheDashboard extends Vue {
       i {
         padding: 0 !important;
       }
-    }
-  }
-
-  .menu {
-    &__link {
-      color: #000000;
-      text-decoration: none;
     }
   }
 

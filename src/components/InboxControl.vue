@@ -21,8 +21,9 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import InboxState from '@/constants/InboxState'
 import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
-import { isFailureResponse } from '@/types/Response'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
 import Inbox from '@/types/Inbox'
+import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
 
 @Component
 export default class InboxControl extends Vue {
@@ -69,6 +70,10 @@ export default class InboxControl extends Vue {
 
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
 
       return
     }

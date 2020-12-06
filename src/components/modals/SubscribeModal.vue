@@ -92,14 +92,19 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="Card number"
-                rules="required|regex:[0-9 ]+|min_numbers:16"
+                :rules="{
+                  required: true,
+                  regex: '[0-9 ]+',
+                  min_numbers: computedCreditCard.substr(0, 2) === '37' ? 15 : 16
+                }"
                 :debounce="500"
               >
                 <base-input
-                  v-model="billingForm.card_number"
+                  v-model="computedCreditCard"
                   :error-messages="errors"
                   custom-label="Card Number"
                   variant="normal"
+                  :maxlength="computedCreditCard.substr(0, 2) === '37' ? 17 : 19"
                 />
               </validation-provider>
             </v-col>
@@ -173,7 +178,7 @@ import Billing from '@/types/Billing'
 import AuthModule from '@/store/modules/AuthModule'
 import RequestStatus from '@/constants/RequestStatus'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
-import { getErrorMessage } from '@/utils/misc'
+import { getAmexCreditCardFormat, getCreditCardFormat, getErrorMessage } from '@/utils/misc'
 import BillingRepository from '@/data/repository/BillingRepository'
 import { AxiosResponse } from 'axios'
 import BillingForm from '@/types/BillingForm'
@@ -184,10 +189,11 @@ import SubscriptionState from '@/constants/SubscriptionState'
 extend('required', required)
 extend('numeric', numeric)
 extend('min_numbers', {
-  validate: (value) => {
-    return value.replace(/\s/g, '').length >= 16
+  validate: (value, { length }) => {
+    return value.replace(/\s/g, '').length >= length
   },
-  message: '{_field_} should be not less than 16 digits'
+  params: ['length'],
+  message: '{_field_} should be not less than {length} digits'
 })
 extend('regex', regex)
 extend('date', {
@@ -289,6 +295,22 @@ export default class SubscribeModal extends Vue {
     const splittedDate = value.split('/')
     this.billingForm.exp_month = splittedDate[0] ? splittedDate[0] : ''
     this.billingForm.exp_year = splittedDate[1] ? splittedDate[1] : ''
+  }
+
+  get computedCreditCard (): string | null {
+    return this.billingForm.card_number
+  }
+
+  set computedCreditCard (value: string | null) {
+    if (!value) {
+      this.billingForm.card_number = ''
+
+      return
+    }
+
+    this.billingForm.card_number = value.substring(0, 2) !== '37'
+      ? getCreditCardFormat(value)
+      : getAmexCreditCardFormat(value)
   }
 
   increase (): void {

@@ -32,7 +32,7 @@
               </div>
               <v-divider />
               <p class="mt-3">
-                You can earn a 20% commission <b>every month</b> for every customer you refer to Warmup Inbox. Use your unqiue
+                You can earn a 20% commission <b>every month</b> for every customer you refer to Warmup Inbox. Use your unique
                 link below so you can share on your blog, podcast, twitter or to your email newsletter list. After your
                 first sign up, we’ll email you a form to get you set up for payouts.
               </p>
@@ -83,7 +83,7 @@ export default class TheBilling extends Vue {
   }
 
   get planCredits (): number | null {
-    return AuthModule.planCredits ? AuthModule.planCredits : 1
+    return AuthModule.planCredits
   }
 
   get availableCredits (): number | null {
@@ -94,18 +94,30 @@ export default class TheBilling extends Vue {
     return AuthModule.trialEndsPretty
   }
 
+  get creditsFetchValue (): number {
+    if (this.planCredits === 0 && this.availableCredits === 0) {
+      return 0
+    }
+
+    if (this.planCredits !== null && this.planCredits > 0) {
+      return this.planCredits
+    }
+
+    return 1
+  }
+
   get creditsInUse (): number | undefined {
-    return this.planCredits && this.availableCredits
+    return this.planCredits !== null && this.availableCredits !== null
       ? this.planCredits - this.availableCredits
       : 0
   }
 
   async fetch (): Promise<void> {
-    if (this.isLoading || (this.planCredits === null)) return
+    if (this.isLoading) return
 
     this.status = RequestStatus.Loading
 
-    const response = await new BillingRepository().fetch(this.planCredits)
+    const response = await new BillingRepository().fetch(this.creditsFetchValue)
 
     if (isFailureResponse(response)) {
       this.status = RequestStatus.Error
