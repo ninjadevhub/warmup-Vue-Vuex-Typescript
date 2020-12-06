@@ -10,7 +10,7 @@
               Enter your email address below and we will send you a link for a password reset.
             </div>
           </v-card-title>
-          <validation-observer v-slot="{ invalid }">
+          <validation-observer v-slot="{ invalid }" @keydown.enter="onSubmit">
             <validation-provider
               v-slot="{ errors, validate }"
               name="Email address"

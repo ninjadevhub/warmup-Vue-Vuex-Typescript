@@ -7,7 +7,10 @@
     :small-spinner="isFetchLoading"
   >
     <template #button>
-      <a class="subscribe__link text-capitalize pl-0" @click.stop="dialog = !dialog">
+      <a
+        :class="`subscribe__link link--${linkVariant} text-capitalize pl-0`"
+        @click.stop="dialog = !dialog"
+      >
         Upgrade now
       </a>
     </template>
@@ -169,7 +172,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import AddInboxForm from '@/components/forms/AddInboxForm.vue'
 import Billing from '@/types/Billing'
 import AuthModule from '@/store/modules/AuthModule'
@@ -204,6 +207,12 @@ extend('date', {
 
 @Component({ components: { AddInboxForm, ValidationObserver, ValidationProvider } })
 export default class SubscribeModal extends Vue {
+  @Prop({
+    type: String,
+    default: 'success'
+  })
+  readonly linkVariant!: string
+
   dialog = false
   billing: Billing | null = null
   submitStatus: RequestStatus = RequestStatus.Initial
@@ -373,9 +382,14 @@ export default class SubscribeModal extends Vue {
   .subscribe {
     &__link {
       font-size: $font-md;
-      color: $color-spring-rain !important;
       text-decoration: underline;
       font-weight: $font-weight-bold;
+      &.link--danger {
+        color: $color-apricot !important;
+      }
+      &.link--success {
+        color: $color-spring-rain !important;
+      }
     }
     &__input {
       max-width: 90px;

@@ -10,18 +10,17 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 import FlashMessage from '@/components/FlashMessage.vue'
-import AuthModule from '@/store/modules/AuthModule'
 
 @Component({ components: { FlashMessage } })
-export default class App extends Vue {
-  mounted () {
-    AuthModule.getUser()
-  }
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
   @import url(./scss/_fonts.scss);
+  * {
+    word-break: keep-all !important;
+  }
+
   #app {
     background-color: $bg-color;
     font-size: $font-md;

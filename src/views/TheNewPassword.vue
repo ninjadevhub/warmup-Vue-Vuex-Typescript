@@ -8,7 +8,7 @@
             <div class="new-password__title text-capitalize">Reset your password</div>
           </v-card-title>
           <v-divider class="mx-2 my-2" />
-          <validation-observer v-slot="{ invalid }">
+          <validation-observer v-slot="{ invalid }" @keydown.enter="onSubmit">
             <div class="px-2">
               <validation-provider
                 v-slot="{ errors, validate }"

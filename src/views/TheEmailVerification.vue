@@ -10,7 +10,7 @@
               We just sent a verification code to {{ userEmail }}. Please enter the code below to verify your account.
             </div>
           </v-card-title>
-          <validation-observer v-slot="{ invalid }">
+          <validation-observer v-slot="{ invalid }" @keydown.enter="onSubmit">
             <validation-provider
               v-slot="{ errors, validate }"
               name="code"

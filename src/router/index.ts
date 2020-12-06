@@ -126,6 +126,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  await AuthModule.getUser()
+
   const title = to.name === 'inbox-details' ? await getEmailByInboxId(to.params.inboxId as string) : to.meta.title
 
   document.title = `${title} | Warmup Inbox`
@@ -136,11 +138,11 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // if (to.meta.verifyRequired && !AuthModule.isAccountVerified) {
-  //   next({ path: '/email-verification', replace: true })
+  if (to.meta.verifyRequired && !AuthModule.isAccountVerified) {
+    next({ path: '/email-verification', replace: true })
 
-  //   return
-  // }
+    return
+  }
 
   if (to.meta.guest && AuthModule.isAuthenticated) {
     next({ path: '/inboxes', replace: true })
