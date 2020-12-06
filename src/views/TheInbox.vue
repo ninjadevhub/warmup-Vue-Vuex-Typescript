@@ -45,6 +45,7 @@ import { FailureResponse, isFailureResponse } from '@/types/Response'
 import { AxiosResponse } from 'axios'
 import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
 import InboxState from '@/constants/InboxState'
+import { EventBus } from '@/main'
 
 @Component({ components: { InboxMetrics, InboxSettings } })
 export default class TheInbox extends Vue {
@@ -81,6 +82,7 @@ export default class TheInbox extends Vue {
     }
 
     this.inbox = (response as AxiosResponse<Inbox>).data
+    EventBus.$emit('inboxEmail', this.inbox.email)
     this.status = RequestStatus.Success
   }
 

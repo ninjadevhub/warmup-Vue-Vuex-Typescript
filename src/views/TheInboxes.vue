@@ -2,6 +2,7 @@
   <div class="inboxes-wrapper">
     <empty-inboxes v-if="!hasInboxes" class="px-8 py-8" @created="fetch" />
     <inboxes-list
+      v-else
       :inboxes="inboxes"
       :current-page="currentPage"
       class="px-8 py-8"

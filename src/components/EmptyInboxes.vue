@@ -51,7 +51,7 @@
           <div class="help-text">
             <div class="mb-2 font-weight-bold">Refer A Friend, Make $ Each Month</div>
             <div>
-              You can earn a 20% commission every month for every customer you refer. Use your unqiue link below so
+              You can earn a 20% commission every month for every customer you refer. Use your unique link below so
               you can share on your blog, podcast, etc…
             </div>
             <base-button

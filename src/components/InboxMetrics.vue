@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" class="pt-0">
         <div class="metrics__title mb-0">
-          <div class="font-weight-bold">{{ inbox.email }}</div>
+          <div ref="inboxemail" class="font-weight-bold">{{ inbox.email }}</div>
           <inbox-control :inbox="inbox" class="py-0" @changed="$emit('changed', $event)" show-status />
           <v-divider />
         </div>

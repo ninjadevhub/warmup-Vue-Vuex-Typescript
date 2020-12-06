@@ -48,3 +48,12 @@ export async function getEmailByInboxId (inboxId: string): Promise<string> {
   const response = await new InboxRepository().fetch(inboxId)
   return isFailureResponse(response) ? '' : (response as AxiosResponse<Inbox>).data.email
 }
+
+export function getCreditCardFormat (cardNumber: string): string {
+  const formatted = cardNumber.replace(/\s/g, '').match(/.{1,4}/g)
+  return formatted ? formatted.join(' ') : ''
+}
+
+export function getAmexCreditCardFormat (cardNumber: string): string {
+  return cardNumber.replace(/\s/g, '').replace(/\b(\d{4})(\d{6})(\d{5})\b/, '$1 $2 $3')
+}
