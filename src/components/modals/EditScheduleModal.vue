@@ -20,10 +20,10 @@
         <validation-observer v-slot="{ invalid }">
         <validation-provider
           v-if="!isFreePlan"
-          v-slot="{ errors, validate }"
+          v-slot="{ errors }"
           name="Starting baseline"
           :rules="{ required: true, max_value: inboxCapabilities.starting_baseline, numeric: true }"
-          mode="passive"
+          :debounce="500"
         >
           <base-input
             v-model="scheduleForm.starting_baseline"
@@ -32,7 +32,6 @@
             :help-text="`(Suggested 0, Max ${inboxCapabilities.starting_baseline})`"
             tooltip="The starting number of emails we should send on day one."
             :disabled="inboxCapabilities.starting_baseline === 0"
-            @blur="validate"
           />
         </validation-provider>
 
@@ -54,10 +53,10 @@
         <!-- end of tooltip -->
 
         <validation-provider
-          v-slot="{ errors, validate }"
+          v-slot="{ errors }"
           name="Increase per day"
           :rules="{ required: true, max_value: inboxCapabilities.increase_per_day, numeric: true }"
-          mode="passive"
+          :debounce="500"
         >
           <base-input
             v-model="scheduleForm.increase_per_day"
@@ -65,14 +64,13 @@
             custom-label="increase per day"
             :help-text="`(Suggested 2, Max ${inboxCapabilities.increase_per_day})`"
             tooltip="The number of emails we will increase by each day."
-            @blur="validate"
           />
         </validation-provider>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Max sends per day"
             :rules="{ required: true, max_value: inboxCapabilities.max_sends_per_day, numeric: true }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="scheduleForm.max_sends_per_day"
@@ -80,14 +78,13 @@
               custom-label="max sends per day"
               :help-text="`(Suggested 40, Max ${inboxCapabilities.max_sends_per_day})`"
               tooltip="We will never send more than  this number of new inital emails per day."
-              @blur="validate"
             />
           </validation-provider>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Reply rate"
             :rules="{ required: true, max_value: inboxCapabilities.reply_rate, numeric: true }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="scheduleForm.reply_rate_percent"
@@ -96,7 +93,6 @@
               :help-text="`(Suggested 30%, Max ${inboxCapabilities.reply_rate}%)`"
               append-icon="mdi-percent-outline"
               tooltip="We automatically reply to X percent of the emails that are received within the inbox. These are additional emails added on top of the Max Send Per Day rate."
-              @blur="validate"
             />
           </validation-provider>
           <div class="form__limit-hint pt-0">

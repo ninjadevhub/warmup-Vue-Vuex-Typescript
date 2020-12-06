@@ -26,10 +26,10 @@
                   <v-row class="mt-4">
                       <v-col cols="12" md="4" class="d-flex align-end">
                         <validation-provider
-                          v-slot="{ errors, validate }"
+                          v-slot="{ errors }"
                           name="Old password"
                           rules="required"
-                          mode="passive"
+                          :debounce="500"
                         >
                           <base-input
                             v-model="passwordForm.old_password"
@@ -38,16 +38,15 @@
                             variant="normal"
                             type="password"
                             class="account-details__input pb-5"
-                            @blur="validate"
                           />
                         </validation-provider>
                       </v-col>
                       <v-col cols="12" md="4" class="d-flex align-end">
                         <validation-provider
-                          v-slot="{ errors, validate }"
+                          v-slot="{ errors }"
                           name="New password"
                           rules="required|min:6"
-                          mode="passive"
+                          :debounce="500"
                         >
                           <base-input
                             v-model="passwordForm.new_password"
@@ -56,7 +55,6 @@
                             variant="normal"
                             type="password"
                             class="account-details__input pb-5"
-                            @blur="validate"
                           />
                         </validation-provider>
                       </v-col>

@@ -27,17 +27,16 @@
               <v-row>
                 <v-col col="12" class="py-0">
                   <validation-provider
-                    v-slot="{ errors, validate }"
+                    v-slot="{ errors }"
                     name="Email address"
                     rules="required|email"
-                    mode="passive"
+                    :debounce="500"
                   >
                     <base-input
                       v-model="form.email"
                       custom-label="Email address"
                       :error-messages="errors"
                       type="email"
-                      @blur="validate"
                     />
                   </validation-provider>
                 </v-col>
@@ -45,17 +44,16 @@
               <v-row>
                 <v-col col="12" class="py-0">
                   <validation-provider
-                    v-slot="{ errors, validate }"
+                    v-slot="{ errors }"
                     name="Password"
                     rules="required"
-                    mode="passive"
+                    :debounce="500"
                   >
                     <base-input
                       v-model="form.password"
                       custom-label="Password"
                       :error-messages="errors"
                       type="password"
-                      @blur="validate"
                     />
                   </validation-provider>
                 </v-col>

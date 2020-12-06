@@ -11,32 +11,30 @@
           <validation-observer v-slot="{ invalid }" @keydown.enter="onSubmit">
             <div class="px-2">
               <validation-provider
-                v-slot="{ errors, validate }"
+                v-slot="{ errors }"
                 vid="confirm"
                 name="New password"
                 rules="required|min:6"
-                mode="passive"
+                :debounce="500"
               >
                 <base-input
                   v-model="passwordForm.new_password"
                   custom-label="New password"
                   :error-messages="errors"
                   type="password"
-                  @blur="validate"
                 />
               </validation-provider>
               <validation-provider
-                v-slot="{ errors, validate }"
+                v-slot="{ errors }"
                 name="Confirm password"
                 rules="required|min:6|password:@confirm"
-                mode="passive"
+                :debounce="500"
               >
                 <base-input
                   v-model="passwordForm.confirm_password"
                   custom-label="Confirm password"
                   :error-messages="errors"
                   type="password"
-                  @blur="validate"
                 />
               </validation-provider>
             </div>
