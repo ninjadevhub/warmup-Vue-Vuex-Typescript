@@ -41,58 +41,54 @@
             <base-icon class="pl-2 pt-0 pb-0">mdi-open-in-new</base-icon>
           </a>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Email"
             rules="required|email"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="email"
               :error-messages="errors"
               custom-label="email"
               type="email"
-              @blur="validate"
             />
           </validation-provider>
           <validation-provider
             v-if="!isOther"
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Password"
             rules="required"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="password"
               :error-messages="errors"
               custom-label="password"
               type="password"
-              @blur="validate"
             />
           </validation-provider>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Sender first name"
             rules="required"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
             v-model="sender_first"
             :error-messages="errors"
             custom-label="sender first name"
-            @blur="validate"
           />
           </validation-provider>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Sender last name"
             rules="required"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="sender_last"
               :error-messages="errors"
               custom-label="sender last name"
-              @blur="validate"
             />
           </validation-provider>
         </v-col>
@@ -105,120 +101,112 @@
           <div class="form__title">Custom Settings</div>
           <v-divider class="mb-5 mt-1" />
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="SMTP username"
             :rules="{ 'required': isOther }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="smtp_username"
               :error-messages="errors"
               custom-label="SMTP username"
-              @blur="validate"
             />
           </validation-provider>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="SMTP password"
             :rules="{ 'required': isOther }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="smtp_password"
               :error-messages="errors"
               custom-label="SMTP password"
               type="password"
-              @blur="validate"
             />
           </validation-provider>
           <v-row>
             <v-col cols="6" class="py-0">
               <validation-provider
-                v-slot="{ errors, validate }"
+                v-slot="{ errors }"
                 name="SMTP host"
                 :rules="{ 'required': isOther }"
-                mode="passive"
+                :debounce="500"
               >
                 <base-input
                   v-model="smtp_host"
                   :error-messages="errors"
                   custom-label="SMTP host"
-                  @blur="validate"
                 />
               </validation-provider>
             </v-col>
             <v-col cols="6" class="py-0">
               <validation-provider
-                v-slot="{ errors, validate }"
+                v-slot="{ errors }"
                 name="SMTP port"
                 :rules="{ 'required': isOther }"
-                mode="passive"
+                :debounce="500"
               >
                 <base-input
                   v-model="smtp_port"
                   :error-messages="errors"
                   custom-label="SMTP port"
-                  @blur="validate"
                 />
               </validation-provider>
             </v-col>
           </v-row>
           <base-checkbox v-model="smtp_ssl" class="mt-0" label="Use SMTP SSL/TLS" />
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="IMAP username"
             :rules="{ 'required': isOther }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="imap_username"
               :error-messages="errors"
               custom-label="IMAP username"
-              @blur="validate"
             />
           </validation-provider>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="IMAP password"
             :rules="{ 'required': isOther }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="imap_password"
               :error-messages="errors"
               custom-label="IMAP password"
               type="password"
-              @blur="validate"
             />
           </validation-provider>
           <v-row>
             <v-col cols="6" class="py-0">
               <validation-provider
-                v-slot="{ errors, validate }"
+                v-slot="{ errors }"
                 name="IMAP host"
                 :rules="{ 'required': isOther }"
-                mode="passive"
+                :debounce="500"
               >
                 <base-input
                   v-model="imap_host"
                   :error-messages="errors"
                   custom-label="IMAP host"
-                  @blur="validate"
                 />
               </validation-provider>
             </v-col>
             <v-col cols="6" class="py-0">
               <validation-provider
-                v-slot="{ errors, validate }"
+                v-slot="{ errors }"
                 name="IMAP port"
                 :rules="{ 'required': isOther }"
-                mode="passive"
+                :debounce="500"
               >
                 <base-input
                   v-model="imap_port"
                   :error-messages="errors"
                   custom-label="IMAP port"
-                  @blur="validate"
                 />
               </validation-provider>
             </v-col>
@@ -235,10 +223,10 @@
           <v-divider class="mb-5 mt-1" />
           <validation-provider
             v-if="!isFreePlan"
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Starting baseline"
             :rules="{ required: true, max_value: inboxCapabilities.starting_baseline }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="starting_baseline"
@@ -246,7 +234,6 @@
               custom-label="starting baseline"
               :help-text="`(Suggested 0, Max ${inboxCapabilities.starting_baseline})`"
               tooltip="The starting number of emails we should send on day one."
-              @blur="validate"
             />
           </validation-provider>
 
@@ -268,10 +255,10 @@
           <!-- end of tooltip -->
 
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Increase per day"
             :rules="{ required: true, max_value: inboxCapabilities.increase_per_day }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="increase_per_day"
@@ -279,14 +266,13 @@
               custom-label="increase per day"
               :help-text="`(Suggested 2, Max ${inboxCapabilities.increase_per_day})`"
               tooltip="The number of emails we will increase by each day."
-              @blur="validate"
             />
           </validation-provider>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Max sends per day"
             :rules="{ required: true, max_value: inboxCapabilities.max_sends_per_day }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="max_sends_per_day"
@@ -294,14 +280,13 @@
               custom-label="max sends per day"
               :help-text="`(Suggested 40, Max ${inboxCapabilities.max_sends_per_day})`"
               tooltip="We will never send more than  this number of new inital emails per day."
-              @blur="validate"
             />
           </validation-provider>
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Reply rate"
             :rules="{ required: true, max_value: inboxCapabilities.reply_rate }"
-            mode="passive"
+            :debounce="500"
           >
             <base-input
               v-model="reply_rate_percent"
@@ -310,7 +295,6 @@
               :help-text="`(Suggested 30%, Max ${inboxCapabilities.reply_rate}%)`"
               append-icon="mdi-percent-outline"
               tooltip="We automatically reply to X percent of the emails that are received within the inbox. These are additional emails added on top of the Max Send Per Day rate."
-              @blur="validate"
             />
           </validation-provider>
           <div class="form__limit-hint pt-2">

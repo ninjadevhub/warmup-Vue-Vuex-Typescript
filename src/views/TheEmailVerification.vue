@@ -12,17 +12,16 @@
           </v-card-title>
           <validation-observer v-slot="{ invalid }" @keydown.enter="onSubmit">
             <validation-provider
-              v-slot="{ errors, validate }"
+              v-slot="{ errors }"
               name="code"
               rules="required"
-              mode="passive"
+              :debounce="500"
             >
               <base-input
                 v-model="code"
                 :error-messages="errors"
                 custom-label="Code"
                 class="mb-1 px-2"
-                @blur="validate"
               />
             </validation-provider>
             <v-card-actions class="py-0">
