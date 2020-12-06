@@ -22,6 +22,10 @@ export default class App extends Vue {
 
 <style lang="scss">
   @import url(./scss/_fonts.scss);
+  * {
+    word-break: keep-all !important;
+  }
+
   #app {
     background-color: $bg-color;
     font-size: $font-md;

@@ -9,10 +9,9 @@
           <div class="form__title">Authentication</div>
           <v-divider class="mb-5 mt-1" />
           <validation-provider
-            v-slot="{ errors, validate }"
+            v-slot="{ errors }"
             name="Email provider"
             rules="required"
-            mode="passive"
           >
             <base-select
               v-model="provider"
@@ -21,7 +20,6 @@
               :items="providers"
               custom-label="email provider"
               @change="$emit('resize', $event)"
-              @blur="validate"
             />
           </validation-provider>
           <a

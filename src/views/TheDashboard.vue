@@ -33,8 +33,8 @@
           <v-col cols="6" sm="4" class="d-flex align-center justify-end header__col">
             <v-menu offset-y>
               <template v-slot:activator="{ on, attrs }">
-                <div>
-                  <a v-if="!hasSubscription" href="#" class="dashboard__link font-weight-bold">Upgrade Now</a>
+                <div class="d-flex justify-space-between align-center">
+                  <subscribe-modal v-if="!hasSubscription" :billing="billing" link-variant="danger" @updated="onUpdate" />
                   <v-btn
                     class="align-items-center white--text"
                     variant="secondary"
@@ -170,13 +170,21 @@
 import { Component, Vue } from 'vue-property-decorator'
 import AuthModule from '@/store/modules/AuthModule'
 import FlashMessage from '@/components/FlashMessage.vue'
-import { getEmailByInboxId } from '@/utils/misc'
+import { getEmailByInboxId, getErrorMessage, sendFlashMessage } from '@/utils/misc'
 import SubscriptionPlan from '@/constants/SubscriptionPlan'
+import SubscribeModal from '@/components/modals/SubscribeModal.vue'
+import RequestStatus from '@/constants/RequestStatus'
+import { FailureResponse, isFailureResponse } from '@/types/Response'
+import BillingRepository from '@/data/repository/BillingRepository'
+import { AxiosResponse } from 'axios'
+import Billing from '@/types/Billing'
 
-@Component({ components: { FlashMessage } })
+@Component({ components: { FlashMessage, SubscribeModal } })
 export default class TheDashboard extends Vue {
   sidebar = null
   selectedInboxEmail = ''
+  status: RequestStatus = RequestStatus.Initial
+  billing: Billing | null = null
 
   isActiveRoute (route: string): boolean {
     return this.$route.name === route
@@ -221,9 +229,47 @@ export default class TheDashboard extends Vue {
     }
   }
 
+  get isLoading (): boolean {
+    return this.status === RequestStatus.Loading
+  }
+
+  get planCredits (): number | null {
+    return AuthModule.planCredits ? AuthModule.planCredits : 1
+  }
+
   async getEmail (): Promise<void> {
     const response = await getEmailByInboxId(this.$route.params.inboxId)
     this.selectedInboxEmail = response
+  }
+
+  async fetch (): Promise<void> {
+    if (this.isLoading || (this.planCredits === null)) return
+
+    this.status = RequestStatus.Loading
+
+    const response = await new BillingRepository().fetch(this.planCredits)
+
+    if (isFailureResponse(response)) {
+      this.status = RequestStatus.Error
+      sendFlashMessage({
+        status: 'error',
+        message: getErrorMessage(response as FailureResponse)
+      })
+
+      return
+    }
+
+    this.status = RequestStatus.Success
+    this.billing = (response as AxiosResponse<Billing>).data
+  }
+
+  async onUpdate (): Promise<void> {
+    await AuthModule.getUser()
+    this.fetch()
+    sendFlashMessage({
+      status: 'success',
+      message: 'Your changes were successfully made.'
+    })
   }
 
   onLogout (): void {
@@ -232,6 +278,7 @@ export default class TheDashboard extends Vue {
   }
 
   mounted () {
+    this.fetch()
     if (this.$route.name === 'inbox-details') {
       this.getEmail()
     }
@@ -248,10 +295,6 @@ export default class TheDashboard extends Vue {
     height: 100%;
     &__content {
       height: inherit;
-    }
-    &__link {
-      font-family: $label-font;
-      color: $color-apricot;
     }
   }
 
