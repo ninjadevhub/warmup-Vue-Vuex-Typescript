@@ -21,6 +21,10 @@ export default class App extends Vue {}
     word-break: keep-all !important;
   }
 
+  .drift-frame-controller {
+    height: 78px !important;
+  }
+
   #app {
     background-color: $bg-color;
     font-size: $font-md;

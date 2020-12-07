@@ -40,7 +40,7 @@
           <template v-slot:activator="{ on, attrs }">
             <div v-bind="attrs" v-on="on">
               <base-input
-                v-model="starting_baseline"
+                v-model="scheduleForm.starting_baseline"
                 custom-label="starting baseline"
                 :help-text="`(Suggested 0, Max ${inboxCapabilities.starting_baseline})`"
                 tooltip="The starting number of emails we should send on day one."
@@ -146,7 +146,7 @@ export default class EditScheduleModal extends Vue {
   errorMessage = ''
   scheduleForm: ScheduleForm = {
     inbox_id: this.inbox.inbox_id,
-    starting_baseline: this.inbox.settings.sending.baseline,
+    starting_baseline: this.inbox.settings.sending.baseline ? this.inbox.settings.sending.baseline : 0,
     increase_per_day: this.inbox.settings.sending.increase_rate,
     max_sends_per_day: this.inbox.settings.sending.max_sends,
     reply_rate_percent: this.inbox.settings.sending.reply_rate
@@ -202,6 +202,12 @@ export default class EditScheduleModal extends Vue {
 </script>
 
 <style lang="scss" scoped>
+  .v-tooltip__content {
+    font-size: $font-xs !important;
+    line-height: 12px;
+    background-color: $secondary-color !important;
+  }
+
   .form {
     &__limit-hint {
       font-size: 9px;
