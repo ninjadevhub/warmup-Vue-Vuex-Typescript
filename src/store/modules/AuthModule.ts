@@ -35,6 +35,10 @@ export class AuthModule extends VuexModule {
     return this.user && this.user.data.affilate.shareable_code
   }
 
+  get userId (): string | null {
+    return this.user && this.user.data._id
+  }
+
   get planCredits (): number | null {
     return this.user && this.user.data.plan_credits
   }

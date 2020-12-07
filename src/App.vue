@@ -10,9 +10,21 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator'
 import FlashMessage from '@/components/FlashMessage.vue'
+import { EventBus } from './main'
 
 @Component({ components: { FlashMessage } })
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted () {
+    EventBus.$on('driftData', (event) => {
+      this.$drift.identify(event.id, {
+        name: event.name,
+        email: event.email,
+        plan: event.plan,
+        api_key: event.apiKey
+      })
+    })
+  }
+}
 </script>
 
 <style lang="scss">
