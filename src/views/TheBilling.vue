@@ -137,7 +137,7 @@ export default class TheBilling extends Vue {
     const shareableCode = AuthModule.shareableCode
 
     if (shareableCode) {
-      copyToClipboard(`${process.env.VUE_APP_BASE_MARKETING_URL}/sign-up?code=${shareableCode}`)
+      copyToClipboard(`${process.env.VUE_APP_BASE_REFERRAL_URL}/sign-up?code=${shareableCode}`)
 
       sendFlashMessage({
         status: 'success',

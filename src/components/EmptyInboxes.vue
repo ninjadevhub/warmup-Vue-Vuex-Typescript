@@ -21,7 +21,7 @@
               Thankfully we built an effortless way to keep your deliverability high. Learn how we do it.
             </div>
             <base-button
-              href="https://www.warmupinbox.com/how-it-works"
+              :href="`${baseUrl}/how-it-works`"
               target="blank"
               class="help-text__action text-capitalize mt-5"
               small
@@ -38,7 +38,7 @@
               possible delivery rates for your emails.
             </div>
             <base-button
-              href="https://www.warmupinbox.com/always-be-warming-up-your-inbox"
+              :href="`${baseUrl}/always-be-warming-up-your-inbox`"
               target="blank"
               class="help-text__action text-capitalize mt-5"
               small
@@ -81,11 +81,15 @@ export default class EmptyInboxes extends Vue {
     return process.env.VUE_APP_SUPPORT_EMAIL
   }
 
+  get baseUrl () {
+    return process.env.VUE_APP_BASE_URL
+  }
+
   onCopyLink (): void {
     const shareableCode = AuthModule.shareableCode
 
     if (shareableCode) {
-      copyToClipboard(`${process.env.VUE_APP_BASE_MARKETING_URL}/sign-up?code=${shareableCode}`)
+      copyToClipboard(`${process.env.VUE_APP_BASE_REFERRAL_URL}/sign-up?code=${shareableCode}`)
 
       sendFlashMessage({
         status: 'success',

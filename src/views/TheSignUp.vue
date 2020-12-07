@@ -37,10 +37,10 @@
           <v-card-text>
             <div>
               By signing up you agree to the
-              <a href="https://www.warmupinbox.com/tos" target="blank">terms of service</a> and
-              <a href="https://www.warmupinbox.com/privacy" target="blank">privacy policy</a>.
+              <a :href="`${baseUrl}/tos`" target="blank">terms of service</a> and
+              <a :href="`${baseUrl}/privacy`" target="blank">privacy policy</a>.
             </div>
-            <a href="https://www.warmupinbox.com" target="blank">
+            <a :href="baseUrl" target="blank">
               <img class="d-block mx-auto mt-4" src="@/assets/img/full-logo.png" alt="">
             </a>
           </v-card-text>
@@ -84,6 +84,10 @@ export default class TheSignUpForm extends Vue {
 
   get refferalCode (): string | null {
     return this.$route.query.code ? this.$route.query.code as string : null
+  }
+
+  get baseUrl () {
+    return process.env.VUE_APP_BASE_URL
   }
 
   async onSubmit (): Promise<void> {
