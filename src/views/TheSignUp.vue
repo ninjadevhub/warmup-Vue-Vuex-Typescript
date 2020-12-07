@@ -86,7 +86,7 @@ export default class TheSignUpForm extends Vue {
     return this.$route.query.code ? this.$route.query.code as string : null
   }
 
-  get baseUrl () {
+  get baseUrl (): string {
     return process.env.VUE_APP_BASE_URL
   }
 
