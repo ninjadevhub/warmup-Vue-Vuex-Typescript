@@ -172,6 +172,7 @@ import { AxiosResponse } from 'axios'
 import Billing from '@/types/Billing'
 import SubscriptionState from '@/constants/SubscriptionState'
 import { EventBus } from '@/main'
+import Cookies from 'js-cookie'
 
 @Component({ components: { FlashMessage, SubscribeModal } })
 export default class TheDashboard extends Vue {
@@ -278,6 +279,14 @@ export default class TheDashboard extends Vue {
 
     EventBus.$on('inboxEmail', (email: string) => {
       this.inboxEmail = email
+    })
+
+    EventBus.$emit('driftData', {
+      id: AuthModule.userId,
+      name: `${AuthModule.firstName}  ${AuthModule.lastName}`,
+      email: AuthModule.userEmail,
+      plan: AuthModule.plan,
+      apiKey: Cookies.get('authKey') || ''
     })
   }
 }
