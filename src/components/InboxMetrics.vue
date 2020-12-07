@@ -32,7 +32,7 @@
           <v-divider class="mb-2 mt-1" />
           <div class="data__wrapper">
             <div class="data__value">{{ inbox.receiving.today }}</div>
-            <div class="data__info">Sent today</div>
+            <div class="data__info">Received today</div>
           </div>
           <div class="data__wrapper">
             <div class="data__value">{{ inbox.receiving.last_7 }}</div>

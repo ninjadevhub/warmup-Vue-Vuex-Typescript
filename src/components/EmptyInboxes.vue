@@ -81,7 +81,7 @@ export default class EmptyInboxes extends Vue {
     return process.env.VUE_APP_SUPPORT_EMAIL
   }
 
-  get baseUrl () {
+  get baseUrl (): string {
     return process.env.VUE_APP_BASE_URL
   }
 

@@ -352,7 +352,7 @@ export default class AddInboxForm extends Vue {
     { text: 'Other', value: EmailProvider.Other }
   ]
 
-  get baseUrl () {
+  get baseUrl (): string {
     return process.env.VUE_APP_BASE_URL
   }
 
