@@ -24,7 +24,7 @@
           </validation-provider>
           <a
             v-if="isGoogleWorkspace"
-            href="https://www.warmupinbox.com/google-walkthrough"
+            :href="`${baseUrl}/google-walkthrough`"
             target="blank"
             class="form__setup-hint d-block pt-1 mb-2"
           >
@@ -33,7 +33,7 @@
           </a>
           <a
             v-if="isMicrosoft365"
-            href="https://www.warmupinbox.com/microsoft-walkthrough"
+            :href="`${baseUrl}/microsoft-walkthrough`"
             target="blank"
             class="form__setup-hint d-block pt-1 mb-2"
           >
@@ -351,6 +351,10 @@ export default class AddInboxForm extends Vue {
     { text: 'Microsoft 365', value: EmailProvider.Microsoft },
     { text: 'Other', value: EmailProvider.Other }
   ]
+
+  get baseUrl () {
+    return process.env.VUE_APP_BASE_URL
+  }
 
   get isFreePlan (): boolean {
     return !!this.plan && this.plan === SubscriptionPlan.Free
