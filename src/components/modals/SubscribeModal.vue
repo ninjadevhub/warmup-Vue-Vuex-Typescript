@@ -121,6 +121,7 @@
                   custom-label="Expiration Date"
                   variant="normal"
                   placeholder="MM/YYYY"
+                  maxlength="7"
                 />
               </validation-provider>
             </v-col>
@@ -159,7 +160,7 @@
         <div class="d-flex justify-end subscribe__action">
           <base-button
             class="text-capitalize font-weight-bold"
-            :disabled="isError || invalid || isNoChange"
+            :disabled="isFetchError || invalid || isNoChange"
             :loading="isSubmitLoading"
             @click="onSubmit"
           >
@@ -234,6 +235,10 @@ export default class SubscribeModal extends Vue {
     return this.fetchStatus === RequestStatus.Error || this.submitStatus === RequestStatus.Error
   }
 
+  get isFetchError (): boolean {
+    return this.fetchStatus === RequestStatus.Error
+  }
+
   get isFetchLoading (): boolean {
     return this.fetchStatus === RequestStatus.Loading
   }
@@ -286,9 +291,9 @@ export default class SubscribeModal extends Vue {
   }
 
   get computedExpDate (): string {
-    return this.billingForm.exp_month || this.billingForm.exp_year
+    return this.billingForm.exp_month && this.billingForm.exp_month.length >= 2
       ? `${this.billingForm.exp_month}/${this.billingForm.exp_year}`
-      : ''
+      : `${this.billingForm.exp_month}`
   }
 
   set computedExpDate (value: string) {
@@ -359,6 +364,11 @@ export default class SubscribeModal extends Vue {
     if (isFailureResponse(response)) {
       this.submitStatus = RequestStatus.Error
       this.errorMessage = getErrorMessage(response as FailureResponse)
+
+      setTimeout(() => {
+        this.submitStatus = RequestStatus.Initial
+        this.errorMessage = ''
+      }, 5000)
 
       return
     }
