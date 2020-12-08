@@ -23,6 +23,11 @@ export default class App extends Vue {
         api_key: event.apiKey
       })
     })
+
+    EventBus.$on('closeDriftConnection', () => {
+      this.$drift.reset()
+      window.location.href = '/login'
+    })
   }
 }
 </script>

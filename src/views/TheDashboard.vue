@@ -265,7 +265,7 @@ export default class TheDashboard extends Vue {
 
   onLogout (): void {
     AuthModule.logout()
-    window.location.href = '/login'
+    EventBus.$emit('closeDriftConnection')
   }
 
   async mounted () {
