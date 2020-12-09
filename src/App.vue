@@ -15,6 +15,7 @@ import { EventBus } from './main'
 @Component({ components: { FlashMessage } })
 export default class App extends Vue {
   mounted () {
+    this.$drift.reset()
     EventBus.$on('driftData', (event) => {
       this.$drift.identify(event.id, {
         name: event.name,

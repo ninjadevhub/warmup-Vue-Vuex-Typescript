@@ -68,10 +68,19 @@
         </div>
       </v-col>
       <v-col class="pl-lg-10" cols="12" lg="4" >
-        <div class="data__title">Health Score</div>
+        <div class="data__title d-flex justify-space-between align-end">
+          Health Score
+          <a
+            :href="`${baseUrl}/improve-your-spam-deliverability-health-score`"
+            target="blank"
+            class="float-right title-link"
+          >
+            Learn More
+          </a>
+        </div>
         <v-divider class="mb-2 mt-1" />
         <div class="data__wrapper">
-          <div class="data__value">
+          <div :class="`data__value value--${scoreVariant}`">
             {{ inbox.basic_health.score }}/{{ inbox.basic_health.out_of }}
           </div>
           <div class="data__info">
@@ -257,7 +266,6 @@ export default class InboxMetrics extends Vue {
             display: false
           },
           ticks: {
-            // Include a dollar sign in the ticks
             callback: function (value: any) {
               return value.split(',')[0]
             }
@@ -286,6 +294,18 @@ export default class InboxMetrics extends Vue {
 
   get scheduledChartData (): number[] {
     return Object.values(this.inbox.chart).map(day => Object.values(day)[0].scheduled)
+  }
+
+  get scoreVariant (): string | void {
+    if (this.inbox.basic_health.score > 0 && this.inbox.basic_health.score <= 6) return 'danger'
+    if (this.inbox.basic_health.score > 6 && this.inbox.basic_health.score <= 8) return 'warning'
+    if (this.inbox.basic_health.score > 8) return 'success'
+
+    return 'normal'
+  }
+
+  get baseUrl (): string {
+    return process.env.VUE_APP_BASE_URL
   }
 
   get computedChartData () {
@@ -339,6 +359,21 @@ export default class InboxMetrics extends Vue {
     }
   }
 
+  .value {
+    &--normal {
+      color: $color-shark;
+    }
+    &--danger {
+      color: $color-petit-orchid;
+    }
+    &--warning {
+      color: $color-tan-hide;
+    }
+    &--success {
+      color: $color-spring-rain;
+    }
+  }
+
   .chart-legend {
     padding: 8px 12px;
     border-radius: 3px;
@@ -387,6 +422,12 @@ export default class InboxMetrics extends Vue {
         &__title {
           font-weight: $font-weight-bold;
           font-size: $font-md-x;
+          .title-link {
+            font-size: $font-sm;
+            color: $color-dodger-blue !important;
+            font-weight: $font-weight-bold;
+            text-decoration: none;
+          }
         }
         &__value {
           font-weight: $font-weight-bold;
