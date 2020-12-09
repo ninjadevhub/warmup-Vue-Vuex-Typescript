@@ -60,7 +60,7 @@
               <div class="data__info">Inbox type</div>
             </div>
           </v-col>
-          <v-col cols="6" md="3">
+          <v-col v-if="!isFreePlan" cols="6" md="3">
             <div class="data__wrapper">
               <div class="data__value">{{ inbox.domain.age_pretty }}</div>
               <div class="data__info">Domain age</div>
@@ -83,6 +83,8 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import EditScheduleModal from '@/components/modals/EditScheduleModal.vue'
 import InboxControl from '@/components/InboxControl.vue'
 import Inbox from '@/types/Inbox'
+import SubscriptionPlan from '@/constants/SubscriptionPlan'
+import AuthModule from '@/store/modules/AuthModule'
 
 @Component({ components: { EditScheduleModal, InboxControl } })
 export default class InboxSettings extends Vue {
@@ -90,6 +92,10 @@ export default class InboxSettings extends Vue {
     type: Object as () => Inbox
   })
   readonly inbox!: Inbox
+
+  get isFreePlan (): boolean {
+    return AuthModule.plan === SubscriptionPlan.Free
+  }
 }
 </script>
 
