@@ -375,6 +375,16 @@ export default class SubscribeModal extends Vue {
 
     this.submitStatus = RequestStatus.Success
     this.dialog = false
+    // Clear form
+    this.billingForm = {
+      new_seat_count: this.planCredits,
+      use_card_on_file: false,
+      card_number: '',
+      exp_month: '',
+      exp_year: '',
+      security_code: '',
+      postal_code: ''
+    }
     this.$emit('updated')
   }
 

@@ -273,9 +273,9 @@ export default class TheDashboard extends Vue {
 
     await AuthModule.getUser()
 
-    if (this.$route.meta.verifyRequired && !AuthModule.isAccountVerified) {
-      this.$router.push({ path: '/email-verification', replace: true })
-    }
+    // if (this.$route.meta.verifyRequired && !AuthModule.isAccountVerified) {
+    //   this.$router.push({ path: '/email-verification', replace: true })
+    // }
 
     EventBus.$on('inboxEmail', (email: string) => {
       this.inboxEmail = email

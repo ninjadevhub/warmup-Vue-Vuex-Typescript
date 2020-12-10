@@ -32,7 +32,7 @@ import EmailProvider from '@/constants/EmailProvider'
 import RequestStatus from '@/constants/RequestStatus'
 import InboxRepository from '@/data/repository/InboxRepository'
 import { FailureResponse, isFailureResponse } from '@/types/Response'
-import { getErrorMessage } from '@/utils/misc'
+import { getErrorMessage, sendFlashMessage } from '@/utils/misc'
 import SubscriptionPlan from '@/constants/SubscriptionPlan'
 import AuthModule from '@/store/modules/AuthModule'
 
@@ -106,6 +106,13 @@ export default class AddInboxModal extends Vue {
 
     this.status = RequestStatus.Success
     this.dialog = false
+
+    sendFlashMessage({
+      status: 'success',
+      message: 'Success! The first email on this inbox will send in the next few minutes.'
+    })
+
+    this.initForm()
     this.$emit('created')
   }
 
