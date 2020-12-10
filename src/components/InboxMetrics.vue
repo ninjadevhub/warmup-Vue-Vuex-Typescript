@@ -71,7 +71,7 @@
         <div class="data__title d-flex justify-space-between align-end">
           Health Score
           <a
-            :href="`${baseUrl}/improve-your-spam-deliverability-health-score`"
+            :href="`${baseUrl}/improve-your-deliverability-score`"
             target="blank"
             class="float-right title-link"
           >

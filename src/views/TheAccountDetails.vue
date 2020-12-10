@@ -22,7 +22,7 @@
                 Change password
               </div>
               <v-divider />
-                <validation-observer v-slot="{ invalid }">
+                <validation-observer :key="formKey" v-slot="{ invalid }">
                   <v-row class="mt-4">
                       <v-col cols="12" md="4" class="d-flex align-end">
                         <validation-provider
@@ -110,6 +110,8 @@ export default class TheAccountDetails extends Vue {
     new_password: ''
   }
 
+  formKey = 1
+
   get isLoading (): boolean {
     return this.status === RequestStatus.Loading
   }
@@ -162,6 +164,7 @@ export default class TheAccountDetails extends Vue {
 
     this.changePasswordStatus = RequestStatus.Success
     this.passwordForm = { new_password: '', old_password: '' }
+    this.formKey++
     sendFlashMessage({
       status: 'success',
       message: 'Password was successfully changed'
