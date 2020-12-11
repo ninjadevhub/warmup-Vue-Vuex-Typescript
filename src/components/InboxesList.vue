@@ -16,6 +16,7 @@
                 <v-list-item-title class="d-flex align-center" @click.self="onInboxClick(inbox.inbox_id)">
                   <inbox-control
                     :inbox="inbox"
+                    :key="inbox.inbox_id"
                     class="d-inline-block pl-3"
                     @changed="$emit('changed', $event)"
                   />
