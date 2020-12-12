@@ -116,7 +116,8 @@ export default class AddInboxModal extends Vue {
     this.$emit('created')
   }
 
-  mounted () {
+  async mounted () {
+    await AuthModule.getUser()
     this.initForm()
   }
 }
