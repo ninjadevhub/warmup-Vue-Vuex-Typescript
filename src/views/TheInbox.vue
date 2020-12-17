@@ -82,6 +82,9 @@ export default class TheInbox extends Vue {
     }
 
     this.inbox = (response as AxiosResponse<Inbox>).data
+    document.title = this.inbox.email
+      ? `${this.inbox.email} | Warmup Inbox`
+      : 'Inbox Details | Warmup Inbox'
     EventBus.$emit('inboxEmail', this.inbox.email)
     this.status = RequestStatus.Success
   }
