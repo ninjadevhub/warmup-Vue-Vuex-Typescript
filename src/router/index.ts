@@ -126,6 +126,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  const title = to.name === 'inbox-details' ? 'Inbox Details' : to.meta.title
+
+  document.title = `${title} | Warmup Inbox`
+
   if (to.meta.authRequired && !AuthModule.isAuthenticated) {
     next({ path: '/login', replace: true })
 
